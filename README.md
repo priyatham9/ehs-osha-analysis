@@ -15,9 +15,9 @@ Regenerating the outputs regenerates every figure and table. The regression
 tests in `tests/test_regression_real_data.py` assert the headline values against
 the data, and `tests/test_readme_consistency.py` parses the figures back out of
 this file and fails if the prose and the generated tables disagree. That
-coverage is not total: the flag-prevalence, size-band and stability tables below
-are transcribed from the named CSVs but are not individually re-parsed by a
-test.
+includes the flag-prevalence, size-band and percentile-stability tables below,
+which are checked row by row against their CSVs, with a further check that the
+stability table omits no percentile the pipeline computes.
 
 Runs on Python 3.9 with pandas and numpy. No SciPy, no matplotlib, no test
 runner beyond stdlib `unittest`.
@@ -209,20 +209,27 @@ argument for the NAICS x size-band peer grouping rather than NAICS alone.
 `outputs/tables/percentile_band_stability.csv`. Across eight adjacent year pairs
 and roughly 440 matched NAICS-3 x size-band cells per pair:
 
+Every percentile the pipeline computes is shown, not a selection:
+
 | Percentile | Median Spearman rho between years | Median absolute relative change |
 |---|---|---|
+| p10 | 0.871 | 25.7% |
 | p25 | 0.919 | 14.3% |
 | p50 | 0.933 | 10.1% |
 | p75 | 0.862 | 9.5% |
 | p90 | 0.887 | 10.6% |
+| p95 | 0.890 | 12.4% |
 
 Peer-group ordering is highly reproducible year to year (rho ~0.86-0.93), and
 95.7-98.5% of publishable cells persist between adjacent years
-(`outputs/tables/peer_group_persistence.csv`). But the *level*
-moves about 10% a year. A site sitting exactly on last year's p75 would be
+(`outputs/tables/peer_group_persistence.csv`). But the *level* moves: about 10%
+a year in the middle of the distribution (p50-p90), and considerably more in the
+lower tail, where a small denominator makes the percentile itself unstable
+(14.3% at p25, 25.7% at p10). A site sitting exactly on last year's p75 would be
 roughly a tenth of the way off this year's p75 without changing anything about
-its own performance. Movement across a percentile band of that size is not
-evidence of anything.
+its own performance, and a site near p10 could move two and a half times that
+far. Movement across a percentile band of that size is not evidence of
+anything.
 
 ---
 
@@ -404,8 +411,12 @@ zero, and the chi-square tail is checked against known critical values.
 ### Peer groups and stability
 
 Peer groups are NAICS 3-digit x size band. Cells with fewer than 30
-establishments carrying a computable rate are marked not publishable; that rule
-excludes 35% of cells but only 0.06% of establishments. Stability is measured
+establishments carrying a computable rate are marked not publishable. The two
+coverage numbers in `outputs/summary.json` are computed over different cell
+definitions and should be quoted together: on per-year NAICS-3 x size cells the
+rule excludes 35.1% of cells and 0.76% of establishments; pooling across years
+gives larger cells, and the rule then excludes 28.5% of cells and 0.06% of
+establishments. Stability is measured
 between adjacent years over cells publishable in both, using Spearman rank
 correlation (implemented directly, average ranks for ties) plus median absolute
 and median absolute relative change. Cell persistence is reported alongside,
@@ -435,7 +446,7 @@ scripts/
   run_analysis.py
 synthetic/
   generate_fixture.py   SYNTHETIC data generator, for tests only
-tests/                  133 tests, stdlib unittest
+tests/                  136 tests, stdlib unittest
 outputs/
   tables/               15 CSVs, all script-generated
   figures/              6 SVGs, all script-generated

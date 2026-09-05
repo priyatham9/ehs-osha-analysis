@@ -288,6 +288,128 @@ class TestReadmeMatchesOutputs(unittest.TestCase):
         )
 
 
+@unittest.skipUnless(
+    outputs_available(), "outputs/summary.json absent; run scripts/run_analysis.py"
+)
+class TestReadmeTranscribedTables(unittest.TestCase):
+    """The three README tables that are transcribed row-by-row from CSVs.
+
+    These were previously described in the README as not individually checked.
+    They are checked here, so that caveat no longer applies: every row printed
+    in the README must match the generated CSV to the precision printed.
+    """
+
+    text: str
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.text = _readme_text()
+
+    def _row(self, label: str) -> list:
+        """Return the cells of the README table row whose first cell is ``label``."""
+        m = re.search(
+            r"^\|\s*" + re.escape(label) + r"\s*\|(.+)\|\s*$",
+            self.text,
+            flags=re.MULTILINE,
+        )
+        self.assertIsNotNone(m, f"README row {label!r} not found")
+        return [
+            c.strip().replace("**", "").replace("%", "").replace(",", "")
+            for c in m.group(1).split("|")
+        ]
+
+    def _assert_cell(self, cell: str, value: float, places: int, what: str) -> None:
+        """Compare one README table cell to a computed value.
+
+        ``~0`` is accepted in the README for a value that rounds to zero at the
+        printed precision, and is checked as such rather than skipped.
+        """
+        if cell == "~0":
+            self.assertLess(
+                abs(value),
+                0.5 * 10 ** (-places),
+                f"README prints ~0 for the {what} but the CSV gives {value}",
+            )
+        else:
+            self.assertAlmostEqual(
+                float(cell),
+                value,
+                places=places,
+                msg=f"README {what} does not match the CSV",
+            )
+
+    def test_flag_prevalence_rows_match_csv(self) -> None:
+        d = pd.read_csv(OUT / "tables" / "quality_flag_prevalence.csv").set_index("flag")
+        labels = {
+            "hours per employee > 4,500": "flag_hours_per_employee_high",
+            "hours per employee < 120": "flag_hours_per_employee_low",
+            "employees missing or < 1": "flag_employees_missing",
+            "hours missing or <= 0": "flag_hours_missing",
+            '"no injuries" box contradicts case counts': "flag_no_injury_contradiction",
+            "negative case count": "flag_negative_counts",
+        }
+        for label, flag in labels.items():
+            cells = self._row(label)
+            self.assertEqual(
+                int(cells[0]),
+                int(d.loc[flag, "n"]),
+                f"README filing count for {label!r} does not match the CSV",
+            )
+            self._assert_cell(
+                cells[1],
+                100.0 * float(d.loc[flag, "share"]),
+                places=3,
+                what=f"filing share for {label!r}",
+            )
+            hours_share = 100.0 * float(d.loc[flag, "hours_share"])
+            self._assert_cell(
+                cells[2], hours_share, places=2, what=f"hours share for {label!r}"
+            )
+
+    def test_size_band_rows_match_csv(self) -> None:
+        d = pd.read_csv(OUT / "tables" / "size_band_effects.csv")
+        d["label"] = d["size_band"].str.replace(r"^0+", "", regex=True).str.replace(
+            r"-0*", "-", regex=True
+        )
+        for _, r in d.iterrows():
+            cells = self._row(r["label"])
+            self.assertEqual(int(cells[0]), int(r["n"]), r["label"])
+            self.assertAlmostEqual(float(cells[1]), float(r["zero_share"]), places=3)
+            self.assertAlmostEqual(
+                float(cells[2]), float(r["variance_to_mean_ratio"]), places=1
+            )
+            self.assertAlmostEqual(float(cells[3]), float(r["aggregate_trir"]), places=2)
+            self.assertAlmostEqual(
+                float(cells[4]), float(r["median_establishment_trir"]), places=2
+            )
+
+    def test_percentile_stability_rows_match_csv_and_omit_nothing(self) -> None:
+        d = pd.read_csv(OUT / "tables" / "percentile_band_stability.csv")
+        med = d.groupby("percentile")[["spearman_rho", "median_abs_rel_change"]].median()
+        for pct, r in med.iterrows():
+            cells = self._row(str(pct))
+            self.assertAlmostEqual(
+                float(cells[0]),
+                float(r["spearman_rho"]),
+                places=3,
+                msg=f"README rho for {pct} does not match the CSV",
+            )
+            self.assertAlmostEqual(
+                float(cells[1]),
+                100.0 * float(r["median_abs_rel_change"]),
+                places=1,
+                msg=f"README relative change for {pct} does not match the CSV",
+            )
+        # Selective reporting guard: no percentile the pipeline computes may be
+        # dropped from the README table.
+        self.assertEqual(
+            len(med),
+            sum(1 for pct in med.index if re.search(r"^\|\s*" + str(pct) + r"\s*\|",
+                                                    self.text, flags=re.MULTILINE)),
+            "README stability table omits a percentile that the pipeline computes",
+        )
+
+
 @unittest.skipUnless(README.exists(), "README.md missing")
 class TestReadmeHygiene(unittest.TestCase):
     """Cheap checks that do not need the pipeline to have been run."""

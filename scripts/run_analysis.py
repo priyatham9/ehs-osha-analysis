@@ -5,10 +5,13 @@ Usage:
     python scripts/run_analysis.py
     python scripts/run_analysis.py --data-dir data/raw --out-dir outputs
     python scripts/run_analysis.py --years 2023 2024
-    python scripts/run_analysis.py --data-dir synthetic/fixture --out-dir outputs/synthetic
 
-Running against the synthetic fixture is supported for exercising the code, and
-the output directory is stamped accordingly. Fixture output is not a finding.
+This script runs only against the real OSHA ITA files named in the catalog. It
+will not run against the synthetic fixture: the loader requires the catalog
+filenames, so pointing --data-dir at synthetic/fixture fails rather than
+producing fixture-derived output that could be mistaken for a finding. The
+fixture is exercised through the library directly, in
+tests/test_pipeline_on_fixture.py, which writes to a temporary directory.
 """
 
 from __future__ import annotations
@@ -64,6 +67,15 @@ def build_parser() -> argparse.ArgumentParser:
         default=500,
         help="Minimum establishments for an industry to be fitted (default 500).",
     )
+    p.add_argument(
+        "--model-max-n",
+        type=int,
+        default=60_000,
+        help=(
+            "Cap on establishments per model fit, for runtime. Larger groups "
+            "are subsampled with the configured seed (default 60,000)."
+        ),
+    )
     p.add_argument("--include-partial", action="store_true")
     p.add_argument(
         "--skip-file-check",
@@ -104,6 +116,7 @@ def main(argv: list[str] | None = None) -> int:
         model_top_k=args.model_top_k,
         model_min_group_n=args.model_min_group_n,
         model_year=args.model_year,
+        model_max_n=args.model_max_n,
         include_partial=args.include_partial,
         years=args.years,
     )

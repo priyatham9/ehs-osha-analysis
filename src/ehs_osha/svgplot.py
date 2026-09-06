@@ -401,17 +401,35 @@ class Figure:
             f'transform="rotate(-90 16 {(ax.plot_top + ax.plot_bottom) / 2:.1f})">'
             f"{_esc(self.ylabel)}</text>"
         )
-        seen, lx = set(), ax.plot_left
+        # The subtitle is drawn left-aligned at plot_left on a fixed baseline of 40.
+        # The legend row would otherwise be placed at the same height whenever the top
+        # margin is small, putting the two on top of each other. When a subtitle is
+        # present, right-align the legend on that row so the two share it cleanly.
+        entries = []
+        seen = set()
         for label, colour in self._legend:
             if label in seen:
                 continue
             seen.add(label)
+            entries.append((label, colour))
+
+        swatch, gap, pad = 10, 14, 18
+        widths = [swatch + gap // 3 + len(label) * 6 for label, _ in entries]
+        if self.subtitle:
+            legend_baseline = 40.0
+            total = sum(widths) + pad * max(len(entries) - 1, 0)
+            lx = max(ax.plot_left, ax.plot_right - total)
+        else:
+            legend_baseline = ax.plot_top - 7.0
+            lx = ax.plot_left
+
+        for (label, colour), w in zip(entries, widths):
             parts.append(
-                f'<rect x="{lx:.1f}" y="{ax.plot_top - 16}" width="10" height="10" '
-                f'fill="{colour}" />'
+                f'<rect x="{lx:.1f}" y="{legend_baseline - 9:.1f}" width="10" '
+                f'height="10" fill="{colour}" />'
             )
             parts.append(
-                f'<text x="{lx + 14:.1f}" y="{ax.plot_top - 7}" font-size="11" '
+                f'<text x="{lx + 14:.1f}" y="{legend_baseline:.1f}" font-size="11" '
                 f'fill="#333">{_esc(label)}</text>'
             )
             lx += 22 + 6.4 * len(str(label))

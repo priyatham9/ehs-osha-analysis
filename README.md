@@ -85,7 +85,7 @@ The screened aggregate is insensitive to where the bounds are drawn. Across a
 25-cell grid of lower bounds (100-400 h) and upper bounds (3,500-6,000 h), the
 screened aggregate TRIR stays within 3.963-3.993
 (`outputs/tables/quality_sensitivity_grid.csv`). The flagged *share* is not
-similarly stable — it runs from 1.79% to 4.49% across the same grid — but that
+similarly stable - it runs from 1.79% to 4.49% across the same grid - but that
 is the point rather than a weakness: the filings that move in and out of the
 flagged set as the bounds shift carry almost none of the hours, so the
 correction they make to the aggregate is nearly identical. The conclusion is
@@ -141,7 +141,7 @@ problem is the spread of the whole distribution, not the zeros alone.
 **Zero-inflation is optional and, where present, small.** In 14 of the 30
 industries the ZINB zero-inflation parameter collapses to the boundary
 (`pi` on the order of 1e-14) and NB2 wins outright on AIC. Where ZINB is
-selected, `pi` ranges from 0.001 to 0.069 — a few percent of establishments at
+selected, `pi` ranges from 0.001 to 0.069 - a few percent of establishments at
 most, not the 37-41% zero share that motivated fitting it. Examples:
 
 Industries are named by their official NAICS 2022 subsector title
@@ -165,8 +165,8 @@ not evidence of a separate non-reporting population. NB2 frequently predicts
 slightly *more* zeros than are observed (ratios below 1.0 above).
 
 This matters practically. A figure of the form "roughly 38% of chemical plants
-report zero recordables" — the prior repository's number, and 37.4% on this
-panel — is often read as evidence of a distinct population of non-reporters. These fits do
+report zero recordables" - the prior repository's number, and 37.4% on this
+panel - is often read as evidence of a distinct population of non-reporters. These fits do
 not support that reading as the main story: once establishment-to-establishment
 variation in the underlying rate is allowed for, most of the excess zeros are
 accounted for. The residual zero-inflation that survives in half the industries
@@ -340,8 +340,8 @@ is a silent-wrong-answer trap:
    retries cp1252, then falls back to replacement and warns. A regression test
    asserts this file still needs the fallback.
 3. **The `size` field is not comparable across years.** OSHA's summary data
-   dictionary (April 2024) documents the codes — 1 = <20 employees, 2 = 20-249,
-   21 = 20-99, 22 = 100-249, 3 = 250+ — and states that "code 2 was split to 21
+   dictionary (April 2024) documents the codes - 1 = <20 employees, 2 = 20-249,
+   21 = 20-99, 22 = 100-249, 3 = 250+ - and states that "code 2 was split to 21
    and 22 with the collection of 2023 data". The files agree: among plausible
    filings code 2 falls from 244,231 in 2022 to 41,343 in 2024 while 21 and 22
    rise to 224,266 combined, and median employee counts are 52 for code 2, 39

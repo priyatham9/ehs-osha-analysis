@@ -1,0 +1,2 @@
+label,n_filings,n_implausible,implausible_share,hours_total,hours_share_implausible,cases_total,cases_share_implausible,aggregate_trir_unscreened,aggregate_trir_screened,ratio_screened_to_unscreened,median_establishment_trir_screened
+pooled_all_years,2801064,57857,0.020655365246920455,18951698493968.0,0.9668017711364894,12703482.0,0.013654209137305818,0.134061672667949,3.983078949653959,29.71079556436282,2.468815770795144

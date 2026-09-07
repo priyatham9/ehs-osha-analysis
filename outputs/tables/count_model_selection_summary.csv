@@ -1,0 +1,5 @@
+model,n_industries_best_by_aic,n_industries_fitted,share_best_by_aic
+poisson,0,30,0.0
+nb2,15,30,0.5
+zip,0,30,0.0
+zinb,15,30,0.5

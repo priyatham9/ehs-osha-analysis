@@ -169,9 +169,21 @@ report zero recordables" - the prior repository's number, and 37.4% on this
 panel - is often read as evidence of a distinct population of non-reporters. These fits do
 not support that reading as the main story: once establishment-to-establishment
 variation in the underlying rate is allowed for, most of the excess zeros are
-accounted for. The residual zero-inflation that survives in half the industries
-is real but modest, and it is concentrated in health care and services rather
-than manufacturing.
+accounted for. The residual zero-inflation that survives in half the industries under the
+intercept-only fits is real but modest, and it is concentrated in health care
+and services rather than manufacturing.
+
+**Covariate adjustment shrinks it further.** Refitting the same four models
+with a log-hours offset, establishment size-band dummies and NAICS 4-digit
+fixed effects within each 3-digit group (`src/ehs_osha/count_models_covariates.py`,
+`outputs/tables/count_model_covariates_summary.csv`, method and limits in
+`docs/COUNT_MODELS.md`) leaves overdispersion intact in all 30 industries (NB2
+beats Poisson at boundary-corrected p < 0.001 everywhere; NB2 alpha median 0.79,
+minimum 0.16) but cuts the ZINB wins from 9 of 30 (converged ZINB wins at boundary p < 0.01 with covariates; 15 of 30 in the earlier intercept-only comparison) to 10 of 30, with the
+ZINB-vs-NB2 boundary test below 0.01 in 9. Part of what looked like excess
+zeros was mean heterogeneity across size bands and sub-industries. The
+statement that survives both specifications is: overdispersion is universal across the 30 industry groups and survives covariate adjustment (NB2 beats Poisson at boundary-corrected p < 0.001 in 30 of 30 with size-band and NAICS-4 effects);
+zero inflation beyond NB2 holds in a minority of industries.
 
 This is a statement about distributional shape, not about reporting behaviour.
 An overdispersed process and a mixture of compliant and non-compliant reporters
@@ -272,6 +284,52 @@ anything.
 
 ---
 
+## Relationship to ehs-benchmarks
+
+The author's earlier repository, [ehs-benchmarks](https://github.com/priyatham9/ehs-benchmarks),
+reports a different set of headline numbers. Both sets are panel-specific, and
+neither repository said so until now.
+
+| | ehs-benchmarks (older) | ehs-osha-analysis (this repo) |
+|---|---|---|
+| Panel | CY2023-2025 ITA files, 1.18M filings | CY2016-2024 ITA files, 2,801,064 filings |
+| Screen | 100-4,000 hours per employee | 120-4,500 hours per employee |
+| Aggregate TRIR, unscreened | 0.45 | 0.134 |
+| Aggregate TRIR, screened | 3.41 | 3.983 |
+| Ratio | 7.58x | 29.7x |
+
+`src/ehs_osha/reconcile.py` recomputes the aggregate under the old panel
+definition with this repository's loaders and writes
+`outputs/tables/reconciliation_panels.csv`. The old panel as available here is
+the CY2023 and CY2024 files (the partial CY2025 file is not part of the pinned
+catalog and is not on disk), so the "old" row covers 792,851 filings rather
+than 1.18M. On those files under the 100-4,000 screen:
+
+| | Recomputed here | Published in ehs-benchmarks | Gap |
+|---|---|---|---|
+| Aggregate TRIR, unscreened | 0.473 | 0.45 | +5.1% |
+| Aggregate TRIR, screened | 3.374 | 3.41 | -1.1% |
+| Ratio | 7.14x | 7.58x | -5.8% |
+
+The screened rate reproduces within about 1%. The unscreened rate and the
+ratio do not reproduce within the 5% tolerance the script applies; the 5-6%
+gaps are consistent with the missing partial CY2025 file and any differences
+in the older TypeScript deduplication, but that has not been verified and the
+gap is reported as a gap. The ratio on the old years is insensitive to the
+screen bounds: across the four combinations of {100, 120} x {4,000, 4,500}
+hours per employee it stays between 7.13x and 7.14x. The bounds do not explain
+the difference between 7.58x and 29.7x; the years do.
+
+Which figure to quote:
+
+- For the CY2016-2024 pooled aggregate, quote **29.7x** (0.134 to 3.983), and
+  say it is dominated by the 2019 file (249x on its own).
+- For a recent-years figure comparable to ehs-benchmarks, quote **7.14x** (0.473
+  to 3.374) from `reconciliation_panels.csv`, CY2023-2024, 100-4,000 screen.
+- Do not quote either multiplier as a property of the ITA data in general. The
+  per-year table above is the honest statement: every year moves, by 1.39x to
+  249x.
+
 ## Relationship to the author's prior work
 
 This extends [github.com/priyatham9/ehs-benchmarks](https://github.com/priyatham9/ehs-benchmarks),
@@ -287,7 +345,8 @@ flagged share replicates closely (2.07% here against 2.24% there, and 1.56-2.60%
 across individual years). The other three numbers do not, and could not: as the
 year table above shows, the hours share held by flagged filings ranges from 29%
 to 99.6% and the ratio from 1.39x to 249x depending purely on which years are
-included. No year subset tried here reproduces 0.45 / 3.41 / 7.58x.
+included. The closest this repository gets is the CY2023-2024 files under the
+older 100-4,000 screen: 0.473 / 3.374 / 7.14x, detailed in the section above.
 
 The finding that survives is the structural one, and it survives in every single
 year: a small minority of filings is implausible, those filings hold a
@@ -496,3 +555,19 @@ are not redistributed in this repository; `scripts/download_data.py` fetches the
 from OSHA.
 
 The code in this repository is MIT licensed. See `LICENSE`.
+
+
+## Regenerating everything
+
+`scripts/run_analysis.py` produces the core tables, summary.json and fig01 to fig06. Three modules
+run after it and write their own artifacts; run them in this order after any pipeline change:
+
+```bash
+PYTHONPATH=src python3 -m ehs_osha.metrics                  # metrics_by_year.csv, metrics_pooled.csv, summary.json["metrics"]
+PYTHONPATH=src python3 -m ehs_osha.count_models_covariates  # count_model_covariates*.csv, fig04 with covariates
+PYTHONPATH=src python3 -m ehs_osha.reconcile                # reconciliation_panels.csv
+python3 ../../tools/build_sites.py                          # regenerate docs/index.html
+```
+
+The covariate count models are the ones to quote; the intercept-only comparison in
+`count_model_selection_summary.csv` is kept for the record.

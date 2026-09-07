@@ -191,13 +191,13 @@ body{overflow-x:hidden}
 .topbar{border-bottom:2px solid var(--rule)}
 .topbar-inner{flex-wrap:wrap;align-items:center;row-gap:0;padding:0 30px;justify-content:flex-start}
 .brand{padding:12px 16px 12px 0;border-right:2px solid var(--rule-soft);margin-right:6px}
-.estate{display:contents}
-.estate a,.topnav a{text-decoration:none;padding:12px 10px;font-family:var(--font-mono);font-size:.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);white-space:nowrap;transition:color .15s,background .15s}
-.estate a:hover,.topnav a:hover{color:var(--ink);background:var(--surface-2)}
-.estate a.nav-external{color:var(--accent)}
-.estate a.nav-external::after{content:'\2197';margin-left:3px;font-size:.85em;opacity:.75}
-.estate a.nav-external:hover{background:var(--accent-wash);color:var(--accent-2)}
-.estate a.nav-paper{color:var(--accent)}
+.estate-nav{display:contents}
+.estate-nav a,.topnav a{text-decoration:none;padding:12px 10px;font-family:var(--font-mono);font-size:.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);white-space:nowrap;transition:color .15s,background .15s}
+.estate-nav a:hover,.topnav a:hover{color:var(--ink);background:var(--surface-2)}
+.estate-nav a.nav-external{color:var(--accent)}
+.estate-nav a.nav-external::after{content:'\2197';margin-left:3px;font-size:.85em;opacity:.75}
+.estate-nav a.nav-external:hover{background:var(--accent-wash);color:var(--accent-2)}
+.estate-nav a.nav-paper{color:var(--accent)}
 .topnav{margin-left:auto;padding-left:6px;border-left:2px solid var(--rule-soft);gap:0}
 .topnav a.is-active{color:var(--ink);box-shadow:inset 0 -2px 0 var(--accent)}
 .toggle{margin-left:8px}
@@ -210,7 +210,7 @@ body{overflow-x:hidden}
 @media(max-width:900px){
   .topbar-inner{padding:0 22px}
   .projects,.topnav{margin:0 -22px;padding:0 22px}
-  .estate a{order:4}
+  .estate-nav a{order:4}
   .toggle{order:5;margin-left:auto}
   .topnav{order:6;flex-basis:100%;border-left:0;border-top:1px solid var(--rule-soft);overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none}
   .topnav::-webkit-scrollbar{display:none}
@@ -218,9 +218,45 @@ body{overflow-x:hidden}
 }
 @media(max-width:640px){
   .brand{border-right:0;padding-right:0}
-  .estate a{padding:12px 7px;font-size:.625rem}
+  .estate-nav a{padding:12px 7px;font-size:.625rem}
 }
 .hero{border-top:2px solid var(--rule)}
+
+/* ============ shared site switcher ============ */
+.estate{display:flex;gap:0;font-family:var(--font-mono);font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;border-bottom:2px solid var(--rule);background:var(--surface-2)}
+.estate a{padding:6px 14px;text-decoration:none;color:var(--muted)}
+.estate a[aria-current="true"]{color:var(--accent);font-weight:700;box-shadow:inset 0 -2px 0 var(--accent)}
+.estate-sep{width:2px;background:var(--rule-soft)}
+
+/* ============ interactive charts ============ */
+.chart{border:2px solid var(--rule);background:var(--surface);padding:22px;margin:0 0 26px}
+.chart .chart-take{font-family:var(--font-display);font-stretch:125%;font-weight:900;text-transform:uppercase;font-size:1.05rem;line-height:1.2;margin:0 0 14px;max-width:44ch}
+.chart-body{position:relative}
+.chart svg{display:block;width:100%;height:auto}
+.chart-pt,.chart-bar{cursor:pointer;outline:none}
+.chart-pt:hover,.chart-pt:focus{r:6.5}
+.chart-bar:hover,.chart-bar:focus{opacity:.8}
+.chart-pt:focus-visible,.chart-bar:focus-visible{stroke:var(--accent);stroke-width:3}
+.chart-tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--paper);font-family:var(--font-mono);font-size:.6875rem;line-height:1.5;padding:6px 9px;border:2px solid var(--rule);white-space:nowrap;z-index:5}
+.chart .src{display:block;margin-top:12px;font-family:var(--font-mono);font-size:.625rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+
+/* ============ less text: expandable detail ============ */
+details.more{border-top:2px solid var(--rule-soft);margin:14px 0 0}
+details.more>summary{cursor:pointer;list-style:none;font-family:var(--font-mono);font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);padding:10px 0}
+details.more>summary::-webkit-details-marker{display:none}
+details.more>summary::before{content:'+ ';font-weight:700}
+details.more[open]>summary::before{content:'- '}
+details.more>div{padding:0 0 12px}
+figcaption details.more,.f-body details.more{margin-top:8px;border-top:0}
+figcaption details.more>summary,.f-body details.more>summary{padding:4px 0}
+figcaption details.more>div{font-size:inherit;color:inherit}
+
+/* ============ compact stat row ============ */
+.statrow{display:grid;grid-template-columns:repeat(4,1fr);border:2px solid var(--rule);background:var(--surface);margin:0 0 30px}
+.statrow .st-cell{padding:18px 20px;border-right:2px solid var(--rule-soft);min-width:0}
+.statrow .st-cell:last-child{border-right:0}
+.statrow .st-v{font-family:var(--font-display);font-stretch:125%;font-weight:900;font-size:clamp(1.35rem,5vw,2rem);line-height:1;display:block;margin-top:6px;overflow-wrap:anywhere}
+@media(max-width:640px){.statrow{grid-template-columns:1fr 1fr}.statrow .st-cell:nth-child(2){border-right:0}.statrow .st-cell:nth-child(-n+2){border-bottom:2px solid var(--rule-soft)}}
 
 /* ============ vertical rhythm ============ */
 .section{padding:78px 0;scroll-margin-top:112px}
@@ -311,7 +347,7 @@ tbody tr:last-child td{box-shadow:none}
 .backlink:hover{color:var(--accent);border-bottom-color:var(--accent)}
 .footer{border-top:2px solid var(--rule)}
 .footer-note{margin-top:16px;font-size:.8125rem;line-height:1.6;color:var(--muted);max-width:64ch}
-.hero h1{max-width:18ch}
+.hero h1{max-width:18ch;font-size:clamp(1.9rem,6.4vw,4.6rem)}
 .hero-role{font-size:1.08rem;max-width:64ch}
 .status{margin-top:36px}
 
@@ -330,7 +366,7 @@ tbody tr:last-child td{box-shadow:none}
 <header class="topbar">
   <div class="topbar-inner">
     <a class="brand" href="#top"><span class="brand-mark"></span> ehs-osha-analysis</a>
-    <nav class="estate" aria-label="Research estate">
+    <nav class="estate-nav" aria-label="Research estate">
       <a class="nav-external" href="https://priyatham9.github.io/">Priyatham Chimmani</a>
       <a href="https://priyatham9.github.io/grounded/">Grounded</a>
       <a class="nav-paper" href="https://priyatham9.github.io/grounded/paper.html">Paper</a>
@@ -346,6 +382,7 @@ tbody tr:last-child td{box-shadow:none}
     </button>
   </div>
 </header>
+<div class="estate" aria-label="Site switcher"><a href="https://priyatham9.github.io/" data-site="personal">Priyatham Chimmani</a><span class="estate-sep"></span><a href="https://priyatham9.github.io/grounded/" data-site="research" aria-current="true">Grounded research</a></div>
 <section class="hero" id="top">
   <div class="wrap">
     <div class="hero-eyebrow"><span class="pulse"></span><span class="label">Empirical analysis - real public data</span></div>
@@ -360,32 +397,32 @@ tbody tr:last-child td{box-shadow:none}
   </div>
 </section>
 <main id="main">
-<section class="section" id="why"><div class="wrap"><div class="rail-head"><span class="rail-num">01</span><h2 class="display">Why this exists</h2></div><div class="opener"><div class="opener-main"><p class="big">The correction is real, it is large, and it is not a constant. That last part is what stops it being a footnote.</p><p>Every establishment-level injury benchmark in the United States is computed from the same public filings analysed here: 2,801,064 of them, calendar years 2016 through 2024, downloaded from the OSHA Injury Tracking Application by a script in this repository. The rate everyone quotes has hours worked in its denominator.</p><p>Only 2.07% of filings report hours that cannot be right. Those filings carry 96.7% of every hour in the dataset. Pooled aggregate TRIR reads 0.134 before the screen and 3.983 after it.</p><p>A ratio of 29.7x would still be manageable if it held still. It does not. The same screen moves 2018 by 1.39x and 2019 by 249x. Nobody can apply a published correction factor to their own year and know what they have.</p></div><div class="opener-side"><h3>What follows from that</h3><ul><li>An unscreened aggregate is not a noisy estimate of the screened one. Their relationship changes year to year, so the error has no fixed sign or size.</li><li>The screened series is stable. That is the useful finding: screening does not just shift the number, it makes the series comparable across years at all.</li><li>Anyone publishing a benchmark from these files owes readers the screen they used. Without it the number is not reproducible even in principle.</li></ul></div></div></div></section><section class="section" id="findings"><div class="wrap"><div class="rail-head"><span class="rail-num">02</span><h2 class="display">Findings</h2></div><p class="sec-lede">Four numbers, each traceable to the artifact named beneath it.</p><div class="findings">
+<section class="section" id="why"><div class="wrap"><div class="rail-head"><span class="rail-num">01</span><h2 class="display">Why this exists</h2></div><div class="opener"><div class="opener-main"><p class="big">The correction is real, it is large, and it is not a constant. That last part is what stops it being a footnote.</p><p>Every establishment-level injury benchmark in the United States is computed from the same public filings analysed here: 2,801,064 of them, calendar years 2016 through 2024, downloaded from the OSHA Injury Tracking Application by a script in this repository. The rate everyone quotes has hours worked in its denominator.</p><details class="more"><summary>Read on</summary><div><p>Only 2.07% of filings report hours that cannot be right. Those filings carry 96.7% of every hour in the dataset. Pooled aggregate TRIR reads 0.134 before the screen and 3.983 after it.</p><p>A ratio of 29.7x would still be manageable if it held still. It does not. The same screen moves 2018 by 1.39x and 2019 by 249x. Nobody can apply a published correction factor to their own year and know what they have.</p></div></details></div><div class="opener-side"><h3>What follows from that</h3><details class="more"><summary>Read on</summary><div><ul><li>An unscreened aggregate is not a noisy estimate of the screened one. Their relationship changes year to year, so the error has no fixed sign or size.</li><li>The screened series is stable. That is the useful finding: screening does not just shift the number, it makes the series comparable across years at all.</li><li>Anyone publishing a benchmark from these files owes readers the screen they used. Without it the number is not reproducible even in principle.</li></ul></div></details></div></div></div></section><section class="section" id="findings"><div class="wrap"><div class="rail-head"><span class="rail-num">02</span><h2 class="display">Findings</h2></div><p class="sec-lede">Four numbers, each traceable to the artifact named beneath it.</p><div class="findings">
       <div class="finding">
         <div class="f-num">249<span class="f-unit">&times;</span></div>
         <div class="f-title">Worst-year divergence</div>
-        <p class="f-body">Aggregate TRIR computed with and without the plausibility screen differs by 1.39x in 2018 and 249x in 2019. A correction that varies by two orders of magnitude between adjacent years is not a portable constant.</p>
+        <p class="f-body">Aggregate TRIR computed with and without the plausibility screen differs by 1.39x in 2018 and 249x in 2019.<details class="more"><summary>Why</summary><div>A correction that varies by two orders of magnitude between adjacent years is not a portable constant.</div></details></p>
         <div class="f-src">summary.json - quality.by_year</div>
       </div>
       <div class="finding">
         <div class="f-num">96.7<span class="f-unit">%</span></div>
         <div class="f-title">Hours concentrated in flagged filings</div>
-        <p class="f-body">2.07% of filings fail the hours-per-employee screen, and they carry 96.7% of every hour reported. Aggregate TRIR reads 0.134 unscreened against 3.983 screened.</p>
+        <p class="f-body">2.07% of filings fail the hours-per-employee screen, and they carry 96.7% of every hour reported.<details class="more"><summary>Why</summary><div>Aggregate TRIR reads 0.134 unscreened against 3.983 screened.</div></details></p>
         <div class="f-src">summary.json - quality.pooled</div>
       </div>
       <div class="finding">
         <div class="f-num">3.1<span class="f-unit">-4.6</span></div>
         <div class="f-title">Screening yields a stable series</div>
-        <p class="f-body">Screened aggregate TRIR stays inside a narrow band across all 9 years, while the unscreened figure swings between 0.016 and 2.92. The screen is doing more than trimming outliers.</p>
+        <p class="f-body">Screened aggregate TRIR stays inside a narrow band across all 9 years, while the unscreened figure swings between 0.016 and 2.92.<details class="more"><summary>Why</summary><div>The screen is doing more than trimming outliers.</div></details></p>
         <div class="f-src">outputs/tables/quality_by_year.csv</div>
       </div>
       <div class="finding">
         <div class="f-num">2.47</div>
         <div class="f-title">Median establishment TRIR</div>
-        <p class="f-body">The median screened establishment sits well below the screened aggregate, which is what a right-skewed count distribution looks like. Reporting a mean against this shape overstates the typical site.</p>
+        <p class="f-body">The median screened establishment sits well below the screened aggregate, which is what a right-skewed count distribution looks like.<details class="more"><summary>Why</summary><div>Reporting a mean against this shape overstates the typical site.</div></details></p>
         <div class="f-src">summary.json - quality.pooled</div>
       </div>
-    </div></div></section><section class="section" id="byyear"><div class="wrap"><div class="rail-head"><span class="rail-num">03</span><h2 class="display">Year by year</h2></div><p class="sec-lede">The pooled ratio is an average over years that do not resemble each other. The point of this table is the spread, not the centre.</p><figure class="tbl"><div class="tbl-wrap"><table><thead><tr><th>Year</th><th>Filings</th><th>Flagged</th><th>Hours flagged</th><th>TRIR raw</th><th>TRIR screened</th><th>Ratio</th><th>Median est. TRIR</th></tr></thead><tbody><tr><td class="t-first">2016</td><td>214,977</td><td>2.30%</td><td>31.6%</td><td>2.729</td><td>3.921</td><td>1.44x</td><td>2.79</td></tr><tr><td class="t-first">2017</td><td>259,757</td><td>1.66%</td><td>35.2%</td><td>2.634</td><td>3.998</td><td>1.52x</td><td>2.94</td></tr><tr><td class="t-first">2018</td><td>286,884</td><td>1.56%</td><td>29.1%</td><td>2.920</td><td>4.069</td><td>1.39x</td><td>3.00</td></tr><tr><td class="t-first">2019</td><td>290,475</td><td>1.60%</td><td>99.6%</td><td>0.016</td><td>4.018</td><td>249.28x</td><td>2.93</td></tr><tr><td class="t-first">2020</td><td>293,385</td><td>1.91%</td><td>38.6%</td><td>2.792</td><td>4.491</td><td>1.61x</td><td>2.39</td></tr><tr><td class="t-first">2021</td><td>315,936</td><td>2.60%</td><td>46.1%</td><td>2.385</td><td>4.368</td><td>1.83x</td><td>2.53</td></tr><tr><td class="t-first">2022</td><td>346,799</td><td>2.02%</td><td>42.9%</td><td>2.661</td><td>4.605</td><td>1.73x</td><td>2.42</td></tr><tr><td class="t-first">2023</td><td>394,231</td><td>2.34%</td><td>56.7%</td><td>1.380</td><td>3.147</td><td>2.28x</td><td>2.00</td></tr><tr><td class="t-first">2024</td><td>398,620</td><td>2.37%</td><td>92.4%</td><td>0.280</td><td>3.642</td><td>12.99x</td><td>1.69</td></tr></tbody></table></div><figcaption class="tbl-cap">Read across the last two columns rather than down them. The screened aggregate and the median establishment barely move; the ratio between screened and unscreened moves by a factor of nearly two hundred.<span class="src">Source artifact: outputs/summary.json - quality.by_year</span></figcaption></figure></div></section><section class="section" id="hours"><div class="wrap"><div class="rail-head"><span class="rail-num">04</span><h2 class="display">Where the hours are</h2></div><p class="sec-lede">A national aggregate rate is a sum of cases over a sum of hours. When one filing dominates the second sum, it decides the answer on its own.</p><figure class="fig"><div class="fig-scroll"><svg viewBox="0 0 860 276" role="img" aria-label="Hours concentration in the largest filings" xmlns="http://www.w3.org/2000/svg" font-family="'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace"><rect x="0" y="0" width="860" height="276" fill="var(--fig-paper)"/><text x="132.0" y="45.8" font-size="11" text-anchor="end" fill="var(--fig-axis)" font-weight="600">Top 1 filing</text><rect x="146" y="26" width="604.0" height="30" fill="var(--fig-grid)"/><rect x="146" y="26" width="552.8" height="30" fill="var(--s1)"/><text x="762.0" y="45.8" font-size="12" text-anchor="start" fill="var(--ink)" font-weight="700">88.81%</text><text x="132.0" y="89.8" font-size="11" text-anchor="end" fill="var(--fig-axis)" font-weight="600">Top 10 filings</text><rect x="146" y="70" width="604.0" height="30" fill="var(--fig-grid)"/><rect x="146" y="70" width="588.5" height="30" fill="var(--s1)"/><text x="762.0" y="89.8" font-size="12" text-anchor="start" fill="var(--ink)" font-weight="700">94.54%</text><text x="132.0" y="133.8" font-size="11" text-anchor="end" fill="var(--fig-axis)" font-weight="600">Top 100 filings</text><rect x="146" y="114" width="604.0" height="30" fill="var(--fig-grid)"/><rect x="146" y="114" width="593.7" height="30" fill="var(--s1)"/><text x="762.0" y="133.8" font-size="12" text-anchor="start" fill="var(--ink)" font-weight="700">95.39%</text><text x="132.0" y="177.8" font-size="11" text-anchor="end" fill="var(--fig-axis)" font-weight="600">Top 1,000 filings</text><rect x="146" y="158" width="604.0" height="30" fill="var(--fig-grid)"/><rect x="146" y="158" width="599.0" height="30" fill="var(--s1)"/><text x="762.0" y="177.8" font-size="12" text-anchor="start" fill="var(--ink)" font-weight="700">96.23%</text><text x="132.0" y="221.8" font-size="11" text-anchor="end" fill="var(--fig-axis)" font-weight="600">Top 10,000 filings</text><rect x="146" y="202" width="604.0" height="30" fill="var(--fig-grid)"/><rect x="146" y="202" width="604.0" height="30" fill="var(--s1)"/><text x="762.0" y="221.8" font-size="12" text-anchor="start" fill="var(--ink)" font-weight="700">97.04%</text></svg></div><figcaption>One keying error in the hours column sets the national denominator. A single establishment filing accounts for 88.8% of the 19.0 trillion hours in the pooled dataset while contributing 0.00% of the recordable cases. Share of all reported hours held by the largest filings, ranked by hours.<span class="src">Source artifact: outputs/tables/quality_hours_concentration.csv</span></figcaption></figure></div></section><section class="section" id="figures"><div class="wrap"><div class="rail-head"><span class="rail-num">05</span><h2 class="display">Figures</h2></div><p class="sec-lede">Five of the six figures the analysis pipeline generates are inlined here from the committed SVG files.</p><figure class="fig"><span class="label">fig01_aggregate_trir_by_year.svg</span><h3 class="fig-title">Aggregate TRIR before and after the plausibility screen</h3><p class="fig-sub">OSHA ITA Form 300A, reporting years 2016-2024, n=2,801,064 filings after deduplication</p><div class="fig-scroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 22 820 438" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+    </div></div></section><section class="section" id="byyear"><div class="wrap"><div class="rail-head"><span class="rail-num">03</span><h2 class="display">Year by year</h2></div><p class="sec-lede">The pooled ratio is an average over years that do not resemble each other.<details class="more"><summary>Why</summary><div>The point of this table is the spread, not the centre.</div></details></p><figure class="tbl"><div class="tbl-wrap"><table><thead><tr><th>Year</th><th>Filings</th><th>Flagged</th><th>Hours flagged</th><th>TRIR raw</th><th>TRIR screened</th><th>Ratio</th><th>Median est. TRIR</th></tr></thead><tbody><tr><td class="t-first">2016</td><td>214,977</td><td>2.30%</td><td>31.6%</td><td>2.729</td><td>3.921</td><td>1.44x</td><td>2.79</td></tr><tr><td class="t-first">2017</td><td>259,757</td><td>1.66%</td><td>35.2%</td><td>2.634</td><td>3.998</td><td>1.52x</td><td>2.94</td></tr><tr><td class="t-first">2018</td><td>286,884</td><td>1.56%</td><td>29.1%</td><td>2.920</td><td>4.069</td><td>1.39x</td><td>3.00</td></tr><tr><td class="t-first">2019</td><td>290,475</td><td>1.60%</td><td>99.6%</td><td>0.016</td><td>4.018</td><td>249.28x</td><td>2.93</td></tr><tr><td class="t-first">2020</td><td>293,385</td><td>1.91%</td><td>38.6%</td><td>2.792</td><td>4.491</td><td>1.61x</td><td>2.39</td></tr><tr><td class="t-first">2021</td><td>315,936</td><td>2.60%</td><td>46.1%</td><td>2.385</td><td>4.368</td><td>1.83x</td><td>2.53</td></tr><tr><td class="t-first">2022</td><td>346,799</td><td>2.02%</td><td>42.9%</td><td>2.661</td><td>4.605</td><td>1.73x</td><td>2.42</td></tr><tr><td class="t-first">2023</td><td>394,231</td><td>2.34%</td><td>56.7%</td><td>1.380</td><td>3.147</td><td>2.28x</td><td>2.00</td></tr><tr><td class="t-first">2024</td><td>398,620</td><td>2.37%</td><td>92.4%</td><td>0.280</td><td>3.642</td><td>12.99x</td><td>1.69</td></tr></tbody></table></div><figcaption class="tbl-cap">Read across the last two columns rather than down them.<details class="more"><summary>Why</summary><div>The screened aggregate and the median establishment barely move; the ratio between screened and unscreened moves by a factor of nearly two hundred.</div></details><span class="src">Source artifact: outputs/summary.json - quality.by_year</span></figcaption></figure></div></section><section class="section" id="hours"><div class="wrap"><div class="rail-head"><span class="rail-num">04</span><h2 class="display">Where the hours are</h2></div><p class="sec-lede">A national aggregate rate is a sum of cases over a sum of hours.<details class="more"><summary>Why</summary><div>When one filing dominates the second sum, it decides the answer on its own.</div></details></p><figure class="fig"><div class="fig-scroll"><svg viewBox="0 0 860 276" role="img" aria-label="Hours concentration in the largest filings" xmlns="http://www.w3.org/2000/svg" font-family="'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace"><rect x="0" y="0" width="860" height="276" fill="var(--fig-paper)"/><text x="132.0" y="45.8" font-size="11" text-anchor="end" fill="var(--fig-axis)" font-weight="600">Top 1 filing</text><rect x="146" y="26" width="604.0" height="30" fill="var(--fig-grid)"/><rect x="146" y="26" width="552.8" height="30" fill="var(--s1)"/><text x="762.0" y="45.8" font-size="12" text-anchor="start" fill="var(--ink)" font-weight="700">88.81%</text><text x="132.0" y="89.8" font-size="11" text-anchor="end" fill="var(--fig-axis)" font-weight="600">Top 10 filings</text><rect x="146" y="70" width="604.0" height="30" fill="var(--fig-grid)"/><rect x="146" y="70" width="588.5" height="30" fill="var(--s1)"/><text x="762.0" y="89.8" font-size="12" text-anchor="start" fill="var(--ink)" font-weight="700">94.54%</text><text x="132.0" y="133.8" font-size="11" text-anchor="end" fill="var(--fig-axis)" font-weight="600">Top 100 filings</text><rect x="146" y="114" width="604.0" height="30" fill="var(--fig-grid)"/><rect x="146" y="114" width="593.7" height="30" fill="var(--s1)"/><text x="762.0" y="133.8" font-size="12" text-anchor="start" fill="var(--ink)" font-weight="700">95.39%</text><text x="132.0" y="177.8" font-size="11" text-anchor="end" fill="var(--fig-axis)" font-weight="600">Top 1,000 filings</text><rect x="146" y="158" width="604.0" height="30" fill="var(--fig-grid)"/><rect x="146" y="158" width="599.0" height="30" fill="var(--s1)"/><text x="762.0" y="177.8" font-size="12" text-anchor="start" fill="var(--ink)" font-weight="700">96.23%</text><text x="132.0" y="221.8" font-size="11" text-anchor="end" fill="var(--fig-axis)" font-weight="600">Top 10,000 filings</text><rect x="146" y="202" width="604.0" height="30" fill="var(--fig-grid)"/><rect x="146" y="202" width="604.0" height="30" fill="var(--s1)"/><text x="762.0" y="221.8" font-size="12" text-anchor="start" fill="var(--ink)" font-weight="700">97.04%</text></svg></div><figcaption>One keying error in the hours column sets the national denominator.<details class="more"><summary>Why</summary><div>A single establishment filing accounts for 88.8% of the 19.0 trillion hours in the pooled dataset while contributing 0.00% of the recordable cases. Share of all reported hours held by the largest filings, ranked by hours.</div></details><span class="src">Source artifact: outputs/tables/quality_hours_concentration.csv</span></figcaption></figure></div></section><section class="section" id="figures"><div class="wrap"><div class="rail-head"><span class="rail-num">05</span><h2 class="display">Figures</h2></div><p class="sec-lede">Two interactive charts from summary.json.<details class="more"><summary>Why</summary><div>The pipeline's static figures sit underneath.</div></details></p><figure class="chart" data-chart="{&quot;type&quot;:&quot;line&quot;,&quot;title&quot;:&quot;Aggregate TRIR by year, screened against unscreened&quot;,&quot;x&quot;:[&quot;2016&quot;,&quot;2017&quot;,&quot;2018&quot;,&quot;2019&quot;,&quot;2020&quot;,&quot;2021&quot;,&quot;2022&quot;,&quot;2023&quot;,&quot;2024&quot;],&quot;aspect&quot;:2.2,&quot;y&quot;:{&quot;min&quot;:0},&quot;series&quot;:[{&quot;name&quot;:&quot;Unscreened&quot;,&quot;values&quot;:[2.729,2.634,2.92,0.016,2.792,2.385,2.661,1.38,0.28],&quot;tip&quot;:[&quot;ratio 1.44x&quot;,&quot;ratio 1.52x&quot;,&quot;ratio 1.39x&quot;,&quot;ratio 249.28x&quot;,&quot;ratio 1.61x&quot;,&quot;ratio 1.83x&quot;,&quot;ratio 1.73x&quot;,&quot;ratio 2.28x&quot;,&quot;ratio 12.99x&quot;]},{&quot;name&quot;:&quot;Screened&quot;,&quot;values&quot;:[3.921,3.998,4.069,4.018,4.491,4.368,4.605,3.147,3.642],&quot;tip&quot;:[&quot;ratio 1.44x&quot;,&quot;ratio 1.52x&quot;,&quot;ratio 1.39x&quot;,&quot;ratio 249.28x&quot;,&quot;ratio 1.61x&quot;,&quot;ratio 1.83x&quot;,&quot;ratio 1.73x&quot;,&quot;ratio 2.28x&quot;,&quot;ratio 12.99x&quot;]}]}"><p class="chart-take">Screened TRIR stays between 3.1 and 4.6. Unscreened swings 0.02 to 2.92.</p><div class="chart-slot"></div><span class="src">Source artifact: outputs/summary.json - quality.by_year</span></figure><figure class="chart" data-chart="{&quot;type&quot;:&quot;bar&quot;,&quot;title&quot;:&quot;Share of reported hours in implausible filings, by year&quot;,&quot;x&quot;:[&quot;2016&quot;,&quot;2017&quot;,&quot;2018&quot;,&quot;2019&quot;,&quot;2020&quot;,&quot;2021&quot;,&quot;2022&quot;,&quot;2023&quot;,&quot;2024&quot;],&quot;aspect&quot;:2.4,&quot;y&quot;:{&quot;min&quot;:0,&quot;max&quot;:1,&quot;fmt&quot;:&quot;pct&quot;},&quot;series&quot;:[{&quot;name&quot;:&quot;Hours in flagged filings&quot;,&quot;values&quot;:[0.3159,0.3516,0.2915,0.996,0.3862,0.4607,0.4294,0.5674,0.9242],&quot;tip&quot;:[&quot;2.30% of filings&quot;,&quot;1.66% of filings&quot;,&quot;1.56% of filings&quot;,&quot;1.60% of filings&quot;,&quot;1.91% of filings&quot;,&quot;2.60% of filings&quot;,&quot;2.02% of filings&quot;,&quot;2.34% of filings&quot;,&quot;2.37% of filings&quot;]}]}"><p class="chart-take">Flagged filings hold 29% to 100% of all hours, depending on the year.</p><div class="chart-slot"></div><span class="src">Source artifact: outputs/summary.json - quality.by_year</span></figure><details class="more"><summary>Static figures</summary><div><figure class="fig"><span class="label">fig01_aggregate_trir_by_year.svg</span><h3 class="fig-title">Aggregate TRIR before and after the plausibility screen</h3><p class="fig-sub">OSHA ITA Form 300A, reporting years 2016-2024, n=2,801,064 filings after deduplication</p><div class="fig-scroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 22 820 438" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
 <rect x="0" y="0" width="820" height="460" fill="var(--fig-paper)" />
 <line x1="78" y1="386.00" x2="796" y2="386.00" stroke="var(--fig-grid)" stroke-width="1" />
 <text x="70" y="390.00" font-size="11" text-anchor="end" fill="var(--fig-axis)">0</text>
@@ -434,7 +471,7 @@ tbody tr:last-child td{box-shadow:none}
 <text x="92.0" y="39" font-size="11" fill="var(--fig-axis)">unscreened (all filings)</text>
 <rect x="253.6" y="30" width="10" height="10" fill="var(--s2)" />
 <text x="267.6" y="39" font-size="11" fill="var(--fig-axis)">screened</text>
-</svg></div><figcaption>The unscreened series is governed by how much bad hours data entered that year's file, not by safety performance. That is why the two series cross and diverge rather than tracking each other: the unscreened aggregate is not a noisy version of the screened one. Aggregate TRIR by year, screened against unscreened.<span class="src">Source artifact: outputs/figures/fig01_aggregate_trir_by_year.svg</span></figcaption></figure><figure class="fig"><span class="label">fig02_hours_share_implausible.svg</span><h3 class="fig-title">A small share of filings carries most of the reported hours</h3><p class="fig-sub">OSHA ITA Form 300A, reporting years 2016-2024, n=2,801,064 filings after deduplication</p><div class="fig-scroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 22 820 438" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+</svg></div><figcaption>The unscreened series is governed by how much bad hours data entered that year's file, not by safety performance.<details class="more"><summary>Why</summary><div>That is why the two series cross and diverge rather than tracking each other: the unscreened aggregate is not a noisy version of the screened one. Aggregate TRIR by year, screened against unscreened.</div></details><span class="src">Source artifact: outputs/figures/fig01_aggregate_trir_by_year.svg</span></figcaption></figure><figure class="fig"><span class="label">fig02_hours_share_implausible.svg</span><h3 class="fig-title">A small share of filings carries most of the reported hours</h3><p class="fig-sub">OSHA ITA Form 300A, reporting years 2016-2024, n=2,801,064 filings after deduplication</p><div class="fig-scroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 22 820 438" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
 <rect x="0" y="0" width="820" height="460" fill="var(--fig-paper)" />
 <line x1="78" y1="386.00" x2="796" y2="386.00" stroke="var(--fig-grid)" stroke-width="1" />
 <text x="70" y="390.00" font-size="11" text-anchor="end" fill="var(--fig-axis)">0</text>
@@ -483,7 +520,7 @@ tbody tr:last-child td{box-shadow:none}
 <text x="92.0" y="39" font-size="11" fill="var(--fig-axis)">% of filings flagged implausible</text>
 <rect x="304.8" y="30" width="10" height="10" fill="var(--s2)" />
 <text x="318.8" y="39" font-size="11" fill="var(--fig-axis)">% of all reported hours held by them</text>
-</svg></div><figcaption>Implausible filings hold anywhere from roughly a third to nearly all of the reported hours, depending on the year. That swing is what drives the instability in the ratio above. Share of all reported hours sitting in filings that fail the plausibility screen, by year.<span class="src">Source artifact: outputs/figures/fig02_hours_share_implausible.svg</span></figcaption></figure><figure class="fig"><span class="label">fig03_hours_per_employee.svg</span><h3 class="fig-title">Hours worked per average employee (log10 scale)</h3><p class="fig-sub">OSHA ITA Form 300A, reporting years 2016-2024, n=2,801,064 filings after deduplication  |  screen bounds: 120-4500 h</p><div class="fig-scroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 22 820 438" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+</svg></div><figcaption>Implausible filings hold anywhere from roughly a third to nearly all of the reported hours, depending on the year.<details class="more"><summary>Why</summary><div>That swing is what drives the instability in the ratio above. Share of all reported hours sitting in filings that fail the plausibility screen, by year.</div></details><span class="src">Source artifact: outputs/figures/fig02_hours_share_implausible.svg</span></figcaption></figure><figure class="fig"><span class="label">fig03_hours_per_employee.svg</span><h3 class="fig-title">Hours worked per average employee (log10 scale)</h3><p class="fig-sub">OSHA ITA Form 300A, reporting years 2016-2024, n=2,801,064 filings after deduplication  |  screen bounds: 120-4500 h</p><div class="fig-scroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 22 820 438" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
 <rect x="0" y="0" width="820" height="460" fill="var(--fig-paper)" />
 <line x1="78" y1="369.99" x2="796" y2="369.99" stroke="var(--fig-grid)" stroke-width="1" />
 <text x="70" y="373.99" font-size="11" text-anchor="end" fill="var(--fig-axis)">1</text>
@@ -527,7 +564,7 @@ tbody tr:last-child td{box-shadow:none}
 <text x="16" y="216.0" font-size="12" text-anchor="middle" fill="var(--fig-axis)" transform="rotate(-90 16 216.0)">Number of filings (log scale)</text>
 <rect x="78.0" y="30" width="10" height="10" fill="var(--s1)" />
 <text x="92.0" y="39" font-size="11" fill="var(--fig-axis)">filings</text>
-</svg></div><figcaption>The tail extends many orders of magnitude beyond anything a workforce can produce, so values outside the window are unit or keying errors rather than real labour. Distribution of hours worked per employee; the screen retains 120 to 4,500 hours per employee per year.<span class="src">Source artifact: outputs/figures/fig03_hours_per_employee.svg</span></figcaption></figure><figure class="fig"><span class="label">fig05_zero_share_by_size.svg</span><h3 class="fig-title">Zero-recordable share falls sharply with establishment size</h3><p class="fig-sub">OSHA ITA Form 300A, reporting years 2016-2024, n=2,801,064 filings after deduplication</p><div class="fig-scroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 22 820 438" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+</svg></div><figcaption>The tail extends many orders of magnitude beyond anything a workforce can produce, so values outside the window are unit or keying errors rather than real labour.<details class="more"><summary>Why</summary><div>Distribution of hours worked per employee; the screen retains 120 to 4,500 hours per employee per year.</div></details><span class="src">Source artifact: outputs/figures/fig03_hours_per_employee.svg</span></figcaption></figure><figure class="fig"><span class="label">fig05_zero_share_by_size.svg</span><h3 class="fig-title">Zero-recordable share falls sharply with establishment size</h3><p class="fig-sub">OSHA ITA Form 300A, reporting years 2016-2024, n=2,801,064 filings after deduplication</p><div class="fig-scroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 22 820 438" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
 <rect x="0" y="0" width="820" height="460" fill="var(--fig-paper)" />
 <line x1="78" y1="386.00" x2="796" y2="386.00" stroke="var(--fig-grid)" stroke-width="1" />
 <text x="70" y="390.00" font-size="11" text-anchor="end" fill="var(--fig-axis)">0</text>
@@ -561,7 +598,7 @@ tbody tr:last-child td{box-shadow:none}
 <text x="16" y="216.0" font-size="12" text-anchor="middle" fill="var(--fig-axis)" transform="rotate(-90 16 216.0)">Share of establishments reporting zero recordables</text>
 <rect x="78.0" y="30" width="10" height="10" fill="var(--s1)" />
 <text x="92.0" y="39" font-size="11" fill="var(--fig-axis)">zero-recordable share</text>
-</svg></div><figcaption>A zero rate says as much about headcount as about safety performance: zero is the modal outcome at small establishments. Share of establishments reporting zero recordable cases, by size band.<span class="src">Source artifact: outputs/figures/fig05_zero_share_by_size.svg</span></figcaption></figure><figure class="fig"><span class="label">fig06_percentile_stability.svg</span><h3 class="fig-title">Peer-group 75th percentile TRIR: 2023 vs 2024</h3><p class="fig-sub">OSHA ITA Form 300A, reporting years 2016-2024, n=2,801,064 filings after deduplication  |  469 matched peer groups</p><div class="fig-scroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 22 820 438" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+</svg></div><figcaption>A zero rate says as much about headcount as about safety performance: zero is the modal outcome at small establishments.<details class="more"><summary>Why</summary><div>Share of establishments reporting zero recordable cases, by size band.</div></details><span class="src">Source artifact: outputs/figures/fig05_zero_share_by_size.svg</span></figcaption></figure><figure class="fig"><span class="label">fig06_percentile_stability.svg</span><h3 class="fig-title">Peer-group 75th percentile TRIR: 2023 vs 2024</h3><p class="fig-sub">OSHA ITA Form 300A, reporting years 2016-2024, n=2,801,064 filings after deduplication  |  469 matched peer groups</p><div class="fig-scroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 22 820 438" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
 <rect x="0" y="0" width="820" height="460" fill="var(--fig-paper)" />
 <line x1="78" y1="386.00" x2="796" y2="386.00" stroke="var(--fig-grid)" stroke-width="1" />
 <text x="70" y="390.00" font-size="11" text-anchor="end" fill="var(--fig-axis)">0</text>
@@ -1063,7 +1100,7 @@ tbody tr:last-child td{box-shadow:none}
 <text x="16" y="216.0" font-size="12" text-anchor="middle" fill="var(--fig-axis)" transform="rotate(-90 16 216.0)">p75 TRIR in 2024</text>
 <rect x="78.0" y="30" width="10" height="10" fill="var(--s1)" />
 <text x="92.0" y="39" font-size="11" fill="var(--fig-axis)">matched peer group</text>
-</svg></div><figcaption>A benchmark is only usable if the band a site is compared against holds still enough between years to mean the same thing. Year-over-year stability of peer-group percentile bands.<span class="src">Source artifact: outputs/figures/fig06_percentile_stability.svg</span></figcaption></figure></div></section><section class="section" id="models"><div class="wrap"><div class="rail-head"><span class="rail-num">06</span><h2 class="display">Count models</h2></div><p class="sec-lede">Rates are ratios of counts, and the count distribution decides what a control limit or a significance test on that rate is allowed to say.</p><figure class="tbl"><div class="tbl-wrap"><table><thead><tr><th>model</th><th>n industries best by aic</th><th>n industries fitted</th><th>share best by aic</th></tr></thead><tbody><tr><td class="t-first">poisson</td><td>0</td><td>30</td><td>0.00%</td></tr><tr><td class="t-first">nb2</td><td>15</td><td>30</td><td>50.00%</td></tr><tr><td class="t-first">zip</td><td>0</td><td>30</td><td>0.00%</td></tr><tr><td class="t-first">zinb</td><td>15</td><td>30</td><td>50.00%</td></tr></tbody></table></div><figcaption class="tbl-cap">Which count model wins on AIC, across the thirty largest three-digit NAICS industries fitted for the model year.<span class="src">Source artifact: outputs/tables/count_model_selection_summary.csv</span></figcaption></figure><div class="prose"><p>Poisson, negative binomial, zero-inflated Poisson and zero-inflated negative binomial were fitted per industry and compared by likelihood ratio and AIC. Boundary-corrected p-values are reported because the zero-inflation parameter sits on the edge of its parameter space, where the naive chi-squared reference distribution does not hold. Poisson never wins, which is the practical result: injury counts are overdispersed everywhere, so control limits built on a Poisson assumption are too tight.</p></div></div></section><section class="section" id="peers"><div class="wrap"><div class="rail-head"><span class="rail-num">07</span><h2 class="display">Peer benchmarking</h2></div><p class="sec-lede">If a benchmark is going to be used to judge a site, the peer group it is judged against has to be stable between years.</p><figure class="tbl"><div class="tbl-wrap"><table><thead><tr><th>year from</th><th>year to</th><th>percentile</th><th>n matched groups</th><th>spearman rho</th><th>median abs change</th><th>median abs rel change</th></tr></thead><tbody><tr><td class="t-first">2016</td><td>2017</td><td>p10</td><td>406</td><td>0.8631</td><td>0</td><td>0.2704</td></tr><tr><td class="t-first">2016</td><td>2017</td><td>p25</td><td>406</td><td>0.9234</td><td>0.04302</td><td>0.1256</td></tr><tr><td class="t-first">2016</td><td>2017</td><td>p50</td><td>406</td><td>0.9096</td><td>0.1386</td><td>0.09389</td></tr><tr><td class="t-first">2016</td><td>2017</td><td>p75</td><td>406</td><td>0.8548</td><td>0.4369</td><td>0.09579</td></tr><tr><td class="t-first">2016</td><td>2017</td><td>p90</td><td>406</td><td>0.8867</td><td>0.9544</td><td>0.1016</td></tr><tr><td class="t-first">2016</td><td>2017</td><td>p95</td><td>406</td><td>0.9092</td><td>1.501</td><td>0.1271</td></tr><tr><td class="t-first">2017</td><td>2018</td><td>p10</td><td>444</td><td>0.8933</td><td>0</td><td>0.2584</td></tr><tr><td class="t-first">2017</td><td>2018</td><td>p25</td><td>444</td><td>0.9145</td><td>0.03925</td><td>0.1292</td></tr><tr><td class="t-first">2017</td><td>2018</td><td>p50</td><td>444</td><td>0.8913</td><td>0.1583</td><td>0.08632</td></tr><tr><td class="t-first">2017</td><td>2018</td><td>p75</td><td>444</td><td>0.8488</td><td>0.36</td><td>0.08182</td></tr><tr><td class="t-first">2017</td><td>2018</td><td>p90</td><td>444</td><td>0.8864</td><td>0.7765</td><td>0.08334</td></tr><tr><td class="t-first">2017</td><td>2018</td><td>p95</td><td>444</td><td>0.9143</td><td>1.1</td><td>0.09356</td></tr></tbody></table></div><figcaption class="tbl-cap">Rank correlation and median absolute change for each percentile band between consecutive years, over peer groups matched in both years. Ordering is stable: the median rank correlation runs from 0.86 to 0.93 across bands. The band values themselves are less so, and least so at the bottom, where p10 moves a median of 26% year over year against 10% for p75. Low percentiles sit near zero, so a small absolute move is a large relative one, which is exactly the region where a site is judged to have improved. Showing 12 of 48 rows.<span class="src">Source artifact: outputs/tables/percentile_band_stability.csv</span></figcaption></figure><figure class="tbl"><div class="tbl-wrap"><table><thead><tr><th>size band</th><th>n</th><th>zero share</th><th>mean recordables</th><th>variance to mean ratio</th><th>aggregate trir</th><th>median establishment trir</th></tr></thead><tbody><tr><td class="t-first">001-019</td><td>535,187</td><td>75.11%</td><td>0.388</td><td>3.351</td><td>4.939</td><td>0</td></tr><tr><td class="t-first">020-049</td><td>884,997</td><td>46.22%</td><td>1.252</td><td>6.459</td><td>4.582</td><td>2.546</td></tr><tr><td class="t-first">050-099</td><td>553,610</td><td>23.92%</td><td>3.054</td><td>7.851</td><td>4.977</td><td>3.35</td></tr><tr><td class="t-first">100-249</td><td>493,919</td><td>10.90%</td><td>6.143</td><td>11.38</td><td>4.707</td><td>3.608</td></tr><tr><td class="t-first">250-499</td><td>170,749</td><td>7.30%</td><td>12.3</td><td>14.74</td><td>4.132</td><td>3.382</td></tr><tr><td class="t-first">500-999</td><td>61,329</td><td>8.19%</td><td>20.42</td><td>29.54</td><td>3.375</td><td>2.381</td></tr><tr><td class="t-first">1000+</td><td>43,416</td><td>8.13%</td><td>72.25</td><td>241.4</td><td>3.143</td><td>2.844</td></tr></tbody></table></div><figcaption class="tbl-cap">Establishment size against zero share, dispersion and rate. The variance-to-mean ratio rises steadily with size, so a single Poisson assumption cannot serve every band.<span class="src">Source artifact: outputs/tables/size_band_effects.csv</span></figcaption></figure></div></section><section class="section" id="method"><div class="wrap"><div class="rail-head"><span class="rail-num">08</span><h2 class="display">Method and limits</h2></div><p class="sec-lede">The screen, its sensitivity, and what the result does not license.</p><div class="cols"><div class="prose"><h3>The plausibility screen</h3><p>Hours worked divided by average employees must fall between 120 and 4,500 per year. Below that, hours were filed in the wrong unit. Above it, a keying error. Filings failing the screen are excluded from aggregates rather than corrected, because the true value is not recoverable from the filing alone.</p><h3>How sensitive is that window</h3><p>The bounds are a judgement call, so the pipeline sweeps them. Across the grid the corrected aggregate TRIR moves only between 3.963 and 3.993, and the flagged share between 1.79% and 4.49%. The finding does not depend on where exactly the window is drawn.</p><h3>Reproducing this</h3><p>The pipeline downloads the public ITA files itself and fails loudly rather than substituting fixtures if they are unavailable. 4,703 duplicate rows were dropped before analysis. Every table and figure on this page is generated by script; none is hand-entered.</p></div><div class="prose"><h3>What this does not establish</h3><p>The screen identifies filings that cannot be right. It does not identify filings that are merely wrong, and it cannot recover the true hours for an excluded establishment.</p><p>Aggregates after screening are conditional on the surviving population, which is not a random sample of the original. If implausible hours are filed disproportionately by one kind of employer, the screened aggregate inherits that selection.</p><p>Nothing here is a claim about whether workplaces got safer. It is a claim about what the denominator will support.</p><h3>Reviewer note</h3><p>An internal adversarial review held that this analysis is a separable contribution being buried inside a larger manuscript, and that it should stand as its own paper. That criticism is recorded here rather than answered.</p></div></div></div></section>
+</svg></div><figcaption>A benchmark is only usable if the band a site is compared against holds still enough between years to mean the same thing.<details class="more"><summary>Why</summary><div>Year-over-year stability of peer-group percentile bands.</div></details><span class="src">Source artifact: outputs/figures/fig06_percentile_stability.svg</span></figcaption></figure></div></details></div></section><section class="section" id="models"><div class="wrap"><div class="rail-head"><span class="rail-num">06</span><h2 class="display">Count models</h2></div><p class="sec-lede">Rates are ratios of counts, and the count distribution decides what a control limit or a significance test on that rate is allowed to say.</p><figure class="tbl"><div class="tbl-wrap"><table><thead><tr><th>model</th><th>n industries best by aic</th><th>n industries fitted</th><th>share best by aic</th></tr></thead><tbody><tr><td class="t-first">poisson</td><td>0</td><td>30</td><td>0.00%</td></tr><tr><td class="t-first">nb2</td><td>15</td><td>30</td><td>50.00%</td></tr><tr><td class="t-first">zip</td><td>0</td><td>30</td><td>0.00%</td></tr><tr><td class="t-first">zinb</td><td>15</td><td>30</td><td>50.00%</td></tr></tbody></table></div><figcaption class="tbl-cap">Which count model wins on AIC, across the thirty largest three-digit NAICS industries fitted for the model year.<span class="src">Source artifact: outputs/tables/count_model_selection_summary.csv</span></figcaption></figure><details class="more"><summary>Notes</summary><div><div class="prose"><p>Poisson, negative binomial, zero-inflated Poisson and zero-inflated negative binomial were fitted per industry and compared by likelihood ratio and AIC. Boundary-corrected p-values are reported because the zero-inflation parameter sits on the edge of its parameter space, where the naive chi-squared reference distribution does not hold. Poisson never wins, which is the practical result: injury counts are overdispersed everywhere, so control limits built on a Poisson assumption are too tight.</p></div></div></details></div></section><section class="section" id="peers"><div class="wrap"><div class="rail-head"><span class="rail-num">07</span><h2 class="display">Peer benchmarking</h2></div><p class="sec-lede">If a benchmark is going to be used to judge a site, the peer group it is judged against has to be stable between years.</p><figure class="tbl"><div class="tbl-wrap"><table><thead><tr><th>year from</th><th>year to</th><th>percentile</th><th>n matched groups</th><th>spearman rho</th><th>median abs change</th><th>median abs rel change</th></tr></thead><tbody><tr><td class="t-first">2016</td><td>2017</td><td>p10</td><td>406</td><td>0.8631</td><td>0</td><td>0.2704</td></tr><tr><td class="t-first">2016</td><td>2017</td><td>p25</td><td>406</td><td>0.9234</td><td>0.04302</td><td>0.1256</td></tr><tr><td class="t-first">2016</td><td>2017</td><td>p50</td><td>406</td><td>0.9096</td><td>0.1386</td><td>0.09389</td></tr><tr><td class="t-first">2016</td><td>2017</td><td>p75</td><td>406</td><td>0.8548</td><td>0.4369</td><td>0.09579</td></tr><tr><td class="t-first">2016</td><td>2017</td><td>p90</td><td>406</td><td>0.8867</td><td>0.9544</td><td>0.1016</td></tr><tr><td class="t-first">2016</td><td>2017</td><td>p95</td><td>406</td><td>0.9092</td><td>1.501</td><td>0.1271</td></tr><tr><td class="t-first">2017</td><td>2018</td><td>p10</td><td>444</td><td>0.8933</td><td>0</td><td>0.2584</td></tr><tr><td class="t-first">2017</td><td>2018</td><td>p25</td><td>444</td><td>0.9145</td><td>0.03925</td><td>0.1292</td></tr><tr><td class="t-first">2017</td><td>2018</td><td>p50</td><td>444</td><td>0.8913</td><td>0.1583</td><td>0.08632</td></tr><tr><td class="t-first">2017</td><td>2018</td><td>p75</td><td>444</td><td>0.8488</td><td>0.36</td><td>0.08182</td></tr><tr><td class="t-first">2017</td><td>2018</td><td>p90</td><td>444</td><td>0.8864</td><td>0.7765</td><td>0.08334</td></tr><tr><td class="t-first">2017</td><td>2018</td><td>p95</td><td>444</td><td>0.9143</td><td>1.1</td><td>0.09356</td></tr></tbody></table></div><figcaption class="tbl-cap">Rank correlation and median absolute change for each percentile band between consecutive years, over peer groups matched in both years.<details class="more"><summary>Why</summary><div>Ordering is stable: the median rank correlation runs from 0.86 to 0.93 across bands. The band values themselves are less so, and least so at the bottom, where p10 moves a median of 26% year over year against 10% for p75. Low percentiles sit near zero, so a small absolute move is a large relative one, which is exactly the region where a site is judged to have improved. Showing 12 of 48 rows.</div></details><span class="src">Source artifact: outputs/tables/percentile_band_stability.csv</span></figcaption></figure><figure class="tbl"><div class="tbl-wrap"><table><thead><tr><th>size band</th><th>n</th><th>zero share</th><th>mean recordables</th><th>variance to mean ratio</th><th>aggregate trir</th><th>median establishment trir</th></tr></thead><tbody><tr><td class="t-first">001-019</td><td>535,187</td><td>75.11%</td><td>0.388</td><td>3.351</td><td>4.939</td><td>0</td></tr><tr><td class="t-first">020-049</td><td>884,997</td><td>46.22%</td><td>1.252</td><td>6.459</td><td>4.582</td><td>2.546</td></tr><tr><td class="t-first">050-099</td><td>553,610</td><td>23.92%</td><td>3.054</td><td>7.851</td><td>4.977</td><td>3.35</td></tr><tr><td class="t-first">100-249</td><td>493,919</td><td>10.90%</td><td>6.143</td><td>11.38</td><td>4.707</td><td>3.608</td></tr><tr><td class="t-first">250-499</td><td>170,749</td><td>7.30%</td><td>12.3</td><td>14.74</td><td>4.132</td><td>3.382</td></tr><tr><td class="t-first">500-999</td><td>61,329</td><td>8.19%</td><td>20.42</td><td>29.54</td><td>3.375</td><td>2.381</td></tr><tr><td class="t-first">1000+</td><td>43,416</td><td>8.13%</td><td>72.25</td><td>241.4</td><td>3.143</td><td>2.844</td></tr></tbody></table></div><figcaption class="tbl-cap">Establishment size against zero share, dispersion and rate.<details class="more"><summary>Why</summary><div>The variance-to-mean ratio rises steadily with size, so a single Poisson assumption cannot serve every band.</div></details><span class="src">Source artifact: outputs/tables/size_band_effects.csv</span></figcaption></figure></div></section><section class="section" id="method"><div class="wrap"><div class="rail-head"><span class="rail-num">08</span><h2 class="display">Method and limits</h2></div><p class="sec-lede">The screen, its sensitivity, and what the result does not license.</p><details class="more"><summary>Method, limits and notes</summary><div><div class="cols"><div class="prose"><h3>The plausibility screen</h3><p>Hours worked divided by average employees must fall between 120 and 4,500 per year. Below that, hours were filed in the wrong unit. Above it, a keying error. Filings failing the screen are excluded from aggregates rather than corrected, because the true value is not recoverable from the filing alone.</p><h3>How sensitive is that window</h3><p>The bounds are a judgement call, so the pipeline sweeps them. Across the grid the corrected aggregate TRIR moves only between 3.963 and 3.993, and the flagged share between 1.79% and 4.49%. The finding does not depend on where exactly the window is drawn.</p><h3>Reproducing this</h3><p>The pipeline downloads the public ITA files itself and fails loudly rather than substituting fixtures if they are unavailable. 4,703 duplicate rows were dropped before analysis. Every table and figure on this page is generated by script; none is hand-entered.</p></div><details class="more"><summary>Notes</summary><div><div class="prose"><h3>What this does not establish</h3><p>The screen identifies filings that cannot be right. It does not identify filings that are merely wrong, and it cannot recover the true hours for an excluded establishment.</p><p>Aggregates after screening are conditional on the surviving population, which is not a random sample of the original. If implausible hours are filed disproportionately by one kind of employer, the screened aggregate inherits that selection.</p><p>Nothing here is a claim about whether workplaces got safer. It is a claim about what the denominator will support.</p><h3>Reviewer note</h3><p>An internal adversarial review held that this analysis is a separable contribution being buried inside a larger manuscript, and that it should stand as its own paper. That criticism is recorded here rather than answered.</p></div></div></div></details></div></details></div></section>
 </main>
 <div class="pn-wrap"><nav class="pn" aria-label="Programme navigation"><a href="https://priyatham9.github.io/grounded/"><span class="label">Previous</span><span class="pn-t">&larr; Grounded</span></a><a href="https://priyatham9.github.io/ehs-ai-grounding-eval/"><span class="label">Next</span><span class="pn-t">Grounding benchmark &rarr;</span></a></nav></div><footer class="footer">
   <div class="wrap">
@@ -1150,6 +1187,131 @@ tbody tr:last-child td{box-shadow:none}
     }, { threshold: 0.4 });
     obs.observe(el);
   });
+})();
+</script>
+<script>/* charts.js - inline SVG line and bar charts from inline JSON.
+   No dependencies. Colours come from CSS variables so both themes work.
+   Usage: <figure class="chart" data-chart='{...}'>, then GCharts.init().
+   spec = {type:"line"|"bar", x:[labels], series:[{name, values, tip?}], y:{min,max,ticks,fmt}, aspect}
+*/
+(function () {
+  var NS = 'http://www.w3.org/2000/svg';
+  var W = 720, PAD = { l: 52, r: 16, t: 14, b: 34 };
+  var COL = ['var(--s1)', 'var(--s2)', 'var(--s3)', 'var(--s4)'];
+
+  function el(tag, attrs, parent) {
+    var n = document.createElementNS(NS, tag);
+    for (var k in attrs) n.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(n);
+    return n;
+  }
+  function txt(x, y, s, anchor, size, fill) {
+    var t = el('text', { x: x, y: y, 'text-anchor': anchor || 'start', 'font-size': size || 11, fill: fill || 'var(--fig-axis)' });
+    t.textContent = s; return t;
+  }
+  function fmtv(v, f) {
+    if (f === 'pct') return (v * 100).toFixed(1) + '%';
+    if (f === 'int') return Math.round(v).toLocaleString();
+    if (typeof f === 'number') return v.toFixed(f);
+    return Math.abs(v) >= 100 ? v.toFixed(0) : v.toFixed(2);
+  }
+  function niceTicks(lo, hi, n) {
+    var span = hi - lo, step = Math.pow(10, Math.floor(Math.log10(span / n)));
+    var m = [1, 2, 2.5, 5, 10], best = step;
+    for (var i = 0; i < m.length; i++) { if (span / (step * m[i]) <= n) { best = step * m[i]; break; } }
+    var a = Math.floor(lo / best) * best, out = [];
+    for (var v = a; v <= hi + best * 0.5; v += best) out.push(+v.toFixed(10));
+    return out;
+  }
+
+  function render(fig) {
+    var spec; try { spec = JSON.parse(fig.getAttribute('data-chart')); } catch (e) { return; }
+    var H = Math.round(W / (spec.aspect || 2.2));
+    var svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': spec.title || 'chart', 'font-family': "'IBM Plex Mono', ui-monospace, Menlo, monospace" });
+    el('rect', { x: 0, y: 0, width: W, height: H, fill: 'var(--fig-paper)' }, svg);
+    var all = [];
+    spec.series.forEach(function (s) { s.values.forEach(function (v) { if (v != null) all.push(v); }); });
+    var lo = spec.y && spec.y.min != null ? spec.y.min : Math.min.apply(null, all.concat([0]));
+    var hi = spec.y && spec.y.max != null ? spec.y.max : Math.max.apply(null, all);
+    if (hi === lo) hi = lo + 1;
+    var ticks = (spec.y && spec.y.ticks) || niceTicks(lo, hi, 5);
+    lo = Math.min(lo, ticks[0]); hi = Math.max(hi, ticks[ticks.length - 1]);
+    var iw = W - PAD.l - PAD.r, ih = H - PAD.t - PAD.b;
+    var ny = function (v) { return PAD.t + ih - (v - lo) / (hi - lo) * ih; };
+    var nx = spec.x.length;
+    var fmt = spec.y && spec.y.fmt;
+
+    ticks.forEach(function (t) {
+      var y = ny(t);
+      el('line', { x1: PAD.l, x2: W - PAD.r, y1: y, y2: y, stroke: 'var(--fig-grid)', 'stroke-width': 1 }, svg);
+      svg.appendChild(txt(PAD.l - 8, y + 4, fmtv(t, fmt), 'end', 10, 'var(--fig-mute)'));
+    });
+    el('line', { x1: PAD.l, x2: W - PAD.r, y1: PAD.t + ih, y2: PAD.t + ih, stroke: 'var(--fig-axis)', 'stroke-width': 2 }, svg);
+    if (spec.ref != null) {
+      el('line', { x1: PAD.l, x2: W - PAD.r, y1: ny(spec.ref), y2: ny(spec.ref), stroke: 'var(--fig-axis)', 'stroke-dasharray': '4 4' }, svg);
+      if (spec.refLabel) svg.appendChild(txt(W - PAD.r, ny(spec.ref) - 5, spec.refLabel, 'end', 10, 'var(--fig-mute)'));
+    }
+
+    var tip = document.createElement('div'); tip.className = 'chart-tip'; tip.hidden = true;
+    var wrap = fig.querySelector('.chart-body') || fig;
+    function show(node, html) {
+      tip.innerHTML = html; tip.hidden = false;
+      var r = node.getBoundingClientRect(), w = wrap.getBoundingClientRect();
+      tip.style.left = Math.max(0, Math.min(r.left - w.left + r.width / 2, w.width - tip.offsetWidth)) + 'px';
+      tip.style.top = (r.top - w.top - tip.offsetHeight - 8) + 'px';
+    }
+    function hide() { tip.hidden = true; }
+    function attach(node, html) {
+      node.setAttribute('tabindex', '0'); node.setAttribute('role', 'img'); node.setAttribute('aria-label', html.replace(/<[^>]+>/g, ' '));
+      node.addEventListener('mouseenter', function () { show(node, html); });
+      node.addEventListener('focus', function () { show(node, html); });
+      node.addEventListener('mouseleave', hide); node.addEventListener('blur', hide);
+    }
+
+    if (spec.type === 'bar') {
+      var ns = spec.series.length, slot = iw / nx, bw = Math.min(56, slot * 0.7 / ns);
+      spec.series.forEach(function (s, si) {
+        s.values.forEach(function (v, i) {
+          if (v == null) return;
+          var x = PAD.l + slot * i + slot / 2 - (bw * ns) / 2 + bw * si;
+          var y = ny(Math.max(v, lo)), h = Math.max(1, ny(lo) - y);
+          var r = el('rect', { x: x, y: y, width: bw - 2, height: h, fill: COL[si % 4], class: 'chart-bar' }, svg);
+          attach(r, '<b>' + spec.x[i] + '</b><br>' + s.name + ': ' + fmtv(v, fmt) + (s.tip && s.tip[i] ? '<br>' + s.tip[i] : ''));
+        });
+      });
+    } else {
+      var step = nx > 1 ? iw / (nx - 1) : 0;
+      spec.series.forEach(function (s, si) {
+        var d = '';
+        s.values.forEach(function (v, i) { if (v == null) return; d += (d ? ' L' : 'M') + (PAD.l + step * i).toFixed(1) + ' ' + ny(v).toFixed(1); });
+        el('path', { d: d, fill: 'none', stroke: COL[si % 4], 'stroke-width': 2.5, 'stroke-linejoin': 'round' }, svg);
+        s.values.forEach(function (v, i) {
+          if (v == null) return;
+          var c = el('circle', { cx: PAD.l + step * i, cy: ny(v), r: 4.5, fill: 'var(--fig-paper)', stroke: COL[si % 4], 'stroke-width': 2.5, class: 'chart-pt' }, svg);
+          attach(c, '<b>' + spec.x[i] + '</b><br>' + s.name + ': ' + fmtv(v, fmt) + (s.tip && s.tip[i] ? '<br>' + s.tip[i] : ''));
+        });
+      });
+    }
+    var every = Math.ceil(nx / 12);
+    spec.x.forEach(function (lab, i) {
+      if (i % every) return;
+      var x = spec.type === 'bar' ? PAD.l + iw / nx * i + iw / nx / 2 : PAD.l + (nx > 1 ? iw / (nx - 1) : 0) * i;
+      svg.appendChild(txt(x, H - 10, lab, 'middle', 10, 'var(--fig-mute)'));
+    });
+
+    var body = document.createElement('div'); body.className = 'chart-body';
+    body.appendChild(svg); body.appendChild(tip);
+    var slot2 = fig.querySelector('.chart-slot');
+    if (slot2) slot2.replaceWith(body); else fig.appendChild(body);
+    if (spec.series.length > 1) {
+      var lg = document.createElement('div'); lg.className = 'fig-legend';
+      spec.series.forEach(function (s, i) { var sp = document.createElement('span'); sp.innerHTML = '<i style="background:' + COL[i % 4] + '"></i>' + s.name; lg.appendChild(sp); });
+      body.after(lg);
+    }
+  }
+
+  window.GCharts = { init: function () { document.querySelectorAll('figure.chart[data-chart]').forEach(render); } };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', window.GCharts.init); else window.GCharts.init();
 })();
 </script>
 </body>

@@ -1,0 +1,12 @@
+statistic,value
+year,2024.0
+n_establishments_screened,389187.0
+n_naics3_groups_total,122.0
+n_naics3_groups_at_least_min_group_n,71.0
+n_naics3_groups_fitted,30.0
+n_naics3_groups_dropped_below_min_group_n,51.0
+n_naics3_groups_dropped_beyond_top_k,41.0
+share_establishments_in_fitted_groups,0.7880813079573573
+share_hours_in_fitted_groups,0.7211393125581383
+share_recordable_cases_in_fitted_groups,0.7596860322712476
+smallest_fitted_group_n,4936.0

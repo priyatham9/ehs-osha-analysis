@@ -1,0 +1,21 @@
+BLS SOII fetch attempt - 2026-09-07 (UTC)
+
+Goal: private industry total recordable case rate per 100 FTE (and NAICS 325
+chemical manufacturing) for reporting years 2016-2024, to compare with the
+ITA-derived aggregate TRIR.
+
+Endpoints probed with curl from this machine:
+  https://api.bls.gov/publicAPI/v2/timeseries/data/<ID>   HTTP 200 (API reachable)
+  https://data.bls.gov/timeseries/<ID>                     HTTP 200 (HTML, no series title returned for probed IDs)
+  https://www.bls.gov/iif/nonfatal-injuries-and-illnesses-tables.htm   HTTP 403
+  https://www.bls.gov/web/osh/summ1_00.htm                 HTTP 403
+  https://download.bls.gov/pub/time.series/is/is.series    HTTP 403 (series catalog)
+  https://download.bls.gov/pub/time.series/is/             HTTP 403
+
+Outcome: the API answers but the series catalog that maps IDs to titles is
+blocked, so no SOII series ID could be confirmed. Probed IDs returned
+"Series does not exist". No rates were entered by hand. No data file is
+cached here. Run src/ehs_osha/bls.py with a confirmed series ID to populate
+this directory; each successful fetch appends a line below.
+
+Fetch log:

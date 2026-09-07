@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="460" viewBox="0 0 820 460" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+<rect x="0" y="0" width="820" height="460" fill="#ffffff" />
+<line x1="78" y1="386.00" x2="796" y2="386.00" stroke="#e6e6e6" stroke-width="1" />
+<text x="70" y="390.00" font-size="11" text-anchor="end" fill="#444">0</text>
+<line x1="78" y1="321.24" x2="796" y2="321.24" stroke="#e6e6e6" stroke-width="1" />
+<text x="70" y="325.24" font-size="11" text-anchor="end" fill="#444">20</text>
+<line x1="78" y1="256.48" x2="796" y2="256.48" stroke="#e6e6e6" stroke-width="1" />
+<text x="70" y="260.48" font-size="11" text-anchor="end" fill="#444">40</text>
+<line x1="78" y1="191.71" x2="796" y2="191.71" stroke="#e6e6e6" stroke-width="1" />
+<text x="70" y="195.71" font-size="11" text-anchor="end" fill="#444">60</text>
+<line x1="78" y1="126.95" x2="796" y2="126.95" stroke="#e6e6e6" stroke-width="1" />
+<text x="70" y="130.95" font-size="11" text-anchor="end" fill="#444">80</text>
+<line x1="78" y1="62.19" x2="796" y2="62.19" stroke="#e6e6e6" stroke-width="1" />
+<text x="70" y="66.19" font-size="11" text-anchor="end" fill="#444">100</text>
+<line x1="78" y1="46" x2="78" y2="386" stroke="#333" stroke-width="1.2" />
+<line x1="78" y1="386" x2="796" y2="386" stroke="#333" stroke-width="1.2" />
+<rect x="85.98" y="378.55" width="31.91" height="7.45" fill="#0072B2" />
+<rect x="165.76" y="380.61" width="31.91" height="5.39" fill="#0072B2" />
+<rect x="245.53" y="380.96" width="31.91" height="5.04" fill="#0072B2" />
+<rect x="325.31" y="380.82" width="31.91" height="5.18" fill="#0072B2" />
+<rect x="405.09" y="379.83" width="31.91" height="6.17" fill="#0072B2" />
+<rect x="484.87" y="377.58" width="31.91" height="8.42" fill="#0072B2" />
+<rect x="564.64" y="379.47" width="31.91" height="6.53" fill="#0072B2" />
+<rect x="644.42" y="378.41" width="31.91" height="7.59" fill="#0072B2" />
+<rect x="724.20" y="378.34" width="31.91" height="7.66" fill="#0072B2" />
+<rect x="117.89" y="283.71" width="31.91" height="102.29" fill="#D55E00" />
+<rect x="197.67" y="272.16" width="31.91" height="113.84" fill="#D55E00" />
+<rect x="277.44" y="291.62" width="31.91" height="94.38" fill="#D55E00" />
+<rect x="357.22" y="63.47" width="31.91" height="322.53" fill="#D55E00" />
+<rect x="437.00" y="260.96" width="31.91" height="125.04" fill="#D55E00" />
+<rect x="516.78" y="236.83" width="31.91" height="149.17" fill="#D55E00" />
+<rect x="596.56" y="246.95" width="31.91" height="139.05" fill="#D55E00" />
+<rect x="676.33" y="202.27" width="31.91" height="183.73" fill="#D55E00" />
+<rect x="756.11" y="86.75" width="31.91" height="299.25" fill="#D55E00" />
+<text x="117.9" y="402.0" font-size="11" text-anchor="middle" fill="#333" transform="rotate(0 117.9 402.0)">2016</text>
+<text x="197.7" y="402.0" font-size="11" text-anchor="middle" fill="#333" transform="rotate(0 197.7 402.0)">2017</text>
+<text x="277.4" y="402.0" font-size="11" text-anchor="middle" fill="#333" transform="rotate(0 277.4 402.0)">2018</text>
+<text x="357.2" y="402.0" font-size="11" text-anchor="middle" fill="#333" transform="rotate(0 357.2 402.0)">2019</text>
+<text x="437.0" y="402.0" font-size="11" text-anchor="middle" fill="#333" transform="rotate(0 437.0 402.0)">2020</text>
+<text x="516.8" y="402.0" font-size="11" text-anchor="middle" fill="#333" transform="rotate(0 516.8 402.0)">2021</text>
+<text x="596.6" y="402.0" font-size="11" text-anchor="middle" fill="#333" transform="rotate(0 596.6 402.0)">2022</text>
+<text x="676.3" y="402.0" font-size="11" text-anchor="middle" fill="#333" transform="rotate(0 676.3 402.0)">2023</text>
+<text x="756.1" y="402.0" font-size="11" text-anchor="middle" fill="#333" transform="rotate(0 756.1 402.0)">2024</text>
+<text x="78" y="24" font-size="15" font-weight="600" fill="#111">A small share of filings carries most of the reported hours</text>
+<text x="78" y="40" font-size="11" fill="#666">OSHA ITA Form 300A, reporting years 2016-2024, n=2,801,064 filings after deduplication</text>
+<text x="437.0" y="448" font-size="12" text-anchor="middle" fill="#333">Reporting year</text>
+<text x="16" y="216.0" font-size="12" text-anchor="middle" fill="#333" transform="rotate(-90 16 216.0)">Percent</text>
+<rect x="78.0" y="30" width="10" height="10" fill="#0072B2" />
+<text x="92.0" y="39" font-size="11" fill="#333">% of filings flagged implausible</text>
+<rect x="304.8" y="30" width="10" height="10" fill="#D55E00" />
+<text x="318.8" y="39" font-size="11" fill="#333">% of all reported hours held by them</text>
+</svg>

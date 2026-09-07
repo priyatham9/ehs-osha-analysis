@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="460" viewBox="0 0 820 460" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+<rect x="0" y="0" width="820" height="460" fill="#ffffff" />
+<line x1="78" y1="386.00" x2="796" y2="386.00" stroke="#e6e6e6" stroke-width="1" />
+<text x="70" y="390.00" font-size="11" text-anchor="end" fill="#444">0</text>
+<line x1="78" y1="322.83" x2="796" y2="322.83" stroke="#e6e6e6" stroke-width="1" />
+<text x="70" y="326.83" font-size="11" text-anchor="end" fill="#444">2000</text>
+<line x1="78" y1="259.67" x2="796" y2="259.67" stroke="#e6e6e6" stroke-width="1" />
+<text x="70" y="263.67" font-size="11" text-anchor="end" fill="#444">4000</text>
+<line x1="78" y1="196.50" x2="796" y2="196.50" stroke="#e6e6e6" stroke-width="1" />
+<text x="70" y="200.50" font-size="11" text-anchor="end" fill="#444">6000</text>
+<line x1="78" y1="133.33" x2="796" y2="133.33" stroke="#e6e6e6" stroke-width="1" />
+<text x="70" y="137.33" font-size="11" text-anchor="end" fill="#444">8000</text>
+<line x1="78" y1="70.17" x2="796" y2="70.17" stroke="#e6e6e6" stroke-width="1" />
+<text x="70" y="74.17" font-size="11" text-anchor="end" fill="#444">10000</text>
+<line x1="78" y1="46" x2="78" y2="386" stroke="#333" stroke-width="1.2" />
+<line x1="78" y1="386" x2="796" y2="386" stroke="#333" stroke-width="1.2" />
+<rect x="84.53" y="102.67" width="13.05" height="283.33" fill="#0072B2" />
+<rect x="149.80" y="261.28" width="13.05" height="124.72" fill="#0072B2" />
+<rect x="215.07" y="313.77" width="13.05" height="72.23" fill="#0072B2" />
+<rect x="280.35" y="339.26" width="13.05" height="46.74" fill="#0072B2" />
+<rect x="345.62" y="357.95" width="13.05" height="28.05" fill="#0072B2" />
+<rect x="410.89" y="367.90" width="13.05" height="18.10" fill="#0072B2" />
+<rect x="476.16" y="372.64" width="13.05" height="13.36" fill="#0072B2" />
+<rect x="541.44" y="375.83" width="13.05" height="10.17" fill="#0072B2" />
+<rect x="606.71" y="378.80" width="13.05" height="7.20" fill="#0072B2" />
+<rect x="671.98" y="380.60" width="13.05" height="5.40" fill="#0072B2" />
+<rect x="737.25" y="363.64" width="13.05" height="22.36" fill="#0072B2" />
+<rect x="97.58" y="180.29" width="13.05" height="205.71" fill="#D55E00" />
+<rect x="162.85" y="229.01" width="13.05" height="156.99" fill="#D55E00" />
+<rect x="228.13" y="287.20" width="13.05" height="98.80" fill="#D55E00" />
+<rect x="293.40" y="326.31" width="13.05" height="59.69" fill="#D55E00" />
+<rect x="358.67" y="349.29" width="13.05" height="36.71" fill="#D55E00" />
+<rect x="423.95" y="362.70" width="13.05" height="23.30" fill="#D55E00" />
+<rect x="489.22" y="370.79" width="13.05" height="15.21" fill="#D55E00" />
+<rect x="554.49" y="375.85" width="13.05" height="10.15" fill="#D55E00" />
+<rect x="619.76" y="379.12" width="13.05" height="6.88" fill="#D55E00" />
+<rect x="685.04" y="381.27" width="13.05" height="4.73" fill="#D55E00" />
+<rect x="750.31" y="372.52" width="13.05" height="13.48" fill="#D55E00" />
+<rect x="110.64" y="100.54" width="13.05" height="285.46" fill="#009E73" />
+<rect x="175.91" y="258.03" width="13.05" height="127.97" fill="#009E73" />
+<rect x="241.18" y="316.45" width="13.05" height="69.55" fill="#009E73" />
+<rect x="306.45" y="344.14" width="13.05" height="41.86" fill="#009E73" />
+<rect x="371.73" y="358.98" width="13.05" height="27.02" fill="#009E73" />
+<rect x="437.00" y="367.63" width="13.05" height="18.37" fill="#009E73" />
+<rect x="502.27" y="372.98" width="13.05" height="13.02" fill="#009E73" />
+<rect x="567.55" y="376.47" width="13.05" height="9.53" fill="#009E73" />
+<rect x="632.82" y="378.84" width="13.05" height="7.16" fill="#009E73" />
+<rect x="698.09" y="380.50" width="13.05" height="5.50" fill="#009E73" />
+<rect x="763.36" y="359.77" width="13.05" height="26.23" fill="#009E73" />
+<rect x="123.69" y="100.53" width="13.05" height="285.47" fill="#CC79A7" />
+<rect x="188.96" y="258.06" width="13.05" height="127.94" fill="#CC79A7" />
+<rect x="254.24" y="316.45" width="13.05" height="69.55" fill="#CC79A7" />
+<rect x="319.51" y="344.14" width="13.05" height="41.86" fill="#CC79A7" />
+<rect x="384.78" y="358.98" width="13.05" height="27.02" fill="#CC79A7" />
+<rect x="450.05" y="367.62" width="13.05" height="18.38" fill="#CC79A7" />
+<rect x="515.33" y="372.98" width="13.05" height="13.02" fill="#CC79A7" />
+<rect x="580.60" y="376.47" width="13.05" height="9.53" fill="#CC79A7" />
+<rect x="645.87" y="378.84" width="13.05" height="7.16" fill="#CC79A7" />
+<rect x="711.15" y="380.50" width="13.05" height="5.50" fill="#CC79A7" />
+<rect x="776.42" y="359.78" width="13.05" height="26.22" fill="#CC79A7" />
+<text x="110.6" y="402.0" font-size="11" text-anchor="middle" fill="#333" transform="rotate(0 110.6 402.0)">0</text>
+<text x="175.9" y="402.0" font-size="11" text-anchor="middle" fill="#333" transform="rotate(0 175.9 402.0)">1</text>
+<text x="241.2" y="402.0" font-size="11" text-anchor="middle" fill="#333" transform="rotate(0 241.2 402.0)">2</text>
+<text x="306.5" y="402.0" font-size="11" text-anchor="middle" fill="#333" transform="rotate(0 306.5 402.0)">3</text>
+<text x="371.7" y="402.0" font-size="11" text-anchor="middle" fill="#333" transform="rotate(0 371.7 402.0)">4</text>
+<text x="437.0" y="402.0" font-size="11" text-anchor="middle" fill="#333" transform="rotate(0 437.0 402.0)">5</text>
+<text x="502.3" y="402.0" font-size="11" text-anchor="middle" fill="#333" transform="rotate(0 502.3 402.0)">6</text>
+<text x="567.5" y="402.0" font-size="11" text-anchor="middle" fill="#333" transform="rotate(0 567.5 402.0)">7</text>
+<text x="632.8" y="402.0" font-size="11" text-anchor="middle" fill="#333" transform="rotate(0 632.8 402.0)">8</text>
+<text x="698.1" y="402.0" font-size="11" text-anchor="middle" fill="#333" transform="rotate(0 698.1 402.0)">9</text>
+<text x="763.4" y="402.0" font-size="11" text-anchor="middle" fill="#333" transform="rotate(0 763.4 402.0)">10+</text>
+<text x="78" y="24" font-size="15" font-weight="600" fill="#111">Recordable-case counts, NAICS 238, 2024: observed vs fitted (size band + NAICS-4 fixed effects, log-hours offset)</text>
+<text x="78" y="40" font-size="11" fill="#666">OSHA ITA Form 300A, reporting year 2024, screened panel, NAICS 238 only; n=20,000 establishments in the fit</text>
+<text x="437.0" y="448" font-size="12" text-anchor="middle" fill="#333">Recordable cases in the reporting year</text>
+<text x="16" y="216.0" font-size="12" text-anchor="middle" fill="#333" transform="rotate(-90 16 216.0)">Number of establishments</text>
+<rect x="554.0" y="31.0" width="10" height="10" fill="#0072B2" />
+<text x="568.0" y="40.0" font-size="11" fill="#333">observed</text>
+<rect x="627.2" y="31.0" width="10" height="10" fill="#D55E00" />
+<text x="641.2" y="40.0" font-size="11" fill="#333">poisson</text>
+<rect x="694.0" y="31.0" width="10" height="10" fill="#009E73" />
+<text x="708.0" y="40.0" font-size="11" fill="#333">nb2</text>
+<rect x="735.2" y="31.0" width="10" height="10" fill="#CC79A7" />
+<text x="749.2" y="40.0" font-size="11" fill="#333">zinb</text>
+</svg>

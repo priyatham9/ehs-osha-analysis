@@ -1,5 +1,7 @@
 # ehs-osha-analysis
 
+[![tests](https://github.com/priyatham9/ehs-osha-analysis/actions/workflows/tests.yml/badge.svg)](https://github.com/priyatham9/ehs-osha-analysis/actions/workflows/tests.yml)
+
 A reproducible pipeline over the public OSHA Injury Tracking Application (ITA)
 Form 300A establishment filings, 2016-2024. It downloads the real files, screens
 them for internal plausibility, and quantifies what the implausible ones do to
@@ -505,7 +507,7 @@ scripts/
   run_analysis.py
 synthetic/
   generate_fixture.py   SYNTHETIC data generator, for tests only
-tests/                  136 tests, stdlib unittest
+tests/                  175 tests, stdlib unittest
 outputs/
   tables/               15 CSVs, all script-generated
   figures/              6 SVGs, all script-generated
@@ -559,15 +561,32 @@ The code in this repository is MIT licensed. See `LICENSE`.
 
 ## Regenerating everything
 
-`scripts/run_analysis.py` produces the core tables, summary.json and fig01 to fig06. Three modules
-run after it and write their own artifacts; run them in this order after any pipeline change:
+A single command regenerates every table, figure and `summary.json` block, including the
+metrics, covariate count-model and reconciliation stages:
 
 ```bash
-PYTHONPATH=src python3 -m ehs_osha.metrics                  # metrics_by_year.csv, metrics_pooled.csv, summary.json["metrics"]
-PYTHONPATH=src python3 -m ehs_osha.count_models_covariates  # count_model_covariates*.csv, fig04 with covariates
-PYTHONPATH=src python3 -m ehs_osha.reconcile                # reconciliation_panels.csv
-python3 ../../tools/build_sites.py                          # regenerate docs/index.html
+PYTHONPATH=src python3 scripts/run_analysis.py
 ```
 
-The covariate count models are the ones to quote; the intercept-only comparison in
-`count_model_selection_summary.csv` is kept for the record.
+That runs eight stages in order: load, quality screen, peer percentiles, count models
+(intercept-only), stability, metrics, covariate-adjusted count models, reconciliation. The
+covariate stage runs after the intercept-only one and rewrites `fig04_count_model_fit.svg`
+last, so the covariate-adjusted figure - not the intercept-only one - is what ends up on disk;
+`count_model_selection_summary.csv` keeps the intercept-only comparison for the record, but the
+covariate count models are the ones to quote.
+
+The metrics stage (`ehs_osha.metrics`) is the slow one, roughly 3 minutes on the full data,
+because it reloads and rescreens the raw files. Each of the three added stages can be skipped
+independently when iterating on the earlier ones:
+
+```bash
+PYTHONPATH=src python3 scripts/run_analysis.py --skip-metrics
+PYTHONPATH=src python3 scripts/run_analysis.py --skip-count-models-covariates
+PYTHONPATH=src python3 scripts/run_analysis.py --skip-reconcile
+```
+
+After any pipeline change, also regenerate the published site:
+
+```bash
+python3 ../../tools/build_sites.py                          # regenerate docs/index.html
+```

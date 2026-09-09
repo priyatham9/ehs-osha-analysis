@@ -5,7 +5,7 @@ is written by this module. Nothing is hand-entered. ``outputs/summary.json``
 records the configuration, the input provenance and the headline numbers, so a
 reader can diff two runs and see exactly what changed.
 
-The pipeline runs in five stages:
+The pipeline runs in eight stages:
 
 1. Load and harmonise the ITA 300A files (:mod:`ehs_osha.load`).
 2. Apply the plausibility screen and quantify its effect on aggregate rates,
@@ -15,6 +15,17 @@ The pipeline runs in five stages:
    (:mod:`ehs_osha.countmodels`).
 5. Measure year-over-year stability of the percentile bands
    (:mod:`ehs_osha.stability`).
+6. Compute TRIR/DART/LTIR/SEVERITY tables (:mod:`ehs_osha.metrics`).
+7. Fit covariate-adjusted count models and rewrite ``fig04`` with the
+   size-band + NAICS-4 fixed-effects version (:mod:`ehs_osha.count_models_covariates`).
+   This must run after stage 4 so the covariate figure is the one left on disk.
+8. Reconcile aggregate TRIR against the previously published figures
+   (:mod:`ehs_osha.reconcile`).
+
+Stages 6-8 were added after the original five and are each skippable via
+``PipelineConfig.skip_metrics`` / ``skip_count_models_covariates`` /
+``skip_reconcile`` (stage 6 is the slow one, roughly 3 minutes on the full
+data, because it reloads and rescreens the raw files).
 """
 
 from __future__ import annotations
@@ -29,7 +40,17 @@ from typing import Dict, List, Optional, Sequence
 import numpy as np
 import pandas as pd
 
-from . import countmodels, naics as naics_titles, peers, quality, stability, svgplot
+from . import (
+    count_models_covariates,
+    countmodels,
+    metrics,
+    naics as naics_titles,
+    peers,
+    quality,
+    reconcile,
+    stability,
+    svgplot,
+)
 from .load import LoadReport, load_ita_300a
 from .quality import PlausibilityConfig
 
@@ -59,6 +80,15 @@ class PipelineConfig:
         include_partial: Include partial-year source files.
         years: Restrict the load to these reporting years.
         random_seed: Seed for the model-fit subsample.
+        skip_metrics: Skip :mod:`ehs_osha.metrics` (TRIR/DART/LTIR/SEVERITY
+            tables). This is the slowest stage (roughly 3 minutes on the full
+            data) because it reloads and rescreens the raw files.
+        skip_count_models_covariates: Skip :mod:`ehs_osha.count_models_covariates`.
+            This stage runs after :func:`stage_count_models` and rewrites
+            ``fig04_count_model_fit.svg`` with the covariate-adjusted version,
+            so skipping it leaves the older intercept-only figure in place.
+        skip_reconcile: Skip :mod:`ehs_osha.reconcile` (comparison against the
+            previously published ehs-benchmarks figures).
     """
 
     data_dir: Path
@@ -74,6 +104,9 @@ class PipelineConfig:
     include_partial: bool = False
     years: Optional[Sequence[int]] = None
     random_seed: int = 20260903
+    skip_metrics: bool = False
+    skip_count_models_covariates: bool = False
+    skip_reconcile: bool = False
 
     def to_json(self) -> dict:
         """Return a JSON-serialisable dict of this configuration."""
@@ -91,6 +124,9 @@ class PipelineConfig:
             "include_partial": self.include_partial,
             "years": list(self.years) if self.years else None,
             "random_seed": self.random_seed,
+            "skip_metrics": self.skip_metrics,
+            "skip_count_models_covariates": self.skip_count_models_covariates,
+            "skip_reconcile": self.skip_reconcile,
         }
 
 
@@ -690,6 +726,74 @@ def make_figures(
     return written
 
 
+def stage_metrics(screened: pd.DataFrame, cfg: PipelineConfig) -> Dict[str, object]:
+    """Compute TRIR/DART/LTIR/SEVERITY and write the metrics tables.
+
+    Reuses the already-screened frame from :func:`stage_quality` rather than
+    reloading the raw files, so this stage is cheap when run as part of
+    :func:`run_pipeline` (:mod:`ehs_osha.metrics` run standalone reloads the
+    data itself and is the slow path the README warns about).
+
+    Args:
+        screened: Output of :func:`stage_quality`.
+        cfg: Pipeline configuration.
+
+    Returns:
+        The JSON-ready metrics block (also folded into ``summary.json``).
+    """
+    return metrics.write_tables(screened, Path(cfg.out_dir) / "tables")
+
+
+def stage_count_models_covariates(
+    cfg: PipelineConfig, *, verbose: bool = True
+) -> Dict[str, object]:
+    """Fit the covariate-adjusted count models and rewrite ``fig04``.
+
+    Must run after :func:`stage_count_models` / :func:`make_figures`: this
+    stage's ``run_real_data`` call writes ``fig04_count_model_fit.svg`` last,
+    so it overwrites the intercept-only figure with the size-band + NAICS-4
+    fixed-effects version that matches the published site and paper.
+
+    Args:
+        cfg: Pipeline configuration.
+        verbose: Print per-industry fit progress.
+
+    Returns:
+        Summary dict with the number of fitted rows and industries covered.
+    """
+    table = count_models_covariates.run_real_data(
+        cfg.data_dir,
+        cfg.out_dir,
+        year=cfg.model_year,
+        top_k=cfg.model_top_k,
+        min_group_n=cfg.model_min_group_n,
+        max_n=cfg.model_max_n,
+        seed=cfg.random_seed,
+        verbose=verbose,
+    )
+    return {
+        "n_rows": int(len(table)),
+        "industries_fitted": sorted(str(v) for v in table["naics3"].unique())
+        if len(table)
+        else [],
+    }
+
+
+def stage_reconcile(df: pd.DataFrame, cfg: PipelineConfig) -> Dict[str, object]:
+    """Write the reconciliation-against-published-figures table.
+
+    Args:
+        df: The raw, unscreened frame from :func:`ehs_osha.load.load_ita_300a`
+            (this stage applies its own screens for the old and new panels).
+        cfg: Pipeline configuration.
+
+    Returns:
+        Dict with the path written.
+    """
+    path = reconcile.write_reconciliation(df, Path(cfg.out_dir) / "tables")
+    return {"path": str(path)}
+
+
 def run_pipeline(cfg: PipelineConfig, *, verbose: bool = True) -> Dict[str, object]:
     """Run the full analysis and write all outputs.
 
@@ -708,7 +812,7 @@ def run_pipeline(cfg: PipelineConfig, *, verbose: bool = True) -> Dict[str, obje
     out_dir.mkdir(parents=True, exist_ok=True)
 
     if verbose:
-        print("[1/5] loading OSHA ITA 300A files")
+        print("[1/8] loading OSHA ITA 300A files")
     df, load_report = load_ita_300a(
         cfg.data_dir, include_partial=cfg.include_partial, years=cfg.years
     )
@@ -719,25 +823,43 @@ def run_pipeline(cfg: PipelineConfig, *, verbose: bool = True) -> Dict[str, obje
     )
 
     if verbose:
-        print(f"[2/5] plausibility screen over {len(df):,} filings")
+        print(f"[2/8] plausibility screen over {len(df):,} filings")
     screened, quality_summary = stage_quality(df, cfg)
 
     if verbose:
-        print("[3/5] peer groups and percentile tables")
+        print("[3/8] peer groups and percentile tables")
     keyed, pct_table, peer_summary = stage_peers(screened, cfg)
 
     if verbose:
-        print("[4/5] count models")
+        print("[4/8] count models")
     count_table, count_summary = stage_count_models(keyed, cfg)
 
     if verbose:
-        print("[5/5] percentile band stability")
+        print("[5/8] percentile band stability")
     stab_summary = stage_stability(pct_table, cfg)
 
     figures = make_figures(
         screened, keyed, pd.DataFrame(quality_summary["by_year"]), count_table,
         pct_table, cfg, provenance
     )
+
+    metrics_summary: Dict[str, object] = {}
+    if not cfg.skip_metrics:
+        if verbose:
+            print("[6/8] metrics (TRIR/DART/LTIR/SEVERITY)")
+        metrics_summary = stage_metrics(screened, cfg)
+
+    count_cov_summary: Dict[str, object] = {}
+    if not cfg.skip_count_models_covariates:
+        if verbose:
+            print("[7/8] covariate-adjusted count models (rewrites fig04)")
+        count_cov_summary = stage_count_models_covariates(cfg, verbose=verbose)
+
+    reconcile_summary: Dict[str, object] = {}
+    if not cfg.skip_reconcile:
+        if verbose:
+            print("[8/8] reconciliation against published figures")
+        reconcile_summary = stage_reconcile(df, cfg)
 
     summary = {
         "generated_utc": t0.isoformat(timespec="seconds"),
@@ -750,6 +872,9 @@ def run_pipeline(cfg: PipelineConfig, *, verbose: bool = True) -> Dict[str, obje
         "count_models": count_summary,
         "stability": stab_summary,
         "figures_written": figures,
+        "metrics": metrics_summary,
+        "count_models_covariates": count_cov_summary,
+        "reconciliation": reconcile_summary,
     }
     (out_dir / "summary.json").write_text(
         json.dumps(summary, indent=2, default=_json_default) + "\n"

@@ -82,6 +82,30 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Do not require the full catalog to be present (used for fixtures).",
     )
+    p.add_argument(
+        "--skip-metrics",
+        action="store_true",
+        help=(
+            "Skip the TRIR/DART/LTIR/SEVERITY metrics stage (ehs_osha.metrics). "
+            "This is the slowest stage, roughly 3 minutes on the full data, "
+            "because it reloads and rescreens the raw files."
+        ),
+    )
+    p.add_argument(
+        "--skip-count-models-covariates",
+        action="store_true",
+        help=(
+            "Skip the covariate-adjusted count-model stage "
+            "(ehs_osha.count_models_covariates). Skipping this leaves the "
+            "older intercept-only fig04_count_model_fit.svg in place instead "
+            "of the size-band + NAICS-4 fixed-effects version."
+        ),
+    )
+    p.add_argument(
+        "--skip-reconcile",
+        action="store_true",
+        help="Skip the reconciliation-against-published-figures stage (ehs_osha.reconcile).",
+    )
     return p
 
 
@@ -119,6 +143,9 @@ def main(argv: list[str] | None = None) -> int:
         model_max_n=args.model_max_n,
         include_partial=args.include_partial,
         years=args.years,
+        skip_metrics=args.skip_metrics,
+        skip_count_models_covariates=args.skip_count_models_covariates,
+        skip_reconcile=args.skip_reconcile,
     )
     summary = run_pipeline(cfg)
 

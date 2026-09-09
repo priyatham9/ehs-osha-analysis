@@ -1,0 +1,2 @@
+observed_odds_ratio,n_permutations,seed,permutation_mean,permutation_p2_5,permutation_p97_5,fraction_permutations_ge_observed
+39.08497801351558,200,20260909,1.011783710982536,0.9244869092294954,1.092033927590973,0.0

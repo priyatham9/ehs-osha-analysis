@@ -202,8 +202,14 @@ def derive_fields(df: pd.DataFrame) -> pd.DataFrame:
     )
     # NAICS codes are 2-6 digits; pad short codes on the right is wrong, so only
     # take prefixes from codes that are long enough.
+    # np.where(..., None) yields an object array whose missing value is None on
+    # some numpy builds and nan on others, so the prefix columns are built with
+    # pandas instead and the absent value is set to None explicitly. Callers and
+    # tests can then rely on a single representation across versions.
     for n, name in ((2, "naics2"), (3, "naics3"), (4, "naics4")):
-        out[name] = np.where(naics_str.str.len() >= n, naics_str.str[:n], None)
+        prefix = naics_str.str[:n].astype(object)
+        prefix[naics_str.str.len() < n] = None
+        out[name] = prefix
     return out
 
 

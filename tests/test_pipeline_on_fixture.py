@@ -212,9 +212,29 @@ class TestFixtureIsNotStale(unittest.TestCase):
             for fresh in sorted(Path(td).glob("SYNTHETIC_ITA_300A_*.csv")):
                 committed = _context.FIXTURE / fresh.name
                 self.assertTrue(committed.exists(), f"{fresh.name} missing from fixture")
+                # Byte equality is not portable: pandas and numpy change float
+                # formatting between versions, so the same generator run emits
+                # different bytes on a different interpreter. The property that
+                # actually matters is that the committed rows are the rows the
+                # generator produces today, so compare parsed content.
+                import csv as _csv
+
+                def _rows(path):
+                    with open(path, newline="", encoding="utf-8") as fh:
+                        return [
+                            {k: _norm(v) for k, v in row.items()}
+                            for row in _csv.DictReader(fh)
+                        ]
+
+                def _norm(v):
+                    try:
+                        return round(float(v), 6)
+                    except (TypeError, ValueError):
+                        return v
+
                 self.assertEqual(
-                    hashlib.sha256(committed.read_bytes()).hexdigest(),
-                    hashlib.sha256(fresh.read_bytes()).hexdigest(),
+                    _rows(committed),
+                    _rows(fresh),
                     f"{fresh.name} is stale; re-run synthetic/generate_fixture.py",
                 )
 

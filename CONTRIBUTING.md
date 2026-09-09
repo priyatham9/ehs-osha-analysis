@@ -34,3 +34,15 @@ Every empirical number in this repository must be produced by a committed script
 - Synthetic data is for testing the pipeline without a network and validating estimators against known parameters
 - **No number produced from the fixture appears anywhere in the README** and none should be cited
 - Fixture runs write to a separate output directory to prevent accidental mixing with real-data outputs
+
+## Random number generation
+
+The synthetic fixture under `synthetic/fixture/` is committed so the test suite runs
+offline, and a test asserts it still matches what the generator produces. That only
+works if generation is reproducible on any machine.
+
+NumPy's NEP 19 freezes the legacy `np.random.RandomState` stream permanently, but makes
+no such guarantee for `np.random.default_rng` / `Generator`: methods such as `gamma`,
+`poisson` and `binomial` may draw different values on a different NumPy release. Use
+`RandomState` in `synthetic/generate_fixture.py`. Elsewhere, where output is not
+committed and compared, `default_rng` is fine.

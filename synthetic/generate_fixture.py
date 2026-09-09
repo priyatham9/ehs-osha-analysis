@@ -108,7 +108,7 @@ class GeneratorParams:
 
 
 def _rzinb(
-    rng: np.random.Generator, mean: np.ndarray, alpha: float, pi: float
+    rng: "np.random.RandomState", mean: np.ndarray, alpha: float, pi: float
 ) -> np.ndarray:
     """Draw zero-inflated negative binomial counts.
 
@@ -117,7 +117,7 @@ def _rzinb(
     ``alpha``, giving ``Var(y) = mean + alpha * mean^2``.
 
     Args:
-        rng: Random generator.
+        rng: Legacy RandomState, chosen for cross-version stream stability.
         mean: Per-observation NB2 mean.
         alpha: Dispersion.
         pi: Structural-zero probability.
@@ -128,7 +128,7 @@ def _rzinb(
     r = 1.0 / alpha
     gam = rng.gamma(shape=r, scale=1.0 / r, size=mean.shape)
     y = rng.poisson(mean * gam)
-    structural = rng.random(mean.shape) < pi
+    structural = rng.random_sample(mean.shape) < pi
     return np.where(structural, 0, y).astype(int)
 
 
@@ -141,7 +141,11 @@ def generate(params: GeneratorParams) -> Dict[int, List[Dict[str, object]]]:
     Returns:
         Mapping of year to a list of row dicts.
     """
-    rng = np.random.default_rng(params.seed)
+    # NumPy's NEP 19 freezes the legacy RandomState stream forever but makes no
+    # such promise for Generator: gamma, poisson and binomial may draw different
+    # values on a different numpy release. A committed fixture that must
+    # regenerate identically anywhere therefore has to use RandomState.
+    rng = np.random.RandomState(params.seed)
     naics_pool = ["3251", "3252", "3115", "2361", "6221", "4841", "4451", "3328"]
     out: Dict[int, List[Dict[str, object]]] = {}
     next_id = 1

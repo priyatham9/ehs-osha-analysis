@@ -4,14 +4,7 @@ data/raw/*
 data/interim/*
 !data/interim/.gitkeep
 
-# Generated analysis outputs. Regenerate with scripts/run_analysis.py.
-outputs/**/*.csv
-outputs/**/*.svg
-outputs/**/*.md
-outputs/**/*.json
-!outputs/.gitkeep
-!outputs/figures/.gitkeep
-!outputs/tables/.gitkeep
+# Generated analysis outputs are committed on purpose so a clone can read the tables and rebuild the site without a 107 s pipeline run. Regenerate with make analysis.
 
 # Python
 __pycache__/

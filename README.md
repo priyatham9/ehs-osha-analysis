@@ -13,7 +13,7 @@ stability of peer-group percentile bands.
 Every empirical number below was computed by `scripts/run_analysis.py` from
 files downloaded from osha.gov and is transcribed from `outputs/summary.json` or
 `outputs/tables/*.csv`; none was carried over from another source or estimated.
-Regenerating the outputs regenerates every figure and table. The regression
+The outputs are committed to the repository; regenerate with `make analysis` to update every figure and table. The regression
 tests in `tests/test_regression_real_data.py` assert the headline values against
 the data, and `tests/test_readme_consistency.py` parses the figures back out of
 this file and fails if the prose and the generated tables disagree. That

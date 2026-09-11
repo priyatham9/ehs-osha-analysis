@@ -2,13 +2,7 @@
 
 [![tests](https://github.com/priyatham9/ehs-osha-analysis/actions/workflows/tests.yml/badge.svg)](https://github.com/priyatham9/ehs-osha-analysis/actions/workflows/tests.yml)
 
-A reproducible pipeline over the public OSHA Injury Tracking Application (ITA)
-Form 300A establishment filings, 2016-2024. It downloads the real files, screens
-them for internal plausibility, and quantifies what the implausible ones do to
-the aggregate injury rates that the data are normally used to produce. It then
-goes beyond the screen: count-model comparison on recordable-case distributions,
-establishment-size effects, industry heterogeneity, and the year-over-year
-stability of peer-group percentile bands.
+A reproducible pipeline over the public OSHA Injury Tracking Application Form 300A establishment filings, 2016-2024. It screens filings for internal plausibility and quantifies the bias they introduce to aggregate injury rates; screening raises the aggregate TRIR from 0.134 to 3.983, a 29.7x correction. It does not identify which specific numbers on forms are wrong, nor does it address causes of injury, nor does it represent the broader US workforce.
 
 Every empirical number below was computed by `scripts/run_analysis.py` from
 files downloaded from osha.gov and is transcribed from `outputs/summary.json` or

@@ -4,20 +4,20 @@ about: Something produces the wrong result or does not run
 labels: bug
 ---
 
-## What happened
+## Description
 
-Describe the unexpected behaviour or error, including any error message.
+Describe the unexpected behavior or error, including any error message.
 
-## What you expected
+## Exact command
 
-Describe what should have happened instead.
+The exact command that produced the error:
 
-## How to reproduce
-
-Give the exact commands and steps to trigger the issue. Include which Python version you are using.
+```
+```
 
 ## Environment
 
-- Python version:
-- Operating system:
-- Did you run `python3 scripts/download_data.py` first? (Y/N)
+- Python version: (output of `python3 --version`)
+- numpy version: (output of `python3 -c "import numpy; print(numpy.__version__)"`)
+- pandas version: (output of `python3 -c "import pandas; print(pandas.__version__)"`)
+- OSHA data year:

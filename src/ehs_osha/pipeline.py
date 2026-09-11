@@ -51,7 +51,7 @@ from . import (
     stability,
     svgplot,
 )
-from .load import LoadReport, load_ita_300a
+from .load import load_ita_300a
 from .quality import PlausibilityConfig
 
 EXPOSURE_UNIT_HOURS = 200_000.0

@@ -308,7 +308,6 @@ def fit_nb2(y: np.ndarray, exposure: Optional[np.ndarray] = None) -> CountFit:
     """
     y, e = prepare_counts(y, exposure)
     mu0 = max(float(y.sum() / e.sum()), 1e-9)
-    m0 = e * mu0
     var, mean = float(np.var(y)), float(np.mean(y))
     a0 = max((var - mean) / max(mean**2, 1e-12), 1e-3)
 

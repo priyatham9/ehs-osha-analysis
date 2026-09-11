@@ -14,7 +14,6 @@ import unittest
 from pathlib import Path
 
 import _context  # noqa: F401
-import numpy as np
 
 from ehs_osha.catalog import DatasetFile
 from ehs_osha.pipeline import PipelineConfig, run_pipeline
@@ -195,7 +194,6 @@ class TestFixtureIsNotStale(unittest.TestCase):
 
     @unittest.skipUnless(_context.fixture_available(), "fixture not generated")
     def test_committed_fixture_matches_a_fresh_generation(self) -> None:
-        import hashlib
         import json
         import sys
 

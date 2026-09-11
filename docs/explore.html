@@ -104,7 +104,7 @@ code,.mono,.src{overflow-wrap:anywhere}
 .gbar-panel a:hover{background:var(--accent-wash)}
 .gbar-panel a[aria-current="page"]{color:var(--accent);font-weight:700}
 .gbar-panel a small{font-family:var(--font-mono);font-size:.625rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);align-self:center}
-.gbar-toggle{display:inline-flex;align-items:center;justify-content:center;width:36px;flex:none;margin:8px 0 8px 12px;background:var(--paper);border:2px solid var(--rule);border-radius:0;color:var(--ink);cursor:pointer}
+.gbar-toggle{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;flex:none;margin:4px 0 4px 12px;background:var(--paper);border:2px solid var(--rule);border-radius:0;color:var(--ink);cursor:pointer}
 .gbar-toggle svg{width:15px;height:15px}
 .gbar-toggle:hover{background:var(--surface-2)}
 @media (max-width:820px){
@@ -135,7 +135,7 @@ select,input[type="number"]{font:inherit;font-family:var(--font-mono);font-size:
 .pub-yes{color:var(--s3)}
 .pub-no{color:var(--warn)}
 .fig-scroll{overflow-x:auto}
-.fig-scroll svg{display:block;min-width:320px}
+.fig-scroll svg{display:block;min-width:320px;width:100%;height:auto}
 figure{margin:0}
 figcaption{margin-top:10px;color:var(--muted);font-size:.875rem}
 .src{display:block;margin-top:6px;font-family:var(--font-mono);font-size:.75rem;color:var(--muted)}
@@ -159,7 +159,7 @@ th{font-family:var(--font-mono);font-size:.6875rem;text-transform:uppercase;lett
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .gbar-toggle .icon-sun{display:none}:root:not([data-theme="light"]) .gbar-toggle .icon-moon{display:block}}
 .footer{padding:30px 0;color:var(--muted);font-size:.8125rem}
 .footer-links{display:flex;flex-wrap:wrap;gap:14px;margin:10px 0}
-.footer-links a{text-decoration:none}
+.footer-links a{text-decoration:none;display:flex;align-items:center;min-height:24px}
 .pn-wrap{border-top:2px solid var(--rule)}
 .pn{max-width:var(--maxw);margin:0 auto;padding:0 30px;display:flex;justify-content:space-between}
 .pn a{text-decoration:none;padding:16px 0;color:var(--ink)}

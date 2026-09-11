@@ -549,7 +549,9 @@ def make_figures(
         count_table: Count-model comparison table.
         stab_table: Per-year percentile table (for the stability scatter).
         cfg: Pipeline configuration.
-        provenance: Subtitle text describing the data vintage.
+        provenance: Data-vintage text; kept for callers, shown via the source
+            line rather than the figure subtitle (each figure's subtitle is
+            now a one-line takeaway instead).
 
     Returns:
         Paths of the SVG files written.
@@ -568,9 +570,20 @@ def make_figures(
             "Reporting year",
             "Recordable cases per 200,000 hours",
             ax,
-            provenance,
+            "Unscreened TRIR tracks bad hours data, not safety performance.",
         )
         f.bars(years, {"unscreened (all filings)": naive, "screened": scr})
+        for callout_year, dx, dy in (("2019", -6, -20), ("2024", 6, -20)):
+            if callout_year in years:
+                yi = years.index(callout_year)
+                f.annotate(
+                    yi + 0.3, naive[yi], f"{callout_year} unscreened {naive[yi]:.2f}",
+                    dx=dx, dy=dy,
+                )
+                f.annotate(
+                    yi + 0.7, scr[yi], f"{callout_year} screened {scr[yi]:.2f}",
+                    dx=dx, dy=-8,
+                )
         written.append(str(f.save(fig_dir / "fig01_aggregate_trir_by_year.svg")))
 
     # 2. Share of reported hours carried by implausible filings, by year.
@@ -583,7 +596,7 @@ def make_figures(
             "Reporting year",
             "Percent",
             ax,
-            provenance,
+            "Implausible filings hold from a third to nearly all reported hours, year to year.",
         )
         f.bars(
             years,
@@ -611,9 +624,9 @@ def make_figures(
             "log10(annual hours per average employee)",
             "Number of filings (log scale)",
             ax,
-            provenance
-            + f"  |  screen bounds: {cfg.plausibility.min_hours_per_employee:g}"
-            f"-{cfg.plausibility.max_hours_per_employee:g} h",
+            "The tail runs many orders of magnitude beyond anything a workforce can produce"
+            f" (screen: {cfg.plausibility.min_hours_per_employee:g}"
+            f"-{cfg.plausibility.max_hours_per_employee:g} h).",
         )
         f.line(list(centres), [max(float(c), 0.5) for c in counts], "filings", markers=False)
         for bound in (
@@ -661,7 +674,7 @@ def make_figures(
                     "Recordable cases in the reporting year",
                     "Number of establishments",
                     ax,
-                    provenance,
+                    "Poisson underfits; NB2 and ZINB track the observed count distribution.",
                 )
                 f.bars(labels, series)
                 written.append(
@@ -679,7 +692,7 @@ def make_figures(
                 "Establishment size band (annual average employees)",
                 "Share of establishments reporting zero recordables",
                 ax,
-                provenance,
+                "A zero rate reflects headcount as much as safety performance.",
             )
             f.bars(
                 [str(v) for v in sb["size_band"]],
@@ -711,7 +724,8 @@ def make_figures(
                     f"p75 TRIR in {int(y0)}",
                     f"p75 TRIR in {int(y1)}",
                     ax,
-                    provenance + f"  |  {len(shared)} matched peer groups",
+                    "A benchmark only works if the peer band holds steady between years"
+                    f" ({len(shared)} matched peer groups).",
                 )
                 f.abline(1.0, 0.0)
                 f.scatter(list(va), list(vb), "matched peer group")

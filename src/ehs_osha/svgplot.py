@@ -30,7 +30,7 @@ PALETTE: Tuple[str, ...] = (
     "#332288",
 )
 
-_FONT = "system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif"
+_FONT = "'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace"
 
 
 @dataclass
@@ -200,13 +200,24 @@ class Figure:
                     f'<rect x="{x0:.2f}" y="{min(y0, y1):.2f}" width="{bw:.2f}" '
                     f'height="{abs(y0 - y1):.2f}" fill="{colour}" />'
                 )
+            # Direct label for this series, replacing a legend box: an identity
+            # dot plus the series name in ink, stacked inside the plot area's
+            # top-right corner so long names never run off the canvas.
+            if n_ser > 1:
+                lx = self.ax.plot_right - 4
+                ly = self.ax.plot_top + 11 + si * 13
+                self._body.append(f'<circle cx="{lx + 8:.1f}" cy="{ly - 3.5:.1f}" r="3" fill="{colour}" />')
+                self._body.append(
+                    f'<text x="{lx:.1f}" y="{ly:.1f}" font-size="10" '
+                    f'text-anchor="end" fill="#333">{_esc(name)}</text>'
+                )
         for ci, cat in enumerate(categories):
             x = self.ax.plot_left + (ci + 0.5) * slot
             rot = -35 if max(len(str(c)) for c in categories) > 5 else 0
             anchor = "end" if rot else "middle"
             self._body.append(
                 f'<text x="{x:.1f}" y="{self.ax.plot_bottom + 16:.1f}" '
-                f'font-size="11" text-anchor="{anchor}" fill="#333" '
+                f'font-size="12" text-anchor="{anchor}" fill="#333" '
                 f'transform="rotate({rot} {x:.1f} {self.ax.plot_bottom + 16:.1f})">'
                 f"{_esc(cat)}</text>"
             )
@@ -257,6 +268,13 @@ class Figure:
                         f'<circle cx="{px:.2f}" cy="{py:.2f}" r="3.2" '
                         f'fill="{colour}" />'
                     )
+            # Direct label at the line's end, replacing a legend box.
+            if len(self._legend) > 1 or markers:
+                lx, ly = pts[-1]
+                self._body.append(
+                    f'<text x="{lx + 8:.1f}" y="{ly + 3.5:.1f}" font-size="10" '
+                    f'text-anchor="start" fill="#333">{_esc(label)}</text>'
+                )
         return self
 
     def scatter(
@@ -316,6 +334,46 @@ class Figure:
         )
         return self
 
+    def annotate(
+        self,
+        x: float,
+        y: float,
+        text: str,
+        *,
+        dx: float = 10.0,
+        dy: float = -18.0,
+    ) -> "Figure":
+        """Draw a callout at a data point: a ring on the point, a leader line,
+        and a text label offset from it.
+
+        Args:
+            x: Data x coordinate of the point being called out.
+            y: Data y coordinate of the point being called out.
+            text: Callout text, one short line.
+            dx: Horizontal offset of the label from the point, in px.
+            dy: Vertical offset of the label from the point, in px (negative
+                is upward).
+
+        Returns:
+            ``self``, for chaining.
+        """
+        px, py = self.ax.sx(x), self.ax.sy(y)
+        lx, ly = px + dx, py + dy
+        self._body.append(
+            f'<circle cx="{px:.2f}" cy="{py:.2f}" r="4.5" fill="none" '
+            f'stroke="#333" stroke-width="1.3" />'
+        )
+        self._body.append(
+            f'<line x1="{px:.2f}" y1="{py:.2f}" x2="{lx:.2f}" y2="{ly:.2f}" '
+            f'stroke="#333" stroke-width="1" stroke-dasharray="2,2" />'
+        )
+        anchor = "start" if dx >= 0 else "end"
+        self._body.append(
+            f'<text x="{lx:.2f}" y="{ly:.2f}" font-size="10.5" font-weight="600" '
+            f'text-anchor="{anchor}" fill="#111">{_esc(text)}</text>'
+        )
+        return self
+
     def _axis_svg(self, x_ticks: Optional[Sequence[float]]) -> List[str]:
         """Render axis lines, grid, ticks and labels."""
         ax = self.ax
@@ -337,7 +395,7 @@ class Figure:
             )
             lab = f"{t:g}"
             out.append(
-                f'<text x="{ax.plot_left - 8}" y="{y + 4:.2f}" font-size="11" '
+                f'<text x="{ax.plot_left - 8}" y="{y + 4:.2f}" font-size="12" '
                 f'text-anchor="end" fill="#444">{_esc(lab)}</text>'
             )
         if x_ticks is not None:
@@ -350,7 +408,7 @@ class Figure:
                     f'y2="{ax.plot_bottom + 4}" stroke="#666" stroke-width="1" />'
                 )
                 out.append(
-                    f'<text x="{x:.2f}" y="{ax.plot_bottom + 17}" font-size="11" '
+                    f'<text x="{x:.2f}" y="{ax.plot_bottom + 17}" font-size="12" '
                     f'text-anchor="middle" fill="#444">{_esc(f"{t:g}")}</text>'
                 )
         out.append(
@@ -401,38 +459,10 @@ class Figure:
             f'transform="rotate(-90 16 {(ax.plot_top + ax.plot_bottom) / 2:.1f})">'
             f"{_esc(self.ylabel)}</text>"
         )
-        # The subtitle is drawn left-aligned at plot_left on a fixed baseline of 40.
-        # The legend row would otherwise be placed at the same height whenever the top
-        # margin is small, putting the two on top of each other. When a subtitle is
-        # present, right-align the legend on that row so the two share it cleanly.
-        entries = []
-        seen = set()
-        for label, colour in self._legend:
-            if label in seen:
-                continue
-            seen.add(label)
-            entries.append((label, colour))
-
-        swatch, gap, pad = 10, 14, 18
-        widths = [swatch + gap // 3 + len(label) * 6 for label, _ in entries]
-        if self.subtitle:
-            legend_baseline = 40.0
-            total = sum(widths) + pad * max(len(entries) - 1, 0)
-            lx = max(ax.plot_left, ax.plot_right - total)
-        else:
-            legend_baseline = ax.plot_top - 7.0
-            lx = ax.plot_left
-
-        for (label, colour), w in zip(entries, widths):
-            parts.append(
-                f'<rect x="{lx:.1f}" y="{legend_baseline - 9:.1f}" width="10" '
-                f'height="10" fill="{colour}" />'
-            )
-            parts.append(
-                f'<text x="{lx + 14:.1f}" y="{legend_baseline:.1f}" font-size="11" '
-                f'fill="#333">{_esc(label)}</text>'
-            )
-            lx += 22 + 6.4 * len(str(label))
+        # No legend box: each series carries a direct label at its own end
+        # (drawn by bars()/line() into self._body already), per the one
+        # visual system these figures share. self._legend is kept only as
+        # bookkeeping for colour assignment.
         parts.append("</svg>")
         return "\n".join(parts)
 

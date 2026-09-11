@@ -514,8 +514,9 @@ def make_persistence_figure(
         xlabel="Year pair",
         ylabel="Odds ratio",
         subtitle=(
-            f"{permutation['n_permutations'].iloc[0]} permutations, seed "
-            f"{permutation['seed'].iloc[0]}; null holds each year's flag count fixed"
+            "Observed flag persistence exceeds the permutation-null level of pure chance "
+            f"({permutation['n_permutations'].iloc[0]} permutations, "
+            f"seed {permutation['seed'].iloc[0]})."
         ),
         axes=svgplot.Axes(ylim=(ylo, yhi)),
     )
@@ -527,10 +528,8 @@ def make_persistence_figure(
     fig.ax.xlim = (0.0, float(n_cat))
     slot = (fig.ax.plot_right - fig.ax.plot_left) / n_cat
     bw = slot * 0.8
-    fig._legend = []
-    fig.add_legend_entry("year-pair", colours[0])
-    fig.add_legend_entry("pooled observed", colours[-2])
-    fig.add_legend_entry("permutation mean", colours[-1])
+    # No legend box: the x-axis category for each bar ("2016-2017", "pooled",
+    # "permutation null") already names what its colour means.
     for ci, (v, colour) in enumerate(zip(values, colours)):
         if not np.isfinite(v):
             continue
@@ -545,7 +544,7 @@ def make_persistence_figure(
         x = fig.ax.plot_left + (ci + 0.5) * slot
         fig._body.append(
             f'<text x="{x:.1f}" y="{fig.ax.plot_bottom + 16:.1f}" '
-            f'font-size="10" text-anchor="middle" fill="#333">{svgplot._esc(cat)}</text>'
+            f'font-size="12" text-anchor="middle" fill="#333">{svgplot._esc(cat)}</text>'
         )
     fig.abline(slope=0.0, intercept=1.0)
     return fig

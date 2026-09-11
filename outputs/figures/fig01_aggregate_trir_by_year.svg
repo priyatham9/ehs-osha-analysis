@@ -1,17 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="820" height="460" viewBox="0 0 820 460" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="460" viewBox="0 0 820 460" font-family="'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace">
 <rect x="0" y="0" width="820" height="460" fill="#ffffff" />
 <line x1="78" y1="386.00" x2="796" y2="386.00" stroke="#e6e6e6" stroke-width="1" />
-<text x="70" y="390.00" font-size="11" text-anchor="end" fill="#444">0</text>
+<text x="70" y="390.00" font-size="12" text-anchor="end" fill="#444">0</text>
 <line x1="78" y1="321.80" x2="796" y2="321.80" stroke="#e6e6e6" stroke-width="1" />
-<text x="70" y="325.80" font-size="11" text-anchor="end" fill="#444">1</text>
+<text x="70" y="325.80" font-size="12" text-anchor="end" fill="#444">1</text>
 <line x1="78" y1="257.59" x2="796" y2="257.59" stroke="#e6e6e6" stroke-width="1" />
-<text x="70" y="261.59" font-size="11" text-anchor="end" fill="#444">2</text>
+<text x="70" y="261.59" font-size="12" text-anchor="end" fill="#444">2</text>
 <line x1="78" y1="193.39" x2="796" y2="193.39" stroke="#e6e6e6" stroke-width="1" />
-<text x="70" y="197.39" font-size="11" text-anchor="end" fill="#444">3</text>
+<text x="70" y="197.39" font-size="12" text-anchor="end" fill="#444">3</text>
 <line x1="78" y1="129.18" x2="796" y2="129.18" stroke="#e6e6e6" stroke-width="1" />
-<text x="70" y="133.18" font-size="11" text-anchor="end" fill="#444">4</text>
+<text x="70" y="133.18" font-size="12" text-anchor="end" fill="#444">4</text>
 <line x1="78" y1="64.98" x2="796" y2="64.98" stroke="#e6e6e6" stroke-width="1" />
-<text x="70" y="68.98" font-size="11" text-anchor="end" fill="#444">5</text>
+<text x="70" y="68.98" font-size="12" text-anchor="end" fill="#444">5</text>
 <line x1="78" y1="46" x2="78" y2="386" stroke="#333" stroke-width="1.2" />
 <line x1="78" y1="386" x2="796" y2="386" stroke="#333" stroke-width="1.2" />
 <rect x="85.98" y="210.76" width="31.91" height="175.24" fill="#0072B2" />
@@ -23,6 +23,8 @@
 <rect x="564.64" y="215.17" width="31.91" height="170.83" fill="#0072B2" />
 <rect x="644.42" y="297.40" width="31.91" height="88.60" fill="#0072B2" />
 <rect x="724.20" y="368.00" width="31.91" height="18.00" fill="#0072B2" />
+<circle cx="735.2" cy="358.5" r="3" fill="#0072B2" />
+<text x="742.2" y="362.0" font-size="10" text-anchor="start" fill="#333">unscreened (all filings)</text>
 <rect x="117.89" y="134.24" width="31.91" height="251.76" fill="#D55E00" />
 <rect x="197.67" y="129.34" width="31.91" height="256.66" fill="#D55E00" />
 <rect x="277.44" y="124.78" width="31.91" height="261.22" fill="#D55E00" />
@@ -32,21 +34,31 @@
 <rect x="596.56" y="90.35" width="31.91" height="295.65" fill="#D55E00" />
 <rect x="676.33" y="183.97" width="31.91" height="202.03" fill="#D55E00" />
 <rect x="756.11" y="152.20" width="31.91" height="233.80" fill="#D55E00" />
-<text x="117.9" y="402.0" font-size="11" text-anchor="middle" fill="#333" transform="rotate(0 117.9 402.0)">2016</text>
-<text x="197.7" y="402.0" font-size="11" text-anchor="middle" fill="#333" transform="rotate(0 197.7 402.0)">2017</text>
-<text x="277.4" y="402.0" font-size="11" text-anchor="middle" fill="#333" transform="rotate(0 277.4 402.0)">2018</text>
-<text x="357.2" y="402.0" font-size="11" text-anchor="middle" fill="#333" transform="rotate(0 357.2 402.0)">2019</text>
-<text x="437.0" y="402.0" font-size="11" text-anchor="middle" fill="#333" transform="rotate(0 437.0 402.0)">2020</text>
-<text x="516.8" y="402.0" font-size="11" text-anchor="middle" fill="#333" transform="rotate(0 516.8 402.0)">2021</text>
-<text x="596.6" y="402.0" font-size="11" text-anchor="middle" fill="#333" transform="rotate(0 596.6 402.0)">2022</text>
-<text x="676.3" y="402.0" font-size="11" text-anchor="middle" fill="#333" transform="rotate(0 676.3 402.0)">2023</text>
-<text x="756.1" y="402.0" font-size="11" text-anchor="middle" fill="#333" transform="rotate(0 756.1 402.0)">2024</text>
+<circle cx="767.1" cy="129.7" r="3" fill="#D55E00" />
+<text x="774.1" y="133.2" font-size="10" text-anchor="start" fill="#333">screened</text>
+<text x="117.9" y="402.0" font-size="12" text-anchor="middle" fill="#333" transform="rotate(0 117.9 402.0)">2016</text>
+<text x="197.7" y="402.0" font-size="12" text-anchor="middle" fill="#333" transform="rotate(0 197.7 402.0)">2017</text>
+<text x="277.4" y="402.0" font-size="12" text-anchor="middle" fill="#333" transform="rotate(0 277.4 402.0)">2018</text>
+<text x="357.2" y="402.0" font-size="12" text-anchor="middle" fill="#333" transform="rotate(0 357.2 402.0)">2019</text>
+<text x="437.0" y="402.0" font-size="12" text-anchor="middle" fill="#333" transform="rotate(0 437.0 402.0)">2020</text>
+<text x="516.8" y="402.0" font-size="12" text-anchor="middle" fill="#333" transform="rotate(0 516.8 402.0)">2021</text>
+<text x="596.6" y="402.0" font-size="12" text-anchor="middle" fill="#333" transform="rotate(0 596.6 402.0)">2022</text>
+<text x="676.3" y="402.0" font-size="12" text-anchor="middle" fill="#333" transform="rotate(0 676.3 402.0)">2023</text>
+<text x="756.1" y="402.0" font-size="12" text-anchor="middle" fill="#333" transform="rotate(0 756.1 402.0)">2024</text>
+<circle cx="341.27" cy="384.97" r="4.5" fill="none" stroke="#333" stroke-width="1.3" />
+<line x1="341.27" y1="384.97" x2="335.27" y2="364.97" stroke="#333" stroke-width="1" stroke-dasharray="2,2" />
+<text x="335.27" y="364.97" font-size="10.5" font-weight="600" text-anchor="end" fill="#111">2019 unscreened 0.02</text>
+<circle cx="373.18" cy="128.00" r="4.5" fill="none" stroke="#333" stroke-width="1.3" />
+<line x1="373.18" y1="128.00" x2="367.18" y2="120.00" stroke="#333" stroke-width="1" stroke-dasharray="2,2" />
+<text x="367.18" y="120.00" font-size="10.5" font-weight="600" text-anchor="end" fill="#111">2019 screened 4.02</text>
+<circle cx="740.16" cy="368.00" r="4.5" fill="none" stroke="#333" stroke-width="1.3" />
+<line x1="740.16" y1="368.00" x2="746.16" y2="348.00" stroke="#333" stroke-width="1" stroke-dasharray="2,2" />
+<text x="746.16" y="348.00" font-size="10.5" font-weight="600" text-anchor="start" fill="#111">2024 unscreened 0.28</text>
+<circle cx="772.07" cy="152.20" r="4.5" fill="none" stroke="#333" stroke-width="1.3" />
+<line x1="772.07" y1="152.20" x2="778.07" y2="144.20" stroke="#333" stroke-width="1" stroke-dasharray="2,2" />
+<text x="778.07" y="144.20" font-size="10.5" font-weight="600" text-anchor="start" fill="#111">2024 screened 3.64</text>
 <text x="78" y="24" font-size="15" font-weight="600" fill="#111">Aggregate TRIR before and after the plausibility screen</text>
-<text x="78" y="40" font-size="11" fill="#666">OSHA ITA Form 300A, reporting years 2016-2024, n=2,801,064 filings after deduplication</text>
+<text x="78" y="40" font-size="11" fill="#666">Unscreened TRIR tracks bad hours data, not safety performance.</text>
 <text x="437.0" y="448" font-size="12" text-anchor="middle" fill="#333">Reporting year</text>
 <text x="16" y="216.0" font-size="12" text-anchor="middle" fill="#333" transform="rotate(-90 16 216.0)">Recordable cases per 200,000 hours</text>
-<rect x="78.0" y="30" width="10" height="10" fill="#0072B2" />
-<text x="92.0" y="39" font-size="11" fill="#333">unscreened (all filings)</text>
-<rect x="253.6" y="30" width="10" height="10" fill="#D55E00" />
-<text x="267.6" y="39" font-size="11" fill="#333">screened</text>
 </svg>

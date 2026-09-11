@@ -625,8 +625,8 @@ def run_real_data(
             "Recordable cases in the reporting year",
             "Number of establishments",
             ax,
-            f"OSHA ITA Form 300A, reporting year {year}, screened panel, NAICS {primary} only; "
-            f"n={int(table[table['naics3'] == primary]['n'].iloc[0]):,} establishments in the fit",
+            "Poisson underfits; NB2 and ZINB track the observed count distribution "
+            f"(n={int(table[table['naics3'] == primary]['n'].iloc[0]):,} establishments).",
         )
         f.bars(labels, series)
         figs = Path(out_dir) / "figures"

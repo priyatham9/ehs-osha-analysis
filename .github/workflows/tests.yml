@@ -21,3 +21,18 @@ jobs:
         run: python -m pip install --upgrade pip numpy pandas
       - name: Run tests
         run: PYTHONPATH=src python -m unittest discover -s tests -v
+  fixture-pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip numpy pandas
+      - name: Run synthetic fixture pipeline
+        run: PYTHONPATH=src python3 -m unittest tests.test_pipeline_on_fixture -v
+      - name: Verify summary.json was written
+        run: |
+          [ -f outputs/summary.json ] || exit 1
+          python3 -c "import json; json.load(open('outputs/summary.json'))" || exit 1

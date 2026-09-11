@@ -24,6 +24,8 @@ stability table omits no percentile the pipeline computes.
 Runs on Python 3.9 with pandas and numpy. No SciPy, no matplotlib, no test
 runner beyond stdlib `unittest`.
 
+**Documentation:** [REPRODUCIBILITY.md](REPRODUCIBILITY.md) records the source data, exact commands, measured runtimes, and verifiable outputs. [DATASHEET.md](DATASHEET.md) documents the dataset following Gebru et al.
+
 ---
 
 ## Why this exists

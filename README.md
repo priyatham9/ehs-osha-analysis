@@ -1,8 +1,13 @@
 # ehs-osha-analysis
 
 [![tests](https://github.com/priyatham9/ehs-osha-analysis/actions/workflows/tests.yml/badge.svg)](https://github.com/priyatham9/ehs-osha-analysis/actions/workflows/tests.yml)
+[![site](https://img.shields.io/badge/site-github%20pages-blue)](https://priyatham9.github.io/ehs-osha-analysis/)
 
-A reproducible pipeline over the public OSHA Injury Tracking Application Form 300A establishment filings, 2016-2024. It screens filings for internal plausibility and quantifies the bias they introduce to aggregate injury rates; screening raises the aggregate TRIR from 0.134 to 3.983, a 29.7x correction. It does not identify which specific numbers on forms are wrong, nor does it address causes of injury, nor does it represent the broader US workforce.
+Part of the Grounded research programme: https://priyatham9.github.io/grounded/
+
+A reproducible pipeline over the public OSHA Injury Tracking Application Form 300A establishment filings, 2016-2024. It screens filings for internal plausibility and quantifies the bias they introduce to aggregate injury rates; screening raises the aggregate TRIR from 0.134 to 3.983, a 29.7x correction.
+
+It does not identify which specific numbers on forms are wrong, nor does it address causes of injury, nor does it represent the broader US workforce.
 
 Every empirical number below was computed by `scripts/run_analysis.py` from
 files downloaded from osha.gov and is transcribed from `outputs/summary.json` or
@@ -19,6 +24,16 @@ Runs on Python 3.9 with pandas and numpy. No SciPy, no matplotlib, no test
 runner beyond stdlib `unittest`.
 
 **Documentation:** [REPRODUCIBILITY.md](REPRODUCIBILITY.md) records the source data, exact commands, measured runtimes, and verifiable outputs. [DATASHEET.md](DATASHEET.md) documents the dataset following Gebru et al.
+
+**At a glance**
+
+| Field | Value |
+|---|---|
+| Status | tests passing (see badge above) |
+| Data | real (public OSHA ITA filings, 2016-2024); synthetic fixture available for offline test runs only, never used for headline numbers |
+| Tests | 175 tests, stdlib `unittest` |
+| Quickstart | `make data && make analysis && make test` |
+| Licence | MIT |
 
 ---
 

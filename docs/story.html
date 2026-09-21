@@ -180,12 +180,37 @@ body:has(.st-progress) .rs-header .rs-progress{display:none}
 .st-presenting .layout{grid-template-columns:minmax(0,1fr)}
 
 /* ============ story page: ehs-osha-analysis ============ */
-.hero-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:36px;align-items:center}
-.hero h1{font-size:clamp(2.2rem,5.4vw,4.4rem);max-width:none;hyphens:manual;overflow-wrap:normal}
-.hero .hero-orb{width:min(360px,100%);margin-left:auto}
-.hero .st-orb-wrap{width:100%;aspect-ratio:1}
+/* scenes get a wider measure than the rest of the site so the stage is big */
+.wrap-wide{max-width:1560px;margin:0 auto;padding:0 40px}
+@media(max-width:820px){.wrap-wide{padding:0 22px}}
+
+.hero{padding:0;background-image:none;overflow:hidden}
+.hero .st-hero{padding-block:56px 48px}
+.hero h1{font-size:clamp(2.4rem,6vw,5.2rem);max-width:none;hyphens:manual;overflow-wrap:normal}
 .hero kbd{font-family:var(--font-mono);font-size:.75rem;border:1px solid var(--rule-soft);padding:1px 5px}
-@media(max-width:860px){.hero-grid{grid-template-columns:1fr}.hero .hero-orb{width:min(240px,62%);margin:0}}
+.crumb{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:18px;font-family:var(--font-mono);font-size:.6875rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.crumb a{color:var(--muted);text-decoration:none;border-bottom:1px solid var(--rule-soft)}
+.crumb a:hover{color:var(--accent);border-bottom-color:var(--accent)}
+.crumb b{color:var(--ink);font-weight:700}
+.st-hero-orb .st-orb-wrap,.next-orb .st-orb-wrap{width:100%;aspect-ratio:1/1}
+
+/* the companion orb the engine docks on each stage: top right, clear of the big number */
+.st-scene .st-companion{left:auto;right:2px;top:6px;align-items:flex-end}
+.st-scene .st-companion .st-companion-cap{text-align:right}
+
+/* key number carried beside the visual */
+.stage-num{display:flex;align-items:flex-end;gap:26px;flex-wrap:wrap;margin:0 0 14px;min-height:112px}
+.stage-num .st-bignum{font-size:clamp(3rem,6.2vw,6rem);margin:0}
+.stage-num .stage-num-note{flex:1 1 220px;min-width:0;font-family:var(--font-mono);font-size:.6875rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);line-height:1.7;padding-bottom:10px;max-width:40ch}
+.stage-num .stage-num-note b{color:var(--ink);font-weight:700}
+.stage-num .st-bignum,.stage-num .stage-num-note{transition:opacity .17s ease}
+.stage-num .is-fading{opacity:0}
+@media (prefers-reduced-motion:reduce){.stage-num .st-bignum,.stage-num .stage-num-note{transition:none}}
+@media(max-width:800px){.stage-num{min-height:0;gap:14px;margin-bottom:8px}.stage-num .st-bignum{font-size:clamp(2rem,9vw,3rem)}.stage-num .stage-num-note{display:none}}
+
+/* chapter cards: keep the text on the same measure as the rest of the page */
+.st-chapter{padding-inline:max(40px,calc((100vw - 1560px) / 2 + 40px));border-bottom:2px solid var(--rule)}
+.st-chapter .st-chapter-num{color:var(--accent);opacity:.9}
 
 .honest{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2px;background:var(--rule-soft);border:2px solid var(--rule)}
 .hcard{background:var(--surface);padding:24px 22px}
@@ -202,22 +227,28 @@ body:has(.st-progress) .rs-header .rs-progress{display:none}
 .mon-note{margin-top:14px;font-size:.8125rem!important;color:var(--muted)!important}
 @media(max-width:860px){.mon-grid{grid-template-columns:1fr;gap:26px}}
 
-/* the stage keeps a stable height so charts do not reflow between steps */
-.st-stage-inner .st-chart{max-height:min(66vh,520px)}
-.st-figure figcaption{overflow-wrap:anywhere}
-.st-presenting .hero,.st-presenting .prog{display:none!important}
+.st-figure figcaption{overflow-wrap:anywhere;font-size:.6875rem;line-height:1.6}
+/* tail room so the sticky stage is not pushed off-screen on the last step */
+.st-scene .st-steps{padding-bottom:18vh}
+@media(max-width:800px){.st-scene .st-steps{padding-bottom:0}}
+.st-presenting .hero,.st-presenting .prog,.st-presenting .st-chapter{display:none!important}
 
-/* narrow screens: the engine pins a 54vh stage to the top, so push each step's
-   text to the bottom of its box where it is not covered by the stage */
-@media(max-width:800px){
-  .st-scene .st-stage,.st-scene[data-side="left"] .st-stage{height:58vh;padding-top:78px}
-  .st-step{justify-content:flex-start;padding-top:56vh;padding-bottom:22px;min-height:80vh}
-  .st-step p{max-width:none}
-}
+/* ============ next card ============ */
+.prog{padding:0;border-bottom:2px solid var(--rule)}
+.next-card{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.55fr);gap:40px;align-items:center;padding:72px 0;border-bottom:2px solid var(--rule-soft);text-decoration:none;color:var(--ink)}
+.next-card:hover .next-name{color:var(--accent)}
+.next-tag{font-family:var(--font-mono);font-size:.6875rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:700}
+.next-name{display:block;margin-top:14px;font-stretch:125%;font-weight:900;text-transform:uppercase;font-size:clamp(2rem,5.6vw,4.2rem);line-height:1.02;transition:color .18s}
+.next-note{display:block;margin-top:16px;font-size:1.05rem;color:var(--ink-2);max-width:46ch}
+.next-orb{width:clamp(180px,20vw,280px);aspect-ratio:1;justify-self:center;line-height:0}
+.next-rest{display:flex;flex-wrap:wrap;gap:0;padding:26px 0 60px;align-items:center}
+.next-rest a{font-family:var(--font-mono);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;color:var(--ink);border:2px solid var(--rule);padding:12px 18px;margin:0 -2px -2px 0}
+.next-rest a:hover{border-color:var(--accent);color:var(--accent)}
+@media(max-width:860px){.next-card{grid-template-columns:1fr;gap:22px;padding:44px 0}.next-orb{order:-1;justify-self:start;width:min(44vw,180px)}}
 </style>
 <style id="story-css">/*STORY_CSS_START*/
 /* ============================================================
-   story.css  -  shared storytelling engine styles
+   story.css  -  shared storytelling engine styles  (v1.1)
    Depends on tokens defined in tools/shared.css:
    --paper --surface --surface-2 --ink --ink-2 --muted --rule
    --rule-soft --accent --accent-2 --accent-ink --accent-wash
@@ -227,52 +258,117 @@ body:has(.st-progress) .rs-header .rs-progress{display:none}
 /* ---------- orb ---------- */
 .st-orb{display:block;width:100%;height:100%;touch-action:manipulation}
 .st-orb-wrap{position:relative;display:block;line-height:0}
+.st-orb-inline{display:inline-block;width:20px;height:20px;vertical-align:-3px;line-height:0;margin:0 .35em 0 .1em}
+.st-orb-inline canvas{display:block;width:100%;height:100%}
 
 /* ---------- scenes ---------- */
-.st-scene{position:relative;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:0 46px;align-items:start}
-.st-scene[data-side="left"]{grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr)}
+.st-scene{position:relative;display:grid;grid-template-columns:minmax(0,7fr) minmax(0,4fr);gap:0 56px;align-items:start}
+.st-scene[data-side="left"]{grid-template-columns:minmax(0,4fr) minmax(0,7fr)}
 .st-scene[data-side="left"] .st-stage{order:2}
 .st-scene[data-side="left"] .st-steps{order:1}
 .st-stage{position:sticky;top:0;height:100vh;height:100svh;display:flex;flex-direction:column;justify-content:center;min-width:0;padding:24px 0}
-.st-stage-inner{position:relative;width:100%;min-width:0;max-height:100%}
+.st-stage-inner{position:relative;width:100%;min-width:0;min-height:60vh;min-height:60svh;display:flex;flex-direction:column;justify-content:center}
+.st-stage-inner > svg,.st-stage-inner > canvas,.st-stage-inner > .st-chart{display:block;width:100%;height:auto;max-height:74vh;max-height:74svh}
+.st-stage-inner > .st-figure{margin:0;width:100%}
+.st-stage-inner > .st-figure > svg,.st-stage-inner > .st-figure > canvas{display:block;width:100%;height:auto;max-height:66vh;max-height:66svh}
 .st-steps{min-width:0}
 .st-step{min-height:86vh;display:flex;flex-direction:column;justify-content:center;padding:34px 0;opacity:.34;transition:opacity .45s ease}
 .st-step.is-active{opacity:1}
 .st-step:last-child{min-height:64vh}
-.st-step h3{font-size:clamp(1.18rem,2.4vw,1.6rem);margin-bottom:12px;letter-spacing:-.01em}
-.st-step p{font-size:1rem;color:var(--ink-2);max-width:46ch}
+.st-step h3{font-size:clamp(1.6rem,2.6vw,2.4rem);margin-bottom:14px;letter-spacing:-.015em;line-height:1.08}
+.st-step p{font-size:clamp(1.125rem,.55vw + 1rem,1.25rem);line-height:1.5;color:var(--ink-2);max-width:42ch}
+.st-step p + p{margin-top:.7em}
 .st-step .label{display:block;margin-bottom:10px}
+
+/* big number beside or inside a visual */
+.st-bignum{display:block;font-family:var(--font-mono);font-variant-numeric:tabular-nums;font-size:clamp(3rem,7.5vw,6rem);line-height:.92;letter-spacing:-.04em;color:var(--accent);font-weight:700}
+.st-bignum small{display:block;margin-top:.5em;font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:400;line-height:1.4}
+.st-bignum-row{display:flex;align-items:baseline;gap:22px;flex-wrap:wrap}
+
+/* staggered step entrance (only once .st-flow is set by the engine) */
+.st-scene.st-flow .st-step > *{opacity:0;transform:translateY(20px);transition:opacity .55s cubic-bezier(.22,.7,.2,1),transform .55s cubic-bezier(.22,.7,.2,1)}
+.st-scene.st-flow .st-step.is-entered > *{opacity:1;transform:none}
+.st-scene.st-flow .st-step.is-entered > :nth-child(2){transition-delay:.08s}
+.st-scene.st-flow .st-step.is-entered > :nth-child(3){transition-delay:.16s}
+.st-scene.st-flow .st-step.is-entered > :nth-child(4){transition-delay:.24s}
+.st-scene.st-flow .st-step.is-entered > :nth-child(n+5){transition-delay:.3s}
+
+/* layered stage children: [data-show="0 1"] crossfade by active step */
+.st-stage-inner.st-layers{display:grid;align-items:center}
+.st-stage-inner.st-layers > *{grid-area:1/1;width:100%}
+.st-stage-inner.st-layers > [data-show]{opacity:0;transform:scale(.975);transition:opacity .5s cubic-bezier(.22,.7,.2,1),transform .5s cubic-bezier(.22,.7,.2,1);pointer-events:none}
+.st-stage-inner.st-layers > [data-show].is-shown{opacity:1;transform:none;pointer-events:auto}
+
 /* scroll progress rail drawn from the scene's --p (0..1) */
 .st-scene-rail{position:absolute;left:-18px;top:0;bottom:0;width:2px;background:var(--rule-soft)}
 .st-scene-rail::after{content:"";position:absolute;left:0;top:0;width:2px;height:calc(var(--p,0) * 100%);background:var(--accent)}
-@media(max-width:800px){
-  .st-scene,.st-scene[data-side="left"]{grid-template-columns:1fr;gap:0}
-  .st-scene .st-stage,.st-scene[data-side="left"] .st-stage{order:0;position:sticky;top:var(--st-top,58px);height:50vh;height:50svh;background:var(--paper);z-index:2;padding:12px 0;border-bottom:2px solid var(--rule-soft)}
-  .st-scene .st-steps,.st-scene[data-side="left"] .st-steps{order:1}
-  .st-step{min-height:80vh;padding:26px 0}
-  .st-scene-rail{display:none}
-}
+
+/* ---------- companion orb docked on the stage ---------- */
+.st-companion{position:absolute;left:0;top:0;z-index:3;display:flex;flex-direction:column;align-items:flex-start;gap:6px;pointer-events:none}
+.st-companion .st-companion-orb{width:var(--st-comp,108px);height:var(--st-comp,108px);line-height:0}
+.st-companion .st-companion-cap{font-family:var(--font-mono);font-size:.625rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);transition:opacity .28s ease;padding-left:2px}
+.st-companion .st-companion-cap.is-fading{opacity:0}
+.st-companion[data-state="wrong"] .st-companion-cap{color:var(--warn)}
+.st-companion[data-state="grounded"] .st-companion-cap,.st-companion[data-state="resolved"] .st-companion-cap{color:var(--accent)}
+
+/* ---------- ambient dot field ---------- */
+.st-field{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:0;pointer-events:none}
+
+/* ---------- hero ---------- */
+.st-hero{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(320px,.78fr);gap:40px;align-items:center;min-height:82vh;min-height:82svh}
+.st-hero > *{position:relative;z-index:1}
+.st-hero > .st-field{position:absolute;inset:0;z-index:0}
+.st-hero .st-hero-orb{width:clamp(380px,32vw,480px);max-width:100%;aspect-ratio:1/1;justify-self:center;line-height:0}
+
+/* ---------- chapter card ---------- */
+.st-chapter{position:relative;min-height:100vh;min-height:100svh;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.8fr);gap:40px;align-items:center;overflow:hidden;padding:0 clamp(20px,5vw,60px)}
+.st-chapter > *{position:relative;z-index:1}
+.st-chapter > .st-field{position:absolute;inset:0;z-index:0}
+.st-chapter .st-chapter-body{min-width:0}
+.st-chapter .st-chapter-num{font-family:var(--font-mono);font-size:clamp(4rem,12vw,9rem);line-height:.85;letter-spacing:-.05em;color:var(--rule);font-variant-numeric:tabular-nums;margin-bottom:.12em}
+.st-chapter h2,.st-chapter .st-chapter-title{font-size:clamp(2rem,5vw,3.6rem);line-height:1.02;letter-spacing:-.02em;margin:0 0 .4em}
+.st-chapter p{font-size:clamp(1.05rem,1.4vw,1.3rem);color:var(--ink-2);max-width:40ch;margin:0}
+.st-chapter .st-chapter-orb{width:clamp(220px,26vw,320px);aspect-ratio:1/1;justify-self:center;line-height:0}
 
 /* ---------- charts ---------- */
 .st-chart{display:block;width:100%;overflow:visible;font-family:var(--font-sans)}
-.st-chart text{font-family:var(--font-mono);font-size:12px;fill:var(--muted);font-variant-numeric:tabular-nums}
-.st-chart .st-axis-line{stroke:var(--rule-soft);stroke-width:1}
+.st-chart.st-in-stage{height:min(66vh,720px);max-height:66vh}
+.st-chart text{font-family:var(--font-mono);font-size:14px;fill:var(--muted);font-variant-numeric:tabular-nums}
+.st-chart .st-axis-line{stroke:var(--rule-soft);stroke-width:1.5}
 .st-chart .st-grid{stroke:var(--rule-soft);stroke-width:1;stroke-dasharray:2 4}
-.st-chart .st-label-direct{fill:var(--ink);font-weight:700;font-size:12px}
-.st-chart .st-caption{fill:var(--muted);font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.st-chart .st-label-direct{fill:var(--ink);font-weight:700;font-size:14px}
+.st-chart .st-caption{fill:var(--muted);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
 .st-chart .st-series-line{fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
 .st-chart .st-gap{fill:var(--accent);opacity:.14}
 .st-chart .st-bar{transition:none}
 .st-chart .st-region{fill:var(--warn);opacity:.12}
-.st-chart .st-region-edge{stroke:var(--warn);stroke-width:1;stroke-dasharray:4 4;fill:none}
-.st-chart .st-marker{stroke:var(--warn);stroke-width:2}
+.st-chart .st-region-edge{stroke:var(--warn);stroke-width:1.5;stroke-dasharray:4 4;fill:none}
+.st-chart .st-marker{stroke:var(--warn);stroke-width:2.5}
 .st-chart .st-node{stroke:var(--paper);stroke-width:1.5}
-.st-chart .st-link{stroke:var(--rule-soft);stroke-width:1.2;fill:none}
-.st-chart .st-link.is-hot{stroke:var(--accent);stroke-width:2.6}
+.st-chart .st-link{stroke:var(--rule-soft);stroke-width:1.4;fill:none}
+.st-chart .st-chart .st-link.is-hot,.st-chart .st-link.is-hot{stroke:var(--accent);stroke-width:2.8}
 .st-chart .st-path-edge{stroke:var(--ink-2);fill:none;marker-end:url(#st-arrow)}
+/* soft glow on accent marks (SVG only; never applied to canvas) */
+.st-chart .st-glow{filter:drop-shadow(0 0 5px color-mix(in srgb, var(--accent) 60%, transparent))}
+@supports not (color: color-mix(in srgb, red, blue)){.st-chart .st-glow{filter:drop-shadow(0 0 4px var(--accent))}}
+/* annotations */
+.st-chart .st-anno-line{stroke:var(--ink-2);stroke-width:1.5;fill:none}
+.st-chart .st-anno-dot{fill:var(--accent);stroke:var(--paper);stroke-width:2}
+.st-chart .st-anno-text{fill:var(--ink);font-family:var(--font-mono);font-size:13px;font-weight:700}
+.st-chart .st-anno-text tspan.st-anno-sub{fill:var(--muted);font-weight:400}
+.st-chart .st-ref-line{stroke:var(--ink-2);stroke-width:1.5;stroke-dasharray:6 5;fill:none}
+.st-chart .st-ref-text{fill:var(--ink-2);font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+/* hover / focus hit targets */
+.st-chart .st-hit{fill:transparent;stroke:transparent;pointer-events:all;cursor:crosshair}
+.st-chart .st-hit:focus{outline:none;stroke:var(--accent);stroke-width:2}
+.st-chart .st-hit:focus-visible{outline:none;stroke:var(--accent);stroke-width:2}
 .st-canvas{display:block;width:100%}
 .st-figure{margin:0}
 .st-figure figcaption{margin-top:10px;font-family:var(--font-mono);font-size:.625rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+/* tooltip */
+.st-tiphost{position:relative}
+.st-tip{position:absolute;left:0;top:0;z-index:12;transform:translate(-50%,-128%);padding:7px 10px;background:var(--surface);border:2px solid var(--rule);color:var(--ink);font-family:var(--font-mono);font-size:.75rem;line-height:1.35;white-space:pre;pointer-events:none;opacity:0;transition:opacity .16s ease;max-width:280px}
+.st-tip.is-on{opacity:1}
 
 /* ---------- reveal ---------- */
 .st-reveal{opacity:0;transform:translateY(14px);transition:opacity .6s cubic-bezier(.22,.7,.2,1),transform .6s cubic-bezier(.22,.7,.2,1)}
@@ -286,15 +382,97 @@ body:has(.st-progress) .rs-header .rs-progress{display:none}
 .st-presenting .st-hide-on-present,.st-presenting header.banner,.st-presenting .footer,.st-presenting .skip{display:none!important}
 .st-presenting body,body.st-presenting{font-size:19px}
 .st-presenting .st-step{opacity:1;min-height:0}
+.st-presenting .st-scene.st-flow .st-step > *{opacity:1;transform:none}
 .st-present-dots{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);display:flex;gap:8px;z-index:70;padding:9px 13px;border:2px solid var(--rule);background:var(--surface)}
 .st-present-dots b{display:block;width:8px;height:8px;background:var(--rule-soft);border-radius:50%}
 .st-present-dots b.is-on{background:var(--accent)}
 .st-present-hint{position:fixed;right:18px;bottom:24px;z-index:70;font-family:var(--font-mono);font-size:.625rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 
+/* ---------- wayfinder ---------- */
+body.st-has-way{padding-bottom:calc(var(--st-way-h,60px) + 10px)}
+body.st-has-way .presbtn{bottom:calc(var(--st-way-h,60px) + 16px)}
+.st-way{position:fixed;left:0;right:0;bottom:0;z-index:75;background:var(--surface);border-top:2px solid var(--rule);font-family:var(--font-mono)}
+.st-presenting .st-way,.st-presenting .st-way-map{display:none!important}
+.st-way-seg{display:flex;gap:3px;padding:0}
+.st-way-seg i{display:block;height:3px;flex:1 1 0;background:var(--rule-soft)}
+.st-way-seg i.is-done{background:var(--accent);opacity:.45}
+.st-way-seg i.is-now{background:var(--accent);opacity:1}
+.st-way-row{display:flex;align-items:center;gap:14px;padding:9px 16px;min-height:44px}
+.st-way-crumb{flex:1 1 auto;min-width:0;font-size:.6875rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.st-way-crumb b{color:var(--ink);font-weight:700}
+.st-way-btns{display:flex;gap:8px;flex:0 0 auto}
+.st-way a.st-way-btn,.st-way button.st-way-btn{display:inline-block;font-family:var(--font-mono);font-size:.6875rem;letter-spacing:.12em;text-transform:uppercase;padding:7px 12px;border:2px solid var(--rule);background:var(--paper);color:var(--ink);text-decoration:none;cursor:pointer;line-height:1.1}
+.st-way a.st-way-btn:hover,.st-way button.st-way-btn:hover{border-color:var(--accent);color:var(--accent)}
+.st-way .st-way-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.st-way .st-way-btn[aria-disabled="true"]{opacity:.35;pointer-events:none}
+@media(max-width:820px){.st-way-crumb{font-size:.625rem;letter-spacing:.08em}.st-way a.st-way-btn,.st-way button.st-way-btn{padding:7px 9px}}
+@media(max-width:620px){.st-way-site{display:none}}
+@media(max-width:460px){.st-way-title{display:none}.st-way-row{gap:8px;padding:8px 12px}.st-way a.st-way-btn,.st-way button.st-way-btn{padding:7px 7px;letter-spacing:.06em}}
+
+/* map overlay */
+.st-way-map{position:fixed;inset:0;z-index:90;background:var(--paper);display:none;overflow:auto;font-family:var(--font-sans)}
+.st-way-map.is-open{display:block}
+.st-way-map .st-map-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:20px 24px 8px;flex-wrap:wrap}
+.st-way-map .st-map-head h2{font-size:clamp(1.3rem,3vw,2rem);margin:0;letter-spacing:-.02em}
+.st-way-map .st-map-hint{font-family:var(--font-mono);font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.st-map-wrap{position:relative;padding:0 24px 28px}
+.st-map-svg{display:block;width:100%;height:auto;max-height:64vh;overflow:visible}
+.st-map-svg text{font-family:var(--font-mono);font-size:13px;fill:var(--muted)}
+.st-map-svg .st-map-spoke{stroke:var(--rule-soft);stroke-width:1.5}
+.st-map-svg .st-map-spoke.is-now{stroke:var(--accent);stroke-width:2.5}
+.st-map-svg .st-map-node{fill:var(--surface);stroke:var(--rule);stroke-width:2}
+.st-map-svg .st-map-node.is-now{stroke:var(--accent);fill:var(--accent-wash)}
+.st-map-svg .st-map-name{fill:var(--ink);font-weight:700;font-size:13px}
+.st-map-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;padding:0 24px 40px}
+.st-map-card{border:2px solid var(--rule);background:var(--surface);padding:14px 15px}
+.st-map-card.is-now{border-color:var(--accent)}
+.st-map-card h3{font-size:.95rem;margin:0 0 3px;letter-spacing:-.01em}
+.st-map-card .st-map-sub{font-family:var(--font-mono);font-size:.625rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+.st-map-card ul{list-style:none;margin:0;padding:0;display:grid;gap:7px}
+.st-map-card a{display:block;text-decoration:none;color:var(--ink);border-left:3px solid var(--rule-soft);padding-left:9px;font-size:.85rem}
+.st-map-card a:hover,.st-map-card a:focus-visible{border-left-color:var(--accent);color:var(--accent);outline:none}
+.st-map-card a span{display:block;font-family:var(--font-mono);font-size:.625rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.st-map-card a:hover span{color:var(--ink-2)}
+.st-map-extra{display:flex;flex-wrap:wrap;gap:8px;padding:0 24px 40px}
+@media(max-width:800px){.st-map-wrap{display:none}}
+
+/* ---------- responsive ---------- */
+@media(max-width:1100px){
+  .st-scene{grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:0 34px}
+  .st-scene[data-side="left"]{grid-template-columns:minmax(0,5fr) minmax(0,6fr)}
+}
+@media(max-width:900px){
+  .st-hero{grid-template-columns:1fr;gap:26px;min-height:0;padding:28px 0}
+  .st-hero .st-hero-orb{width:min(72vw,360px);order:-1}
+  .st-chapter{grid-template-columns:1fr;gap:24px;text-align:left}
+  .st-chapter .st-chapter-orb{width:min(60vw,240px);justify-self:start}
+}
+@media(max-width:800px){
+  .st-scene,.st-scene[data-side="left"]{grid-template-columns:1fr;gap:0}
+  .st-scene .st-stage,.st-scene[data-side="left"] .st-stage{order:0;position:sticky;top:var(--st-top,58px);height:50vh;height:50svh;background:var(--paper);z-index:2;padding:12px 0;border-bottom:2px solid var(--rule-soft)}
+  .st-stage-inner{min-height:0}
+  .st-stage-inner > svg,.st-stage-inner > canvas,.st-stage-inner > .st-chart{max-height:44vh}
+  .st-chart.st-in-stage{height:min(40vh,300px);max-height:40vh}
+  .st-scene .st-steps,.st-scene[data-side="left"] .st-steps{order:1}
+  .st-step{min-height:80vh;padding:26px 0}
+  .st-step h3{font-size:clamp(1.3rem,5.5vw,1.8rem)}
+  .st-step p{font-size:1.0625rem}
+  .st-scene-rail{display:none}
+  .st-companion{--st-comp:64px}
+  .st-companion .st-companion-cap{font-size:.5625rem;letter-spacing:.12em}
+}
+@media(max-width:420px){
+  .st-companion{--st-comp:52px}
+  .st-bignum{font-size:clamp(2.4rem,15vw,3.4rem)}
+}
+
 /* ---------- reduced motion ---------- */
 @media (prefers-reduced-motion: reduce){
   .st-reveal{opacity:1;transform:none;transition:none}
   .st-step{opacity:1;transition:none}
+  .st-scene.st-flow .st-step > *{opacity:1;transform:none;transition:none}
+  .st-stage-inner.st-layers > [data-show]{transition:none}
+  .st-companion .st-companion-cap{transition:none}
 }
 /*STORY_CSS_END*/</style>
 <script id="rs-theme-init">try{var t=localStorage.getItem("pc-theme")||localStorage.getItem("ehs-ai-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t);}catch(e){}</script><style id="rs-header-css">
@@ -409,33 +587,49 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
 <main id="main">
 
 <section class="hero">
-  <div class="wrap hero-grid">
+  <div class="wrap wrap-wide st-hero" id="hero">
     <div>
-      <span class="hero-eyebrow"><i class="pulse" aria-hidden="true"></i><span class="label">The story &middot; ehs-osha-analysis</span></span>
+      <nav class="crumb" aria-label="You are here">
+        <a href="https://priyatham9.github.io/grounded/">Grounded</a>
+        <span aria-hidden="true">&rsaquo;</span>
+        <a href="index.html">ehs-osha-analysis</a>
+        <span aria-hidden="true">&rsaquo;</span>
+        <b>Story</b>
+      </nav>
+      <span class="hero-eyebrow"><i class="pulse" aria-hidden="true"></i><span class="label">Story 1 of 7 &middot; five scenes</span></span>
       <h1 class="display">The denominator</h1>
       <p class="hero-role">A safety rate is a fraction. Almost every argument about it happens in the numerator. In 2.8 million OSHA filings, the bottom half of the fraction is where the damage is.</p>
-      <p class="hero-lede">Six scenes, every number read from a committed file in this repository. Press <kbd>P</kbd> for presenter mode.</p>
+      <p class="hero-lede">Every number here is read from a committed file in this repository, named under the figure it sits in. Press <kbd>P</kbd> for presenter mode, <kbd>M</kbd> for the site map.</p>
       <div class="hero-links">
         <a class="btn btn-primary" href="#scene-1">Start the story</a>
-        <a class="btn" href="index.html">Full project page</a>
-        <a class="btn" href="https://priyatham9.github.io/grounded/">Research hub</a>
+        <a class="btn" href="index.html">Project page</a>
+        <a class="btn" href="explore.html">Explore the data</a>
       </div>
     </div>
-    <div class="hero-orb">
-      <div class="st-orb-wrap"><canvas id="orb" class="st-orb" width="420" height="420" role="img" aria-label="An animated dotted sphere standing for the reporting system under review. It changes state as the story moves."></canvas></div>
+    <div class="st-hero-orb">
+      <div class="st-orb-wrap"><canvas id="orb" class="st-orb" width="460" height="460" role="img" aria-label="An animated dotted sphere standing for the reporting system under review. It changes state as the story moves."></canvas></div>
     </div>
   </div>
 </section>
 
+<!-- ================= chapter 1 ================= -->
+<section class="st-chapter" id="scene-1" data-num="01" data-orb="searching" data-orb-label="Chapter one: reading the whole panel">
+  <h2 class="display" id="h1-1">Two point eight million filings</h2>
+  <p>Nine years of the public OSHA Injury Tracking Application, whole. Two percent of the rows cannot be true, and they hold almost all of the hours.</p>
+</section>
+
 <!-- ================= scene 1 ================= -->
-<section class="section" id="scene-1" aria-labelledby="h1-1">
-  <div class="wrap">
-    <div class="rail-head"><span class="rail-num">01</span><h2 class="display" id="h1-1">Two point eight million filings</h2></div>
+<section class="section" aria-labelledby="h1-1">
+  <div class="wrap wrap-wide">
     <div class="st-scene" id="sc1" data-orb-scene>
       <div class="st-stage"><div class="st-stage-inner">
+        <div class="stage-num">
+          <span class="st-bignum" id="num-1">2,801,064</span>
+          <span class="stage-num-note" id="note-1"><b>establishment-year filings</b><br />2016 to 2024, after 4,703 duplicate rows dropped</span>
+        </div>
         <figure class="st-figure">
-          <svg id="ch-dots" class="st-chart" viewBox="0 0 560 400" role="img" aria-label="A grid of one thousand dots, each standing for about 2,800 filings. Twenty-one dots turn amber: the 2.07 percent that fail the plausibility screen. Those dots then grow to carry 96.7 percent of all reported hours."></svg>
-          <figcaption>Source: outputs/tables/quality_overall.csv, quality_flag_prevalence.csv</figcaption>
+          <svg id="ch-dots" class="st-chart" viewBox="0 0 880 600" role="img" aria-label="A grid of one thousand dots, each standing for about 2,800 filings. Twenty-one dots turn amber: the 2.07 percent that fail the plausibility screen. Those dots then move into a bar showing that they carry 96.7 percent of all reported hours."></svg>
+          <figcaption>n = 2,801,064 filings. Source: outputs/tables/quality_overall.csv, quality_flag_prevalence.csv</figcaption>
         </figure>
       </div></div>
       <div class="st-steps">
@@ -460,15 +654,24 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
   </div>
 </section>
 
+<!-- ================= chapter 2 ================= -->
+<section class="st-chapter" id="scene-2" data-num="02" data-orb="working" data-orb-label="Chapter two: what the bad rows do to the rate">
+  <h2 class="display" id="h1-2">What that does to the rate</h2>
+  <p>Same filings, one screen applied or not. In 2019 the difference between the two answers is a factor of 249.</p>
+</section>
+
 <!-- ================= scene 2 ================= -->
-<section class="section" id="scene-2" aria-labelledby="h1-2">
-  <div class="wrap">
-    <div class="rail-head"><span class="rail-num">02</span><h2 class="display" id="h1-2">What that does to the rate</h2></div>
+<section class="section" aria-labelledby="h1-2">
+  <div class="wrap wrap-wide">
     <div class="st-scene" id="sc2" data-side="left" data-orb-scene>
       <div class="st-stage"><div class="st-stage-inner">
+        <div class="stage-num">
+          <span class="st-bignum" id="num-2">3.98</span>
+          <span class="stage-num-note" id="note-2"><b>pooled screened TRIR</b><br />cases per 200,000 hours, 2016 to 2024</span>
+        </div>
         <figure class="st-figure">
-          <svg id="ch-line" class="st-chart" viewBox="0 0 560 400" role="img" aria-label="Two lines of aggregate TRIR by year. The screened line sits between 3.1 and 4.6. The unscreened line tracks it until 2019, when it collapses to 0.02, and falls again to 0.28 in 2024. The gap between them is shaded."></svg>
-          <figcaption>Source: outputs/tables/quality_by_year.csv, metrics_by_year.csv</figcaption>
+          <svg id="ch-line" class="st-chart" viewBox="0 0 880 600" role="img" aria-label="Two lines of aggregate TRIR by year. The screened line sits between 3.1 and 4.6. The unscreened line tracks it until 2019, when it collapses to 0.02, and falls again to 0.28 in 2024. The gap between them is shaded."></svg>
+          <figcaption>n = 9 years, all filers. Source: outputs/tables/quality_by_year.csv, metrics_by_year.csv, quality_sensitivity.csv</figcaption>
         </figure>
       </div></div>
       <div class="st-steps">
@@ -498,15 +701,24 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
   </div>
 </section>
 
+<!-- ================= chapter 3 ================= -->
+<section class="st-chapter" id="scene-3" data-num="03" data-orb="connecting" data-orb-label="Chapter three: following the same sites across years">
+  <h2 class="display" id="h1-3">Typos do not come back next year</h2>
+  <p>Follow 1.4 million establishments from one filing year into the next and the flags turn out to be a property of the filer.</p>
+</section>
+
 <!-- ================= scene 3 ================= -->
-<section class="section" id="scene-3" aria-labelledby="h1-3">
-  <div class="wrap">
-    <div class="rail-head"><span class="rail-num">03</span><h2 class="display" id="h1-3">Typos do not come back next year</h2></div>
+<section class="section" aria-labelledby="h1-3">
+  <div class="wrap wrap-wide">
     <div class="st-scene" id="sc3" data-orb-scene>
       <div class="st-stage"><div class="st-stage-inner">
+        <div class="stage-num">
+          <span class="st-bignum" id="num-3">1,436,479</span>
+          <span class="stage-num-note" id="note-3"><b>establishment-year pairs</b><br />each restricted to sites that filed in both years</span>
+        </div>
         <figure class="st-figure">
-          <svg id="ch-flow" class="st-chart" viewBox="0 0 560 400" role="img" aria-label="Two flow bands. Of establishments flagged in one year, 27.2 percent are flagged again the next. Of those not flagged, 0.95 percent are. The odds ratio is 39.1."></svg>
-          <figcaption>Source: outputs/tables/panel_transitions.csv (pooled row), docs/PANEL.md</figcaption>
+          <svg id="ch-flow" class="st-chart" viewBox="0 0 880 600" role="img" aria-label="Two flow bands. Of establishments flagged in one year, 27.2 percent are flagged again the next. Of those not flagged, 0.95 percent are. The odds ratio is 39.1."></svg>
+          <figcaption>n = 1,436,479 pairs. Source: outputs/tables/panel_transitions.csv (pooled row), docs/PANEL.md</figcaption>
         </figure>
       </div></div>
       <div class="st-steps">
@@ -531,15 +743,24 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
   </div>
 </section>
 
+<!-- ================= chapter 4 ================= -->
+<section class="st-chapter" id="scene-4" data-num="04" data-orb="solving" data-orb-label="Chapter four: testing the result against chance">
+  <h2 class="display" id="h1-4">Against chance</h2>
+  <p>Shuffle the flags 200 times and chance answers 1.01. The panel answers 39.1.</p>
+</section>
+
 <!-- ================= scene 4 ================= -->
-<section class="section" id="scene-4" aria-labelledby="h1-4">
-  <div class="wrap">
-    <div class="rail-head"><span class="rail-num">04</span><h2 class="display" id="h1-4">Against chance</h2></div>
+<section class="section" aria-labelledby="h1-4">
+  <div class="wrap wrap-wide">
     <div class="st-scene" id="sc4" data-side="left" data-orb-scene>
       <div class="st-stage"><div class="st-stage-inner">
+        <div class="stage-num">
+          <span class="st-bignum" id="num-4">200</span>
+          <span class="stage-num-note" id="note-4"><b>permutations, seed 20260909</b><br />flag counts held fixed within each year</span>
+        </div>
         <figure class="st-figure">
-          <svg id="ch-null" class="st-chart" viewBox="0 0 560 400" role="img" aria-label="A log scale of odds ratios. The permutation null sits as a narrow band from 0.92 to 1.09 around a mean of 1.01. The observed odds ratio of 39.1 sits far to the right of it."></svg>
-          <figcaption>Source: outputs/tables/panel_permutation.csv (200 permutations, seed 20260909)</figcaption>
+          <svg id="ch-null" class="st-chart" viewBox="0 0 880 600" role="img" aria-label="A log scale of odds ratios. The permutation null sits as a narrow band from 0.92 to 1.09 around a mean of 1.01. The observed odds ratio of 39.1 sits far to the right of it."></svg>
+          <figcaption>n = 200 permutations. Source: outputs/tables/panel_permutation.csv (seed 20260909)</figcaption>
         </figure>
       </div></div>
       <div class="st-steps">
@@ -564,15 +785,24 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
   </div>
 </section>
 
+<!-- ================= chapter 5 ================= -->
+<section class="st-chapter" id="scene-5" data-num="05" data-orb="wrong" data-orb-label="Chapter five: the distribution behind the control chart">
+  <h2 class="display" id="h1-5">And the counts are not Poisson</h2>
+  <p>Thirty large industries, four candidate models, one loser. Poisson never wins, and control limits are built on Poisson.</p>
+</section>
+
 <!-- ================= scene 5 ================= -->
-<section class="section" id="scene-5" aria-labelledby="h1-5">
-  <div class="wrap">
-    <div class="rail-head"><span class="rail-num">05</span><h2 class="display" id="h1-5">And the counts are not Poisson</h2></div>
+<section class="section" aria-labelledby="h1-5">
+  <div class="wrap wrap-wide">
     <div class="st-scene" id="sc5" data-orb-scene>
       <div class="st-stage"><div class="st-stage-inner">
+        <div class="stage-num">
+          <span class="st-bignum" id="num-5">0 of 30</span>
+          <span class="stage-num-note" id="note-5"><b>industries won by Poisson</b><br />30 largest three-digit NAICS groups, 2024 recordable counts</span>
+        </div>
         <figure class="st-figure">
-          <svg id="ch-bars" class="st-chart" viewBox="0 0 560 400" role="img" aria-label="Bars counting how many of thirty large industries each count model wins on AIC. Intercept-only: negative binomial 15, zero-inflated negative binomial 15, Poisson 0. With size and sub-industry covariates: negative binomial 20, zero-inflated negative binomial 10, Poisson 0."></svg>
-          <figcaption>Source: outputs/tables/count_model_selection_summary.csv and count_model_covariates_summary.csv</figcaption>
+          <svg id="ch-bars" class="st-chart" viewBox="0 0 880 600" role="img" aria-label="Bars counting how many of thirty large industries each count model wins on AIC. Intercept-only: negative binomial 15, zero-inflated negative binomial 15, Poisson 0. With size and sub-industry covariates: negative binomial 20, zero-inflated negative binomial 10, Poisson 0."></svg>
+          <figcaption>n = 30 industries. Source: outputs/tables/count_model_selection_summary.csv, count_model_covariates_summary.csv</figcaption>
         </figure>
       </div></div>
       <div class="st-steps">
@@ -652,12 +882,21 @@ python3 -m ehs_osha.panel</code></pre>
 </section>
 
 <nav class="prog" aria-labelledby="prog-h">
-  <div class="wrap">
-    <h2 class="prog-h display" id="prog-h">Where to go next</h2>
-    <div class="prog-grid">
-      <a class="prog-card prog-next" href="https://priyatham9.github.io/ehs-ai-grounding-eval/story.html"><span class="prog-tag">Next story</span><span class="prog-name">The adjacent clause</span><span class="prog-note">when a model retrieves the neighbour</span><span class="prog-arrow" aria-hidden="true">&rarr;</span></a>
-      <a class="prog-card" href="index.html"><span class="prog-tag">This project</span><span class="prog-name">Tables, figures, method</span><span class="prog-note">every artifact behind these scenes</span><span class="prog-arrow" aria-hidden="true">&rarr;</span></a>
-      <a class="prog-card" href="https://priyatham9.github.io/grounded/"><span class="prog-tag">Hub</span><span class="prog-name">Grounded</span><span class="prog-note">the six instruments</span><span class="prog-arrow" aria-hidden="true">&rarr;</span></a>
+  <div class="wrap wrap-wide">
+    <h2 class="sr-only" id="prog-h">Where to go next</h2>
+    <a class="next-card" href="https://priyatham9.github.io/ehs-ai-grounding-eval/story.html">
+      <span>
+        <span class="next-tag">Next story &middot; 3 of 7</span>
+        <span class="next-name">The adjacent clause</span>
+        <span class="next-note">A rate can be wrong because of its denominator. An answer can be wrong because the model retrieved the clause next door. Same failure, different instrument.</span>
+      </span>
+      <span class="next-orb"><span class="st-orb-wrap"><canvas id="orb-next" class="st-orb" width="320" height="320" role="img" aria-label="Orb in the searching state, pointing to the next story."></canvas></span></span>
+    </a>
+    <div class="next-rest">
+      <a href="index.html">Project page</a>
+      <a href="explore.html">Explore the data</a>
+      <a href="https://priyatham9.github.io/grounded/">Research hub</a>
+      <a href="#hero" data-map-open>Open the map</a>
     </div>
   </div>
 </nav>
@@ -1439,6 +1678,203 @@ python3 -m ehs_osha.panel</code></pre>
   }
 
   /* ---------------------------------------------------------
+     4b. companion orb, inline orb, chapter card, ambient field
+     --------------------------------------------------------- */
+  var ORB_VERB = {
+    breathing: "IDLE", working: "THINKING", searching: "SEARCHING", solving: "SOLVING",
+    connecting: "CONNECTING", listening: "LISTENING", wrong: "WRONG",
+    grounded: "GROUNDED", resolved: "RESOLVED"
+  };
+
+  /* Story.companion(hostEl, {state, caption, size, label})
+     A docked orb with a live mono verb caption. Used by Story.scenes. */
+  function companion(host, opts) {
+    opts = opts || {};
+    host = isEl(host) ? host : el(host);
+    if (!host) return null;
+    var box = html("div", "st-companion");
+    var orbHost = html("div", "st-companion-orb", box);
+    var cap = html("span", "st-companion-cap", box);
+    var cv = document.createElement("canvas");
+    orbHost.appendChild(cv);
+    if (opts.size) box.style.setProperty("--st-comp", typeof opts.size === "number" ? opts.size + "px" : opts.size);
+    host.insertBefore(box, host.firstChild);
+    var state = ORB_ALIAS[opts.state] || "breathing";
+    var o = orb(cv, {
+      state: state, parallax: false, density: opts.density,
+      label: opts.label || "Orb showing the state of the system under review"
+    });
+    cap.textContent = (opts.caption || ORB_VERB[state] || state).toUpperCase();
+    box.setAttribute("data-state", state);
+    var timer = null, api;
+    function setState(name, label) {
+      var canon = ORB_ALIAS[name] || "breathing";
+      var text = String(label || ORB_VERB[canon] || canon).toUpperCase();
+      if (canon === state && text === cap.textContent) return api;
+      state = canon;
+      o.setState(canon);
+      box.setAttribute("data-state", canon);
+      if (reduced()) { cap.textContent = text; return api; }
+      cap.classList.add("is-fading");
+      clearTimeout(timer);
+      timer = setTimeout(function () { cap.textContent = text; cap.classList.remove("is-fading"); }, 180);
+      return api;
+    }
+    api = {
+      orb: o, el: box, setState: setState,
+      get state() { return state; },
+      destroy: function () { clearTimeout(timer); o.destroy(); box.remove(); }
+    };
+    return api;
+  }
+
+  /* Story.orbInline(el, {state}) - a 20px orb that sits in running text */
+  function orbInline(node, opts) {
+    opts = opts || {};
+    node = isEl(node) ? node : el(node);
+    if (!node) return null;
+    node.classList.add("st-orb-inline");
+    var cv = node.querySelector("canvas");
+    if (!cv) { cv = document.createElement("canvas"); node.appendChild(cv); }
+    return orb(cv, {
+      state: opts.state || node.getAttribute("data-orb") || "working",
+      density: opts.density || 72, parallax: false,
+      label: opts.label || node.getAttribute("aria-label") || "Inline orb"
+    });
+  }
+
+  /* Story.field(canvasOrHost, {density}) - ambient monochrome dot field */
+  function field(node, opts) {
+    opts = opts || {};
+    var host = isEl(node) ? node : el(node);
+    if (!host) return null;
+    var canvas = host.tagName.toLowerCase() === "canvas" ? host : html("canvas", "st-field");
+    canvas.classList.add("st-field");
+    canvas.setAttribute("aria-hidden", "true");
+    if (host !== canvas) {
+      if (getComputedStyle(host).position === "static") host.style.position = "relative";
+      host.insertBefore(canvas, host.firstChild);
+    }
+    var ctx = canvas.getContext("2d");
+    var W = 0, H = 0, DPR = 1, pts = [], visible = false, un = null, ro = null, io = null, destroyed = false;
+    var par = 0, lastY = global.scrollY || 0, pxT = 0, pyT = 0, px = 0, py = 0;
+
+    function build() {
+      var n = clamp(Math.round((W * H) / 10000 * (opts.density == null ? 1.1 : opts.density)), 20, 420);
+      pts = [];
+      for (var i = 0; i < n; i++) {
+        var z = 0.25 + hashD(i, 4.21) * 0.75;
+        pts.push({
+          x: hashD(i, 1.13) * W, y: hashD(i, 2.27) * H, z: z,
+          vx: (hashD(i, 3.31) - 0.5) * 8, vy: (hashD(i, 5.57) - 0.5) * 5,
+          r: 0.6 + z * 1.6
+        });
+      }
+    }
+    function paintField() {
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      ctx.clearRect(0, 0, W, H);
+      var c = Theme.rgb("ink");
+      for (var i = 0; i < pts.length; i++) {
+        var p = pts[i];
+        var x = p.x + px * p.z, y = p.y + (py + par) * p.z;
+        if (y < -8) y += H + 16; else if (y > H + 8) y -= H + 16;
+        ctx.fillStyle = rgba(c, (0.05 + 0.2 * p.z).toFixed(3));
+        ctx.beginPath(); ctx.arc(x, y, p.r, 0, 6.2832); ctx.fill();
+      }
+    }
+    function step(dt) {
+      if (destroyed) return false;
+      if (!visible) return;
+      for (var i = 0; i < pts.length; i++) {
+        var p = pts[i];
+        p.x += p.vx * p.z * dt; p.y += p.vy * p.z * dt;
+        if (p.x < -6) p.x = W + 6; else if (p.x > W + 6) p.x = -6;
+        if (p.y < -6) p.y = H + 6; else if (p.y > H + 6) p.y = -6;
+      }
+      var k = 1 - Math.pow(0.02, dt);
+      par = lerp(par, 0, k);
+      px = lerp(px, pxT, k); py = lerp(py, pyT, k);
+      paintField();
+    }
+    function resize() {
+      var r = canvas.getBoundingClientRect();
+      var w = Math.max(1, Math.round(r.width || 600)), h = Math.max(1, Math.round(r.height || 400));
+      DPR = Math.min(global.devicePixelRatio || 1, 2);
+      if (w === W && h === H) return;
+      W = w; H = h;
+      canvas.width = Math.round(W * DPR); canvas.height = Math.round(H * DPR);
+      build(); paintField();
+    }
+    function onScroll() {
+      var y = global.scrollY || 0, dv = y - lastY; lastY = y;
+      if (!reduced()) par = clamp(par - dv * 0.28, -70, 70);
+    }
+    function onPointer(e) {
+      var r = canvas.getBoundingClientRect();
+      if (!r.width) return;
+      pxT = clamp((e.clientX - (r.left + r.width / 2)) / r.width, -1, 1) * 16;
+      pyT = clamp((e.clientY - (r.top + r.height / 2)) / Math.max(1, r.height), -1, 1) * 10;
+    }
+    function start() { if (!un && !destroyed && !reduced()) un = tick(step); }
+    function stop() { if (un) { un(); un = null; } }
+    if (global.ResizeObserver) { ro = new ResizeObserver(resize); ro.observe(canvas); } else addEventListener("resize", resize);
+    if (global.IntersectionObserver) {
+      io = new IntersectionObserver(function (es) { visible = es[0].isIntersecting; if (visible) start(); else stop(); }, { rootMargin: "80px" });
+      io.observe(canvas);
+    } else { visible = true; start(); }
+    addEventListener("scroll", onScroll, { passive: true });
+    if (opts.pointer !== false) addEventListener("pointermove", onPointer, { passive: true });
+    var unTheme = Theme.onChange(paintField);
+    resize();
+    return {
+      el: canvas,
+      destroy: function () {
+        destroyed = true; stop();
+        if (ro) ro.disconnect(); else removeEventListener("resize", resize);
+        if (io) io.disconnect();
+        removeEventListener("scroll", onScroll); removeEventListener("pointermove", onPointer);
+        unTheme(); canvas.remove();
+      }
+    };
+  }
+
+  /* Story.chapter(el) - full-viewport chapter card.
+     Markup: <section class="st-chapter" data-num="02" data-orb="searching">
+               <h2>Title</h2><p>One line.</p></section>                     */
+  function chapter(node, opts) {
+    opts = opts || {};
+    node = isEl(node) ? node : el(node);
+    if (!node) return null;
+    if (node.__stChapter) return node.__stChapter;
+    var body = html("div", "st-chapter-body");
+    while (node.firstChild) body.appendChild(node.firstChild);
+    var num = node.getAttribute("data-num");
+    if (num) { var nEl = html("div", "st-chapter-num"); nEl.textContent = num; body.insertBefore(nEl, body.firstChild); }
+    var orbHost = html("div", "st-chapter-orb");
+    var cv = document.createElement("canvas");
+    orbHost.appendChild(cv);
+    node.appendChild(body);
+    node.appendChild(orbHost);
+    var f = field(node, { density: opts.density == null ? 0.9 : opts.density });
+    var target = node.getAttribute("data-orb") || "grounded";
+    var o = orb(cv, {
+      state: opts.from || "breathing", parallax: false,
+      label: node.getAttribute("data-orb-label") || ("Chapter orb, state " + target)
+    });
+    inView(node, function () {
+      if (reduced()) { o.setState(target); return; }
+      setTimeout(function () { o.setState(target); }, 420);
+    }, { once: true, margin: "0px 0px -30% 0px" });
+    var api = {
+      el: node, orb: o, field: f,
+      destroy: function () { o.destroy(); if (f) f.destroy(); node.__stChapter = null; }
+    };
+    node.__stChapter = api;
+    return api;
+  }
+
+  /* ---------------------------------------------------------
      5. scenes  (sticky stage + scroll steps)
      --------------------------------------------------------- */
   function scenes(root, opts) {
@@ -1447,18 +1883,53 @@ python3 -m ehs_osha.panel</code></pre>
     if (!scene) return { destroy: function () { } };
     var steps = els(".st-step", scene);
     var stage = el(".st-stage", scene);
+    var inner = el(".st-stage-inner", scene) || stage;
     var active = -1, ioStep = null, unScroll = null;
+
+    // staggered step-text entrance is opt-in via this class, so pages that
+    // never run scenes() still render their step text normally
+    scene.classList.add("st-flow");
+    // text enters when the step reaches the viewport, not when it goes active,
+    // so the column ahead of the reader is never blank
+    steps.forEach(function (s) {
+      inView(s, function () { s.classList.add("is-entered"); }, { once: true, margin: "0px 0px -6% 0px" });
+    });
+
+    // docked companion orb, unless the stage already has one
+    var comp = null;
+    if (opts.companion !== false && stage && !el(".st-orb-wrap", stage) && !el("canvas.st-orb", stage) && !el(".st-companion", stage)) {
+      comp = companion(stage, {
+        size: opts.companionSize,
+        state: (steps[0] && steps[0].getAttribute("data-orb")) || "breathing",
+        caption: steps[0] && steps[0].getAttribute("data-orb-label")
+      });
+    }
+
+    // layered stage children driven by [data-show="0 1 2"]
+    var layers = inner ? els("[data-show]", inner).filter(function (n) { return n.parentNode === inner; }) : [];
+    if (layers.length && inner) inner.classList.add("st-layers");
+    function showLayers(i) {
+      layers.forEach(function (n) {
+        var list = (n.getAttribute("data-show") || "").split(/[\s,]+/).filter(Boolean);
+        n.classList.toggle("is-shown", list.indexOf(String(i)) >= 0);
+      });
+    }
 
     function setActive(i, dir) {
       if (i === active) return;
       var prev = active; active = i;
-      steps.forEach(function (s, j) { s.classList.toggle("is-active", j === i); });
+      steps.forEach(function (s, j) {
+        s.classList.toggle("is-active", j === i);
+        if (j === i) s.classList.add("is-entered");
+      });
       var node = steps[i];
       if (node) {
         var orbState = node.getAttribute("data-orb");
         if (orbState && opts.orb && opts.orb.setState) opts.orb.setState(orbState);
+        if (comp) comp.setState(orbState || "breathing", node.getAttribute("data-orb-label"));
         scene.setAttribute("data-step", node.getAttribute("data-step") || String(i));
       }
+      showLayers(i);
       if (opts.onStep) opts.onStep(i, node, i > prev ? 1 : -1);
     }
 
@@ -1472,7 +1943,7 @@ python3 -m ehs_osha.panel</code></pre>
         if (best) setActive(steps.indexOf(best.target));
       }, { rootMargin: narrow ? "-68% 0px -12% 0px" : "-45% 0px -45% 0px", threshold: 0 });
       steps.forEach(function (s) { ioStep.observe(s); });
-    } else { setActive(0); }
+    } else { steps.forEach(function (s) { s.classList.add("is-entered"); }); setActive(0); }
 
     function onScroll() {
       var r = scene.getBoundingClientRect();
@@ -1496,11 +1967,12 @@ python3 -m ehs_osha.panel</code></pre>
     else if (active < 0) setActive(0);
 
     return {
-      steps: steps, stage: stage, scene: scene,
+      steps: steps, stage: stage, scene: scene, companion: comp,
       get index() { return active; },
       go: function (i) { if (steps[i]) steps[i].scrollIntoView({ behavior: reduced() ? "auto" : "smooth", block: "center" }); },
       destroy: function () {
         if (ioStep) ioStep.disconnect();
+        if (comp) comp.destroy();
         removeEventListener("scroll", onScroll); removeEventListener("resize", onScroll);
       }
     };
@@ -1523,19 +1995,37 @@ python3 -m ehs_osha.panel</code></pre>
     var W = opts.width || 700, H = opts.height || Math.round(W * (opts.aspect || defAspect || 0.58));
     var api = {
       svg: svg, host: host, m: m,
+      tipHost: (host === svg ? (host.parentNode || host) : host),
       get w() { return W - m.left - m.right; },
       get h() { return H - m.top - m.bottom; },
       W: W, H: H,
       clear: function () { while (svg.firstChild) svg.removeChild(svg.firstChild); },
+      fit: function () {
+        // a stage chart is sized by CSS; match the viewBox to the real box so
+        // the drawing fills it instead of being letterboxed
+        if (!svg.classList.contains("st-in-stage")) return false;
+        var r = svg.getBoundingClientRect();
+        if (!r.width || !r.height) return false;
+        var want = clamp(Math.round(W * (r.height / r.width)), 180, 1400);
+        if (Math.abs(want - H) < 3) return false;
+        H = want; return true;
+      },
       frame: function () {
+        api.fit();
         svg.setAttribute("viewBox", "0 0 " + W + " " + H);
         svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
         if (opts.height && host !== svg) svg.setAttribute("height", opts.height);
+        // a chart that lives on a scene stage fills the stage by default
+        if (opts.fill !== false && host.closest && host.closest(".st-stage-inner")) svg.classList.add("st-in-stage");
         var g = mk("g", { transform: "translate(" + m.left + "," + m.top + ")" }, svg);
         return g;
       },
       setLabel: function (s) { svg.setAttribute("aria-label", s); }
     };
+    if (global.ResizeObserver) {
+      api._ro = new ResizeObserver(function () { if (api.fit() && api._redraw) api._redraw(); });
+      api._ro.observe(svg);
+    }
     return api;
   }
   // x/y axes with 12px mono type (styled by story.css)
@@ -1578,6 +2068,85 @@ python3 -m ehs_osha.panel</code></pre>
     if (reduced()) { cb(1, true); return { stop: function () { } }; }
     var s = spring(0, 1, function (v, done) { cb(clamp(v, 0, 1.0001), done); }, { stiffness: opts.stiffness || 120, damping: opts.damping });
     return s;
+  }
+
+  /* ---- tooltips, callouts, reference lines (shared by all charts) ---- */
+  function tipFor(b) {
+    var host = b.tipHost;
+    if (!host || !host.appendChild) return null;
+    if (!host.__stTip) {
+      if (host.classList) host.classList.add("st-tiphost");
+      var t = html("div", "st-tip", host);
+      t.setAttribute("aria-hidden", "true");
+      host.__stTip = t;
+    }
+    return host.__stTip;
+  }
+  function hideTip(b) { var t = b.tipHost && b.tipHost.__stTip; if (t) t.classList.remove("is-on"); }
+  function showTipAt(b, text, clientX, clientY) {
+    var t = tipFor(b); if (!t) return;
+    var hr = b.tipHost.getBoundingClientRect();
+    t.textContent = text;
+    t.style.left = clamp(clientX - hr.left, 10, Math.max(10, hr.width - 10)).toFixed(1) + "px";
+    t.style.top = (clientY - hr.top).toFixed(1) + "px";
+    t.classList.add("is-on");
+  }
+  // invisible, keyboard-focusable hit target that reveals the exact value
+  function addHit(b, g, shape, attrs, text) {
+    if (text == null || text === "") return null;
+    var a = {}; for (var k in attrs) a[k] = attrs[k];
+    a["class"] = "st-hit";
+    var n = mk(shape, a, g);
+    n.setAttribute("tabindex", "0");
+    n.setAttribute("role", "img");
+    n.setAttribute("aria-label", String(text).replace(/\n/g, ", "));
+    function show() { var r = n.getBoundingClientRect(); showTipAt(b, text, r.left + r.width / 2, r.top); }
+    function hide() { hideTip(b); }
+    n.addEventListener("pointerenter", show);
+    n.addEventListener("pointerleave", hide);
+    n.addEventListener("focus", show);
+    n.addEventListener("blur", hide);
+    return n;
+  }
+  /* opts.annotations: [{x, y, text, dx, dy}] in data units, dx/dy in px */
+  function drawAnnotations(b, g, xs, ys, anns, t) {
+    if (!anns || !anns.length) return;
+    var a = clamp((t - 0.5) / 0.5, 0, 1);
+    if (a <= 0.01) return;
+    anns.forEach(function (an) {
+      if (an.x == null || an.y == null) return;
+      var px = xs(an.x), py = ys(an.y);
+      var dx = an.dx == null ? 54 : an.dx, dy = an.dy == null ? -48 : an.dy;
+      var tx = px + dx * a, ty = py + dy * a;
+      var elbow = dx >= 0 ? 10 : -10;
+      var col = an.color ? (tok(an.color) || an.color) : tok("accent");
+      mk("line", { class: "st-anno-line", x1: px, y1: py, x2: tx, y2: ty, opacity: a.toFixed(2) }, g);
+      mk("line", { class: "st-anno-line", x1: tx, y1: ty, x2: tx + elbow, y2: ty, opacity: a.toFixed(2) }, g);
+      mk("circle", { class: "st-anno-dot st-glow", cx: px, cy: py, r: (5 * a).toFixed(2), fill: col }, g);
+      var ax = tx + elbow + (dx >= 0 ? 6 : -6), anchor = dx >= 0 ? "start" : "end";
+      var txt = mk("text", { class: "st-anno-text", x: ax, y: ty + 5, "text-anchor": anchor, opacity: a.toFixed(2) }, g);
+      String(an.text).split("\n").forEach(function (ln, i) {
+        var ts = mk("tspan", { x: ax, dy: i ? 17 : 0 }, txt);
+        if (i) ts.setAttribute("class", "st-anno-sub");
+        ts.textContent = ln;
+      });
+    });
+  }
+  /* opts.refLines: [{y|x, label?, color?}] */
+  function drawRefLines(b, g, xs, ys, refs, t) {
+    if (!refs || !refs.length) return;
+    refs.forEach(function (r) {
+      var col = r.color ? (tok(r.color) || r.color) : tok("ink-2");
+      if (r.y != null && ys) {
+        var y = ys(r.y);
+        mk("line", { class: "st-ref-line", x1: 0, x2: (b.w * t).toFixed(1), y1: y, y2: y, stroke: col }, g);
+        if (r.label && t > .6) { var n1 = mk("text", { class: "st-ref-text", x: 2, y: y - 8, fill: col }, g); n1.textContent = r.label; }
+      } else if (r.x != null && xs) {
+        var x = xs(r.x);
+        mk("line", { class: "st-ref-line", x1: x, x2: x, y1: (b.h * (1 - t)).toFixed(1), y2: b.h, stroke: col }, g);
+        if (r.label && t > .6) { var n2 = mk("text", { class: "st-ref-text", x: x + 6, y: 12, fill: col }, g); n2.textContent = r.label; }
+      }
+    });
   }
 
   /* ---------------------------------------------------------
@@ -1627,9 +2196,21 @@ python3 -m ehs_osha.panel</code></pre>
           lab.setAttribute("opacity", ((t - .6) / .4).toFixed(2));
         }
       });
+      drawRefLines(b, g, xs, ys, opts.refLines, t);
+      drawAnnotations(b, g, xs, ys, opts.annotations, t);
+      if (t > .95 && opts.tips !== false) {
+        cur.series.forEach(function (s) {
+          s.points.forEach(function (p) {
+            var txt = opts.tipFmt ? opts.tipFmt(p, s) :
+              (s.name ? s.name + "\n" : "") + (opts.xlabel || "x") + " " + fmt(p[0], 0) + "\n" + (opts.ylabel || "y") + " " + fmt(p[1]);
+            addHit(b, g, "circle", { cx: xs(p[0]).toFixed(2), cy: ys(p[1]).toFixed(2), r: 10 }, txt);
+          });
+        });
+      }
     }
     function run() { if (anim) anim.stop(); anim = transition(function (t) { render(clamp(t, 0, 1)); }); }
     un = Theme.onChange(function () { render(1); });
+    b._redraw = function () { render(1); };
     if (first) { first = false; inView(b.svg, run, { once: true }); render(0.0001); }
     return {
       update: function (d, o) { if (d) cur = d; if (o) Object.assign(opts, o); run(); },
@@ -1653,10 +2234,17 @@ python3 -m ehs_osha.panel</code></pre>
         var v = lerp(from[i] == null ? 0 : from[i], d.value, t);
         var x = i * (w / cur.length) + (w / cur.length - bw) / 2;
         var y = ys(v), hh = Math.max(0, h - y);
-        mk("rect", { class: "st-bar", x: x, y: y, width: bw, height: hh, fill: d.color ? (tok(d.color) || d.color) : tok("accent") }, g);
+        var rect = mk("rect", { class: "st-bar", x: x, y: y, width: bw, height: hh, fill: d.color ? (tok(d.color) || d.color) : tok("accent") }, g);
+        if (d.glow) rect.setAttribute("class", "st-bar st-glow");
         var lab = mk("text", { class: "st-label-direct", x: x + bw / 2, y: y - 7, "text-anchor": "middle" }, g);
         lab.textContent = (opts.valueFmt || fmt)(v);
+        if (t > .95 && opts.tips !== false) {
+          addHit(b, g, "rect", { x: i * (w / cur.length), y: 0, width: w / cur.length, height: h },
+            opts.tipFmt ? opts.tipFmt(d) : d.label + "\n" + (opts.valueFmt || fmt)(d.value) + (opts.unit ? " " + opts.unit : ""));
+        }
       });
+      drawRefLines(b, g, null, ys, opts.refLines, t);
+      if (opts.annotations) drawAnnotations(b, g, function (i) { return (i + .5) * (w / cur.length); }, ys, opts.annotations, t);
     }
     function run() {
       var from = prev.slice();
@@ -1665,6 +2253,7 @@ python3 -m ehs_osha.panel</code></pre>
       prev = cur.map(function (d) { return d.value; });
     }
     un = Theme.onChange(function () { render(1, prev); });
+    b._redraw = function () { render(1, prev); };
     render(0, prev);
     inView(b.svg, run, { once: true });
     return {
@@ -1721,6 +2310,7 @@ python3 -m ehs_osha.panel</code></pre>
     }
     function run() { if (anim) anim.stop(); anim = transition(function (t) { render(clamp(t, 0, 1)); }, { stiffness: 70 }); }
     un = Theme.onChange(function () { render(1); });
+    b._redraw = function () { render(1); };
     render(0.001); inView(b.svg, run, { once: true });
     return { update: function (d, o) { if (d) cur = d; if (o) Object.assign(opts, o); run(); }, el: b.svg, destroy: function () { if (anim) anim.stop(); un(); b.clear(); } };
   };
@@ -1751,14 +2341,22 @@ python3 -m ehs_osha.panel</code></pre>
         var e = clamp((t - (i / Math.max(1, pts.length)) * 0.4) / 0.6, 0, 1);
         var c = mk("circle", { cx: xs(p.x), cy: ys(p.y), r: (p.r || 5) * e, fill: p.color ? (tok(p.color) || p.color) : tok("accent") }, g);
         c.setAttribute("opacity", (0.85 * e).toFixed(2));
+        if (p.glow) c.setAttribute("class", "st-glow");
         if (p.label && e > .9) {
           var tx = mk("text", { class: "st-label-direct", x: xs(p.x) + 9, y: ys(p.y) + 4 }, g);
           tx.textContent = p.label;
         }
+        if (t > .95 && opts.tips !== false) {
+          addHit(b, g, "circle", { cx: xs(p.x), cy: ys(p.y), r: Math.max(11, (p.r || 5) + 6) },
+            opts.tipFmt ? opts.tipFmt(p) : (p.label ? p.label + "\n" : "") + (opts.xlabel || "x") + " " + fmt(p.x) + "\n" + (opts.ylabel || "y") + " " + fmt(p.y));
+        }
       });
+      drawRefLines(b, g, xs, ys, opts.refLines, t);
+      drawAnnotations(b, g, xs, ys, opts.annotations, t);
     }
     function run() { if (anim) anim.stop(); anim = transition(function (t) { render(clamp(t, 0, 1)); }, { stiffness: 90 }); }
     un = Theme.onChange(function () { render(1); });
+    b._redraw = function () { render(1); };
     render(0.001); inView(b.svg, run, { once: true });
     return { update: function (d, o) { if (d) cur = d; if (o) Object.assign(opts, o); run(); }, el: b.svg, destroy: function () { if (anim) anim.stop(); un(); b.clear(); } };
   };
@@ -1804,9 +2402,20 @@ python3 -m ehs_osha.panel</code></pre>
         var ct = mk("text", { class: "st-caption", x: w, y: -4, "text-anchor": "end" }, g);
         ct.textContent = take + " / " + B.order.length + " draws";
       }
+      drawRefLines(b, g, xs, ys, opts.refLines, t);
+      drawAnnotations(b, g, xs, ys, opts.annotations, t);
+      if (t > .95 && opts.tips !== false) {
+        var step = (B.d[1] - B.d[0]) / B.n;
+        full.forEach(function (c, i) {
+          if (!c) return;
+          addHit(b, g, "rect", { x: i * bw, y: 0, width: bw, height: h },
+            fmt(B.d[0] + i * step) + " to " + fmt(B.d[0] + (i + 1) * step) + "\n" + c + " of " + B.order.length + " draws");
+        });
+      }
     }
     function run() { if (anim) anim.stop(); anim = transition(function (t) { render(clamp(t, 0, 1)); }, { stiffness: 26 }); }
     un = Theme.onChange(function () { render(1); });
+    b._redraw = function () { render(1); };
     render(0); inView(b.svg, run, { once: true });
     return { update: function (d, o) { if (d) cur = d; if (o) Object.assign(opts, o); run(); }, el: b.svg, destroy: function () { if (anim) anim.stop(); un(); b.clear(); } };
   };
@@ -1847,7 +2456,13 @@ python3 -m ehs_osha.panel</code></pre>
         lt.textContent = d.label;
         var vt = mk("text", { x: x1 + 6, y: y + bh / 2 + 4 }, g);
         vt.textContent = (opts.xfmt ? opts.xfmt(d.high) : fmt(d.high));
+        if (t > .95 && opts.tips !== false) {
+          var f = opts.xfmt || fmt;
+          addHit(b, g, "rect", { x: 0, y: row * rowH, width: w, height: rowH },
+            opts.tipFmt ? opts.tipFmt(d) : d.label + "\nlow " + f(d.low) + "\nhigh " + f(d.high) + "\nswing " + f(Math.abs(d.high - d.low)));
+        }
       });
+      drawRefLines(b, g, xs, null, opts.refLines, t);
     }
     function run(toSorted) {
       order = toSorted === false ? cur.map(function (d, i) { return i; }) : sorted();
@@ -1855,6 +2470,7 @@ python3 -m ehs_osha.panel</code></pre>
       anim = transition(function (t) { render(clamp(t, 0, 1)); }, { stiffness: 55 });
     }
     un = Theme.onChange(function () { render(1); });
+    b._redraw = function () { render(1); };
     render(0); inView(b.svg, function () { run(true); }, { once: true });
     return {
       update: function (d, o) { if (d) cur = d; if (o) Object.assign(opts, o); run(o && o.sorted === false ? false : true); },
@@ -1927,6 +2543,7 @@ python3 -m ehs_osha.panel</code></pre>
     }
     init(data);
     un = Theme.onChange(render);
+    b._redraw = function () { init(cur); sim(120); render(); };
     sim(60); render();
     inView(b.svg, settle, { once: true });
     return {
@@ -2000,6 +2617,7 @@ python3 -m ehs_osha.panel</code></pre>
       prev = {}; cur.edges.forEach(function (e) { prev[e.from + ">" + e.to] = e.coef; });
     }
     un = Theme.onChange(function () { render(1, prev); });
+    b._redraw = function () { render(1, prev); };
     render(0, {}); inView(b.svg, run, { once: true });
     return { update: function (d, o) { if (d) cur = d; if (o) Object.assign(opts, o); run(); }, el: b.svg, destroy: function () { if (anim) anim.stop(); un(); b.clear(); } };
   };
@@ -2059,7 +2677,7 @@ python3 -m ehs_osha.panel</code></pre>
       ctx.strokeStyle = tok("rule-soft"); ctx.lineWidth = 1;
       ctx.beginPath(); ctx.moveTo(m.left, H - m.bottom); ctx.lineTo(W - m.right, H - m.bottom); ctx.stroke();
       ctx.fillStyle = tok("muted");
-      ctx.font = "12px " + (getComputedStyle(document.documentElement).getPropertyValue("--font-mono") || "monospace");
+      ctx.font = "14px " + (getComputedStyle(document.documentElement).getPropertyValue("--font-mono") || "monospace");
       ctx.textAlign = "center";
       ticks(laid.xd[0], laid.xd[1], 5).forEach(function (v) {
         var x = m.left + (v - laid.xd[0]) / (laid.xd[1] - laid.xd[0]) * pw;
@@ -2080,6 +2698,61 @@ python3 -m ehs_osha.panel</code></pre>
         ctx.beginPath(); ctx.arc(d.x, d.y, d.r, 0, 6.2832); ctx.fill();
       }
       ctx.globalAlpha = 1;
+      // reference lines
+      var sx = function (v) { return m.left + (v - laid.xd[0]) / (laid.xd[1] - laid.xd[0]) * pw; };
+      (opts.refLines || []).forEach(function (r) {
+        if (r.x == null) return;
+        ctx.save();
+        ctx.strokeStyle = r.color ? (tok(r.color) || r.color) : tok("ink-2");
+        ctx.lineWidth = 1.5; ctx.setLineDash([6, 5]);
+        ctx.beginPath(); ctx.moveTo(sx(r.x), m.top); ctx.lineTo(sx(r.x), H - m.bottom); ctx.stroke();
+        ctx.restore();
+        if (r.label) {
+          ctx.fillStyle = r.color ? (tok(r.color) || r.color) : tok("ink-2");
+          ctx.textAlign = "left"; ctx.fillText(r.label, sx(r.x) + 6, m.top + 12);
+        }
+      });
+      // callouts with leader lines
+      (opts.annotations || []).forEach(function (an) {
+        if (an.x == null) return;
+        var gi = an.group == null ? 0 : Math.max(0, laid.groups.indexOf(an.group));
+        var px = sx(an.x);
+        var py = an.y != null ? (m.top + an.y * ph) : (m.top + gi * laid.bandH + laid.bandH / 2);
+        var tx = px + (an.dx == null ? 54 : an.dx), ty = py + (an.dy == null ? -48 : an.dy);
+        ctx.save();
+        ctx.strokeStyle = tok("ink-2"); ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(tx, ty); ctx.lineTo(tx + (an.dx >= 0 || an.dx == null ? 10 : -10), ty); ctx.stroke();
+        ctx.fillStyle = an.color ? (tok(an.color) || an.color) : tok("accent");
+        ctx.beginPath(); ctx.arc(px, py, 5, 0, 6.2832); ctx.fill();
+        ctx.restore();
+        var right = (an.dx == null || an.dx >= 0);
+        ctx.textAlign = right ? "left" : "right";
+        var lx = tx + (right ? 16 : -16);
+        String(an.text).split("\n").forEach(function (ln, i) {
+          ctx.fillStyle = i ? tok("muted") : tok("ink");
+          ctx.fillText(ln, lx, ty + 5 + i * 17);
+        });
+        ctx.textAlign = "center";
+      });
+    }
+    // hover / focus: nearest dot inside 8px
+    var tipBox = { tipHost: (host === canvas ? (canvas.parentNode || canvas) : host) };
+    function nearest(cx, cy) {
+      var best = null, bd = 81;
+      for (var i = 0; i < laid.length; i++) {
+        var dx = laid[i].x - cx, dy = laid[i].y - cy, d2 = dx * dx + dy * dy;
+        if (d2 < bd) { bd = d2; best = laid[i]; }
+      }
+      return best;
+    }
+    function onHover(e) {
+      var r = canvas.getBoundingClientRect();
+      var d = nearest((e.clientX - r.left) * (W / Math.max(1, r.width)), (e.clientY - r.top) * (H / Math.max(1, r.height)));
+      if (!d) { hideTip(tipBox); return; }
+      var txt = opts.tipFmt ? opts.tipFmt(d.p) :
+        (d.p.label ? d.p.label + "\n" : "") + (d.p.group != null && d.p.group !== "" ? d.p.group + "\n" : "") +
+        (opts.xlabel || "value") + " " + fmt(d.p.x) + (d.p.flag ? "\nflagged" : "");
+      showTipAt(tipBox, txt, r.left + d.x * (r.width / Math.max(1, W)), r.top + d.y * (r.height / Math.max(1, H)));
     }
     function resize() {
       var r = canvas.getBoundingClientRect();
@@ -2098,12 +2771,17 @@ python3 -m ehs_osha.panel</code></pre>
     }
     un = Theme.onChange(function () { render(1); });
     if (global.ResizeObserver) { ro = new ResizeObserver(resize); ro.observe(canvas); } else addEventListener("resize", resize);
+    function offHover() { hideTip(tipBox); }
+    if (opts.tips !== false) {
+      canvas.addEventListener("pointermove", onHover);
+      canvas.addEventListener("pointerleave", offHover);
+    }
     resize(); render(0);
     inView(canvas, run, { once: true });
     return {
       update: function (d, o) { if (d) cur = d; if (o) Object.assign(opts, o); run(); },
       el: canvas,
-      destroy: function () { if (anim) anim.stop(); un(); if (ro) ro.disconnect(); else removeEventListener("resize", resize); ctx.clearRect(0, 0, canvas.width, canvas.height); }
+      destroy: function () { if (anim) anim.stop(); un(); if (ro) ro.disconnect(); else removeEventListener("resize", resize); canvas.removeEventListener("pointermove", onHover); canvas.removeEventListener("pointerleave", offHover); ctx.clearRect(0, 0, canvas.width, canvas.height); }
     };
   };
 
@@ -2167,11 +2845,327 @@ python3 -m ehs_osha.panel</code></pre>
   }
 
   /* ---------------------------------------------------------
+     8b. wayfinder  -  one navigation model, site map lives here
+     --------------------------------------------------------- */
+  var BASE = "https://priyatham9.github.io/";
+  function U(p) { return /^https?:/.test(p) ? p : BASE + p; }
+
+  var WAY = {
+    site: "GROUNDED",
+    // one linear path through the whole research site
+    path: [
+      { key: "hub", title: "The argument", url: "grounded/" },
+      { key: "osha", title: "The denominator", url: "ehs-osha-analysis/story.html" },
+      { key: "grounding", title: "The adjacent clause", url: "ehs-ai-grounding-eval/story.html" },
+      { key: "ontology", title: "Why people err", url: "ehs-human-factors-ontology/story.html" },
+      { key: "sem", title: "Where the method breaks", url: "ehs-risk-sem/story.html" },
+      { key: "capitals", title: "The capital case", url: "ehs-capitals-calculator/story.html" },
+      { key: "benchmarks", title: "Compared with whom", url: "ehs-benchmarks/story.html" }
+    ],
+    end: { title: "What is missing", url: "grounded/#open" },
+    hub: {
+      key: "hub", repo: "grounded", name: "Grounded", sub: "The hub",
+      doors: [
+        { kind: "story", label: "The argument", url: "grounded/", note: "Hub story, 10 min" },
+        { kind: "project", label: "Start here", url: "grounded/start.html", note: "Guided 5 minute path" },
+        { kind: "tool", label: "Observatory", url: "grounded/observatory.html", note: "Status of every repo" }
+      ]
+    },
+    projects: [
+      {
+        key: "osha", repo: "ehs-osha-analysis", name: "OSHA 300A screen", sub: "The denominator",
+        doors: [
+          { kind: "story", label: "Story", url: "ehs-osha-analysis/story.html", note: "5 min, for leaders" },
+          { kind: "project", label: "Project page", url: "ehs-osha-analysis/", note: "Methods and tables, for analysts" },
+          { kind: "tool", label: "Explore", url: "ehs-osha-analysis/explore.html", note: "Filings, hours, flags" }
+        ]
+      },
+      {
+        key: "grounding", repo: "ehs-ai-grounding-eval", name: "Grounding eval", sub: "The adjacent clause",
+        doors: [
+          { kind: "story", label: "Story", url: "ehs-ai-grounding-eval/story.html", note: "5 min, for leaders" },
+          { kind: "project", label: "Project page", url: "ehs-ai-grounding-eval/", note: "Corpus card, preregistration" },
+          { kind: "tool", label: "Try an item", url: "ehs-ai-grounding-eval/try.html", note: "Answer before the model does" }
+        ]
+      },
+      {
+        key: "ontology", repo: "ehs-human-factors-ontology", name: "Human factors ontology", sub: "Why people err",
+        doors: [
+          { kind: "story", label: "Story", url: "ehs-human-factors-ontology/story.html", note: "5 min, for leaders" },
+          { kind: "project", label: "Project page", url: "ehs-human-factors-ontology/", note: "Provenance and compatibility" },
+          {
+            kind: "tool", label: "Walkthrough", url: "ehs-human-factors-ontology/walkthrough.html", note: "Rule derivation, edge by edge",
+            alt: { label: "Crosswalk", url: "ehs-human-factors-ontology/crosswalk.html" }
+          }
+        ]
+      },
+      {
+        key: "sem", repo: "ehs-risk-sem", name: "Risk SEM", sub: "Where the method breaks",
+        doors: [
+          { kind: "story", label: "Story", url: "ehs-risk-sem/story.html", note: "5 min, for leaders" },
+          { kind: "project", label: "Project page", url: "ehs-risk-sem/", note: "Simulation studies, synthetic data" },
+          { kind: "tool", label: "API reference", url: "ehs-risk-sem/api/", note: "Estimator and diagnostics" }
+        ]
+      },
+      {
+        key: "capitals", repo: "ehs-capitals-calculator", name: "Capitals calculator", sub: "The capital case",
+        doors: [
+          { kind: "story", label: "Story", url: "ehs-capitals-calculator/story.html", note: "5 min, for leaders" },
+          { kind: "project", label: "Project page", url: "ehs-capitals-calculator/", note: "Model and assumptions" },
+          { kind: "tool", label: "Calculator", url: "ehs-capitals-calculator/#calculator", note: "Run one investment" }
+        ]
+      },
+      {
+        key: "benchmarks", repo: "ehs-benchmarks", name: "Peer benchmarks", sub: "Compared with whom",
+        doors: [
+          { kind: "story", label: "Story", url: "ehs-benchmarks/story.html", note: "5 min, for leaders" },
+          { kind: "project", label: "Method", url: "ehs-benchmarks/#view-method", note: "Peer groups and sources" },
+          { kind: "tool", label: "Benchmark app", url: "ehs-benchmarks/#view-benchmark", note: "Pick a NAICS and size band" }
+        ]
+      }
+    ],
+    extras: [
+      { label: "Paper: grounding", url: "grounded/paper.html" },
+      { label: "Paper: OSHA", url: "grounded/paper-osha.html" },
+      { label: "Observatory", url: "grounded/observatory.html" },
+      { label: "Start here", url: "grounded/start.html" },
+      { label: "Changelog", url: "grounded/changelog.html" },
+      { label: "Benchmark API", url: "ehs-osha-benchmark-api/" },
+      { label: "GitHub", url: "https://github.com/priyatham9" }
+    ]
+  };
+  var REPO_KEY = {
+    "grounded": "hub", "ehs-osha-analysis": "osha", "ehs-ai-grounding-eval": "grounding",
+    "ehs-human-factors-ontology": "ontology", "ehs-risk-sem": "sem",
+    "ehs-capitals-calculator": "capitals", "ehs-benchmarks": "benchmarks",
+    "ehs-osha-benchmark-api": "benchmarks"
+  };
+  var DOOR_LABEL = { story: "Story", project: "Project page", tool: "Tool" };
+
+  function detectCurrent() {
+    var parts = location.pathname.split("/").filter(Boolean);
+    var key = null, file = parts.length ? parts[parts.length - 1] : "";
+    for (var i = 0; i < parts.length; i++) if (REPO_KEY[parts[i]]) key = REPO_KEY[parts[i]];
+    if (!key) return null;
+    if (!/\.html?$/.test(file)) file = "";
+    var door = "project";
+    if (file === "story.html" || (key === "hub" && (file === "" || file === "index.html"))) door = "story";
+    else if (/^(explore|try|walkthrough|crosswalk|observatory|start|changelog)\.html$/.test(file) || /api/.test(location.pathname)) door = "tool";
+    return { key: key, door: door };
+  }
+
+  var wayState = null;
+  function wayfinder(opts) {
+    opts = opts || {};
+    if (wayState) return wayState;
+    var cur = opts.current || detectCurrent() || { key: "hub", door: "story" };
+    if (typeof cur === "string") cur = { key: cur, door: opts.door || "story" };
+    var key = cur.key || "hub", door = cur.door || opts.door || "story";
+    var idx = 0;
+    WAY.path.forEach(function (p, i) { if (p.key === key) idx = i; });
+    var here = WAY.path[idx];
+
+    /* ---- fixed bottom bar ---- */
+    var bar = html("nav", "st-way");
+    bar.setAttribute("aria-label", "Site path");
+    var seg = html("div", "st-way-seg", bar);
+    WAY.path.forEach(function (p, i) {
+      var s = html("i", null, seg);
+      if (i < idx) s.className = "is-done";
+      else if (i === idx) s.className = "is-now";
+    });
+    var row = html("div", "st-way-row", bar);
+    var crumb = html("div", "st-way-crumb", row);
+    var site = html("span", "st-way-site", crumb);
+    site.textContent = WAY.site + " · ";
+    var b = document.createElement("b");
+    b.textContent = (idx + 1) + " of " + WAY.path.length;
+    crumb.appendChild(b);
+    var ttl = html("span", "st-way-title", crumb);
+    ttl.textContent = " · " + here.title + (door !== "story" ? " · " + DOOR_LABEL[door] : "");
+
+    var btns = html("div", "st-way-btns", row);
+    function link(text, target, rel) {
+      var a = document.createElement("a");
+      a.className = "st-way-btn";
+      a.textContent = text;
+      if (target) { a.href = U(target.url); a.title = target.title; if (rel) a.rel = rel; }
+      else a.setAttribute("aria-disabled", "true");
+      btns.appendChild(a);
+      return a;
+    }
+    link("← Prev", idx > 0 ? WAY.path[idx - 1] : null, "prev");
+    var mapBtn = document.createElement("button");
+    mapBtn.type = "button"; mapBtn.className = "st-way-btn";
+    mapBtn.textContent = "Map (M)";
+    mapBtn.setAttribute("aria-expanded", "false");
+    btns.appendChild(mapBtn);
+    link("Next →", idx < WAY.path.length - 1 ? WAY.path[idx + 1] : WAY.end, "next");
+    document.body.appendChild(bar);
+    document.body.classList.add("st-has-way");
+
+    function measure() {
+      document.documentElement.style.setProperty("--st-way-h", Math.round(bar.getBoundingClientRect().height || 60) + "px");
+    }
+    measure();
+    addEventListener("resize", measure);
+
+    /* ---- map overlay ---- */
+    var map = html("div", "st-way-map");
+    map.setAttribute("role", "dialog");
+    map.setAttribute("aria-modal", "true");
+    map.setAttribute("aria-label", "Site map");
+    var head = html("div", "st-map-head", map);
+    var h2 = document.createElement("h2");
+    h2.textContent = "Where everything is";
+    head.appendChild(h2);
+    var closeBtn = document.createElement("button");
+    closeBtn.type = "button"; closeBtn.className = "st-way-btn";
+    closeBtn.textContent = "Close (Esc)";
+    head.appendChild(closeBtn);
+    var hint = html("div", "st-map-hint", head);
+    hint.textContent = "Every project has three doors: story, project page, tool";
+
+    // constellation (hidden under 800px by CSS; the card list below is the
+    // plain-list fallback and is always present)
+    var wrap = html("div", "st-map-wrap", map);
+    var svg = mk("svg", { class: "st-map-svg", viewBox: "0 0 820 430", role: "img", "aria-label": "Site map as a constellation: the hub at the centre, six projects around it" }, wrap);
+    var cx = 410, cy = 215, rx = 310, ry = 150;
+    var placed = WAY.projects.map(function (p, i) {
+      var a = -Math.PI / 2 + (i / WAY.projects.length) * 6.2832;
+      return { p: p, x: cx + Math.cos(a) * rx, y: cy + Math.sin(a) * ry };
+    });
+    placed.forEach(function (n) {
+      mk("line", { class: "st-map-spoke" + (n.p.key === key ? " is-now" : ""), x1: cx, y1: cy, x2: n.x, y2: n.y }, svg);
+    });
+    var hubG = mk("g", null, svg);
+    mk("circle", { class: "st-map-node" + (key === "hub" ? " is-now" : ""), cx: cx, cy: cy, r: 44 }, hubG);
+    var hubT = mk("text", { class: "st-map-name", x: cx, y: cy + 5, "text-anchor": "middle" }, hubG);
+    hubT.textContent = "HUB";
+    placed.forEach(function (n) {
+      var a = mk("a", { href: U(n.p.doors[0].url) }, svg);
+      mk("circle", { class: "st-map-node" + (n.p.key === key ? " is-now" : ""), cx: n.x, cy: n.y, r: 30 }, a);
+      var t = mk("text", { class: "st-map-name", x: n.x, y: n.y + (n.y < cy ? -56 : 50), "text-anchor": "middle" }, a);
+      t.textContent = n.p.name;
+      var s = mk("text", { x: n.x, y: n.y + (n.y < cy ? -39 : 67), "text-anchor": "middle" }, a);
+      s.textContent = n.p.sub;
+      var num = mk("text", { class: "st-map-name", x: n.x, y: n.y + 5, "text-anchor": "middle" }, a);
+      num.textContent = String(WAY.path.map(function (q) { return q.key; }).indexOf(n.p.key) + 1);
+    });
+
+    var list = html("div", "st-map-list", map);
+    function card(node) {
+      var c = html("div", "st-map-card" + (node.key === key ? " is-now" : ""), list);
+      var t = document.createElement("h3"); t.textContent = node.name; c.appendChild(t);
+      var s = html("p", "st-map-sub", c); s.textContent = node.sub;
+      var ul = document.createElement("ul"); c.appendChild(ul);
+      node.doors.forEach(function (d) {
+        var li = document.createElement("li");
+        var a = document.createElement("a");
+        a.href = U(d.url);
+        a.appendChild(document.createTextNode(d.label));
+        var sp = document.createElement("span"); sp.textContent = d.note; a.appendChild(sp);
+        if (node.key === key && d.kind === door) a.setAttribute("aria-current", "page");
+        li.appendChild(a);
+        if (d.alt) {
+          var a2 = document.createElement("a");
+          a2.href = U(d.alt.url); a2.textContent = d.alt.label;
+          a2.style.marginTop = "6px";
+          li.appendChild(a2);
+        }
+        ul.appendChild(li);
+      });
+    }
+    card(WAY.hub);
+    WAY.projects.forEach(card);
+    var extra = html("div", "st-map-extra", map);
+    WAY.extras.forEach(function (e) {
+      var a = document.createElement("a");
+      a.className = "st-way-btn"; a.href = U(e.url); a.textContent = e.label;
+      extra.appendChild(a);
+    });
+    document.body.appendChild(map);
+
+    /* ---- open / close with a focus trap ---- */
+    var lastFocus = null, isOpen = false;
+    function focusables() {
+      return els("a[href],button:not([disabled])", map).filter(function (n) { return n.offsetParent !== null || n.getClientRects().length; });
+    }
+    function open() {
+      if (isOpen) return;
+      isOpen = true;
+      lastFocus = document.activeElement;
+      map.classList.add("is-open");
+      mapBtn.setAttribute("aria-expanded", "true");
+      document.documentElement.style.overflow = "hidden";
+      closeBtn.focus();
+      addEventListener("keydown", trap, true);
+    }
+    function close() {
+      if (!isOpen) return;
+      isOpen = false;
+      map.classList.remove("is-open");
+      mapBtn.setAttribute("aria-expanded", "false");
+      document.documentElement.style.overflow = "";
+      removeEventListener("keydown", trap, true);
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+    function trap(e) {
+      if (e.key === "Escape") { e.preventDefault(); close(); return; }
+      if (e.key !== "Tab") return;
+      var f = focusables();
+      if (!f.length) return;
+      var first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+    mapBtn.addEventListener("click", function () { isOpen ? close() : open(); });
+    closeBtn.addEventListener("click", close);
+    function key2(e) {
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      var t = e.target;
+      if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable)) return;
+      if ((e.key === "m" || e.key === "M") && !isOpen) { e.preventDefault(); open(); }
+    }
+    addEventListener("keydown", key2);
+
+    wayState = {
+      el: bar, map: map, open: open, close: close,
+      get index() { return idx; },
+      data: WAY,
+      destroy: function () {
+        close(); removeEventListener("keydown", key2); removeEventListener("resize", measure);
+        bar.remove(); map.remove();
+        document.body.classList.remove("st-has-way");
+        wayState = null;
+      }
+    };
+    return wayState;
+  }
+  function autoWayfinder() {
+    if (global.STORY_NO_WAYFINDER) return;
+    if (document.querySelector(".st-way")) return;
+    try { wayfinder(); } catch (e) { if (global.console) console.error(e); }
+  }
+  function autoChapters() {
+    els(".st-chapter").forEach(function (n) { try { chapter(n); } catch (e) { if (global.console) console.error(e); } });
+  }
+  function boot() { autoChapters(); autoWayfinder(); }
+  if (document.readyState === "loading") addEventListener("DOMContentLoaded", boot);
+  else boot();
+
+  /* ---------------------------------------------------------
      9. export
      --------------------------------------------------------- */
   var Story = {
-    version: "1.0.0",
+    version: "1.1.0",
     orb: orb,
+    orbInline: orbInline,
+    companion: companion,
+    chapter: chapter,
+    field: field,
+    wayfinder: wayfinder,
+    sitemap: WAY,
     scenes: scenes,
     chart: chart,
     spring: spring,
@@ -2231,10 +3225,17 @@ function fmt(v, d) { return v.toFixed(d === undefined ? 1 : d); }
 function ease(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
 
 /* one shared tween; uses the engine when it is present */
-var running = [];
-function tween(ms, cb) {
+var running = [], tweens = {};
+function tween(ms, cb, key) {
+  /* one live tween per figure: a new step stops the previous one so an older
+     animation can never finish last and leave the stage in a stale state */
+  if (key && tweens[key] && tweens[key].stop) { tweens[key].stop(); tweens[key] = null; }
   if (reduce) { cb(1); return; }
-  if (S && typeof S.tween === "function") { S.tween(0, 1, function (v) { cb(v); }, { duration: ms }); return; }
+  if (S && typeof S.tween === "function") {
+    var h = S.tween(0, 1, function (v) { cb(v); }, { duration: ms });
+    if (key) tweens[key] = h;
+    return h;
+  }
   var t0 = null, id = { stop: false };
   running.push(id);
   function frame(t) {
@@ -2253,62 +3254,93 @@ document.addEventListener("visibilitychange", function () { if (document.hidden)
 /* deterministic pseudo-random, so the dot layout is the same every load */
 function lcg(seed) { var s = seed; return function () { s = (s * 1103515245 + 12345) % 2147483648; return s / 2147483648; }; }
 
+/* ---------------- shared figure helpers ---------------- */
+function txt(parent, x, y, s, o) {
+  var a = { x: x, y: y };
+  for (var k in o) a[k] = o[k];
+  var n = el("text", a, parent);
+  n.textContent = s;
+  return n;
+}
+function lead(parent, pts, cls) {
+  return el("polyline", { points: pts, class: cls || "st-anno-line" }, parent);
+}
+function tip(node, s) { el("title", {}, node).textContent = s; }
+
 /* ---------------- scene 1: dot density ---------------- */
 function dots(svg) {
-  var COLS = 40, ROWS = 25, N = COLS * ROWS;      /* 1 dot = 2,801 filings */
-  var x0 = 24, y0 = 46, w = 512, h = 300;
+  var COLS = 50, ROWS = 20, N = COLS * ROWS;      /* 1 dot = 2,801 filings */
+  var x0 = 30, y0 = 92, w = 820, h = 430;
   var g = el("g", {}, svg);
   var bar = el("g", { opacity: 0 }, svg);
-  var cap = el("text", { x: 24, y: 24, class: "st-label-direct" }, svg);
-  var sub = el("text", { x: 24, y: 384 }, svg);
+  var anno = el("g", { opacity: 0 }, svg);
+  var cap = txt(svg, 30, 34, "", { class: "st-label-direct", "font-size": 18 });
+  var sub = txt(svg, 30, 58, "", {});
 
   var nFlag = Math.round(N * D.flaggedShare);      /* 21 dots */
   var rnd = lcg(20260903), flagSet = {};
   while (Object.keys(flagSet).length < nFlag) flagSet[Math.floor(rnd() * N)] = 1;
 
-  var dotsArr = [];
+  var dotsArr = [], flagged = [];
   for (var i = 0; i < N; i++) {
     var c = i % COLS, r = Math.floor(i / COLS);
     var gx = x0 + (c + 0.5) * (w / COLS), gy = y0 + (r + 0.5) * (h / ROWS);
-    var flagged = !!flagSet[i];
-    dotsArr.push({ n: el("circle", { cx: gx, cy: gy, r: 2.6, fill: "var(--ink-2)", opacity: .42 }, g), gx: gx, gy: gy, f: flagged });
+    var isF = !!flagSet[i];
+    var node = el("circle", { cx: gx, cy: gy, r: 4.2, fill: "var(--ink-2)", opacity: .45 }, g);
+    if (isF) tip(node, "Fails the plausibility screen. 57,857 filings, 2.07% of the panel, 96.68% of reported hours.");
+    var d = { n: node, gx: gx, gy: gy, f: isF };
+    dotsArr.push(d);
+    if (isF) flagged.push(d);
   }
+
   /* the hours bar: 96.68% of hours in the flagged segment */
   var split = x0 + w * D.hoursShareFlagged;
-  var barY = 170, barH = 74;
-  var segA = el("rect", { x: x0, y: barY, width: split - x0, height: barH, fill: "var(--warn)", opacity: .16 }, bar);
-  el("rect", { x: split, y: barY, width: x0 + w - split, height: barH, fill: "var(--ink-2)", opacity: .12 }, bar);
-  el("rect", { x: x0, y: barY, width: w, height: barH, fill: "none", stroke: "var(--rule-soft)" }, bar);
-  el("text", { x: x0 + 10, y: barY - 10, class: "st-label-direct", fill: "var(--warn)" }, bar).textContent = "96.68% of hours worked";
-  el("text", { x: x0, y: barY + barH + 20 }, bar).textContent = "sits in the 2.07% of filings that fail the screen";
+  var barY = 200, barH = 232;
+  el("rect", { x: x0, y: barY, width: split - x0, height: barH, fill: "var(--warn)", opacity: .15 }, bar);
+  el("rect", { x: split, y: barY, width: x0 + w - split, height: barH, fill: "var(--ink-2)", opacity: .14 }, bar);
+  el("rect", { x: x0, y: barY, width: w, height: barH, fill: "none", stroke: "var(--rule-soft)", "stroke-width": 2 }, bar);
+  el("line", { x1: split, x2: split, y1: barY, y2: barY + barH, stroke: "var(--warn)", "stroke-width": 2.5 }, bar);
+  txt(bar, x0 + 22, barY + 96, "96.68%", { "font-size": 64, fill: "var(--warn)", "font-weight": 700, "font-family": "var(--font-mono)" });
+  txt(bar, x0 + 24, barY + 130, "of every hour reported in the panel", { "font-size": 15 });
+  txt(bar, x0 + 24, barY + 154, "sits in filings that cannot be true", { "font-size": 15 });
+  lead(bar, (split + 6) + "," + (barY - 8) + " " + (split + 6) + "," + (barY - 44) + " " + (split - 150) + "," + (barY - 44));
+  txt(bar, split - 158, barY - 39, "the 97.93% that pass hold 3.32%", { "text-anchor": "end", class: "st-anno-text" });
 
   /* target positions inside the bar */
   var rnd2 = lcg(7771);
   dotsArr.forEach(function (d) {
-    if (d.f) { d.bx = x0 + 8 + rnd2() * (split - x0 - 16); d.by = barY + 10 + rnd2() * (barH - 20); }
-    else { d.bx = split + 2 + rnd2() * Math.max(4, x0 + w - split - 4); d.by = barY + 6 + rnd2() * (barH - 12); }
+    if (d.f) { d.bx = x0 + 300 + rnd2() * (split - x0 - 320); d.by = barY + 14 + rnd2() * (barH - 28); }
+    else { d.bx = split + 3 + rnd2() * Math.max(6, x0 + w - split - 6); d.by = barY + 8 + rnd2() * (barH - 16); }
   });
+
+  /* callout on the flagged dots, used in step 2 */
+  var fd = flagged.slice().sort(function (a, b) { return Math.abs(a.gx - 250) - Math.abs(b.gx - 250); })[0] || dotsArr[0];
+  lead(anno, fd.gx + "," + (fd.gy + 9) + " " + fd.gx + ",556 250,556");
+  el("circle", { cx: fd.gx, cy: fd.gy, r: 11, fill: "none", stroke: "var(--warn)", "stroke-width": 2 }, anno);
+  txt(anno, 240, 561, "57,857 filings fail, 2.07% of the panel", { "text-anchor": "end", class: "st-anno-text" });
+  txt(anno, 240, 583, "hours per employee outside 120 to 4,500", { "text-anchor": "end", "font-size": 13 });
 
   function set(state) {
     var toBar = state === "hours" ? 1 : 0;
-    cap.textContent = state === "hours" ? "1 dot = 2,801 filings; position now shows hours"
+    cap.textContent = state === "hours" ? "the same 1,000 dots, now placed by the hours they carry"
       : state === "flag" ? "21 of 1,000 dots fail the plausibility screen"
-      : "1 dot = 2,801 filings (1,000 dots = 2,801,064)";
-    sub.textContent = state === "hours" ? "hours per employee above 4,500: 24,617 filings, 96.65% of hours"
-      : state === "flag" ? "57,857 flagged filings of 2,801,064 (2.07%)"
-      : "2016 to 2024, after 4,703 duplicate rows dropped";
-    tween(760, function (p) {
+      : "1 dot = 2,801 filings; 1,000 dots = 2,801,064";
+    sub.textContent = state === "hours" ? "24,617 filings report hours per employee above 4,500 and hold 96.65% of hours"
+      : state === "flag" ? "hours / employees outside 120 to 4,500, or missing, or negative counts"
+      : "2016 to 2024, the whole public Injury Tracking Application panel";
+    tween(820, function (p) {
       var k = toBar ? p : 1 - p;
       bar.setAttribute("opacity", String(toBar ? p : 1 - p));
+      anno.setAttribute("opacity", String(state === "flag" ? p : 1 - p));
       dotsArr.forEach(function (d) {
         d.n.setAttribute("cx", String(d.gx + (d.bx - d.gx) * k));
         d.n.setAttribute("cy", String(d.gy + (d.by - d.gy) * k));
         var isF = d.f && state !== "all";
         d.n.setAttribute("fill", isF ? "var(--warn)" : "var(--ink-2)");
-        d.n.setAttribute("r", String(isF ? 3.4 : (state === "all" ? 2.6 : 2.2)));
-        d.n.setAttribute("opacity", String(isF ? 1 : (state === "all" ? .42 : .2)));
+        d.n.setAttribute("r", String(isF ? 7 : (state === "all" ? 4.2 : 3.2)));
+        d.n.setAttribute("opacity", String(isF ? 1 : (state === "all" ? .45 : .22)));
       });
-    });
+    }, "dots");
   }
   set("all");
   return set;
@@ -2316,40 +3348,53 @@ function dots(svg) {
 
 /* ---------------- scene 2: raw vs screened line ---------------- */
 function line(svg) {
-  var x0 = 56, x1 = 540, y0 = 56, y1 = 344, yMax = 5;
+  var x0 = 104, x1 = 848, y0 = 96, y1 = 510, yMax = 5;
   var X = function (i) { return x0 + i * (x1 - x0) / (D.years.length - 1); };
   var Y = function (v) { return y1 - (v / yMax) * (y1 - y0); };
   var t;
   for (t = 0; t <= 5; t++) {
     el("line", { x1: x0, x2: x1, y1: Y(t), y2: Y(t), class: "st-grid" }, svg);
-    el("text", { x: x0 - 10, y: Y(t) + 4, "text-anchor": "end" }, svg).textContent = String(t);
+    txt(svg, x0 - 14, Y(t) + 5, String(t), { "text-anchor": "end" });
   }
   D.years.forEach(function (y, i) {
-    if (i % 2 === 0 || i === D.years.length - 1) el("text", { x: X(i), y: y1 + 22, "text-anchor": "middle" }, svg).textContent = String(y);
+    txt(svg, X(i), y1 + 30, String(y), { "text-anchor": "middle", "font-size": i % 2 === 0 ? 14 : 13, opacity: i % 2 === 0 ? 1 : .6 });
   });
   el("line", { x1: x0, x2: x1, y1: y1, y2: y1, class: "st-axis-line" }, svg);
-  el("text", { x: 14, y: 30 }, svg).textContent = "aggregate TRIR, cases per 200,000 hours";
+  txt(svg, 30, 34, "aggregate TRIR, cases per 200,000 hours", { class: "st-label-direct", "font-size": 18 });
+  txt(svg, 30, 58, "same filings, one plausibility screen applied or not", {});
 
   var gap = el("path", { class: "st-gap", d: "", opacity: 0 }, svg);
   var sens = el("g", { opacity: 0 }, svg);
-  el("rect", { x: x0, y: Y(3.993), width: x1 - x0, height: Math.max(2, Y(3.963) - Y(3.993)), fill: "var(--accent)", opacity: .3 }, sens);
-  el("text", { x: x1, y: Y(3.993) - 9, "text-anchor": "end", class: "st-label-direct", fill: "var(--accent)" }, sens)
-    .textContent = "3.963 to 3.993 across 25 screen variants";
+  el("rect", { x: x0, y: Y(3.993), width: x1 - x0, height: Math.max(3, Y(3.963) - Y(3.993)), fill: "var(--accent)", opacity: .45 }, sens);
+  el("line", { x1: x0, x2: x1, y1: Y(3.978), y2: Y(3.978), class: "st-ref-line" }, sens);
+  txt(sens, x1, Y(3.993) - 14, "3.963 to 3.993 across all 25 screen variants", { "text-anchor": "end", class: "st-anno-text" });
 
   function path(vals) { return vals.map(function (v, i) { return (i ? "L" : "M") + X(i) + " " + Y(v); }).join(" "); }
-  var pScr = el("path", { class: "st-series-line", stroke: "var(--accent)", d: path(D.trirScreened) }, svg);
-  var pRaw = el("path", { class: "st-series-line", stroke: "var(--ink-2)", "stroke-dasharray": "6 4", d: path(D.trirRaw), opacity: 0 }, svg);
-  var lenS = pScr.getTotalLength ? pScr.getTotalLength() : 1200;
-  var lenR = pRaw.getTotalLength ? pRaw.getTotalLength() : 1200;
-  var mark = el("g", { opacity: 0 }, svg);
+  var pScr = el("path", { class: "st-series-line", stroke: "var(--accent)", "stroke-width": 3.5, d: path(D.trirScreened) }, svg);
+  var pRaw = el("path", { class: "st-series-line", stroke: "var(--ink-2)", "stroke-width": 3, "stroke-dasharray": "8 5", d: path(D.trirRaw), opacity: 0 }, svg);
+  var lenS = pScr.getTotalLength ? pScr.getTotalLength() : 1600;
+  var lenR = pRaw.getTotalLength ? pRaw.getTotalLength() : 1600;
+
   var i19 = D.years.indexOf(2019);
-  el("line", { x1: X(i19), x2: X(i19), y1: Y(D.trirRaw[i19]), y2: Y(D.trirScreened[i19]), class: "st-marker" }, mark);
-  el("circle", { cx: X(i19), cy: Y(D.trirRaw[i19]), r: 4.5, fill: "var(--warn)" }, mark);
-  el("text", { x: X(i19) + 10, y: Y(2.0), class: "st-label-direct", fill: "var(--warn)" }, mark).textContent = "2019: 4.02 screened, 0.016 raw";
-  el("text", { x: X(i19) + 10, y: Y(2.0) + 16 }, mark).textContent = "correction factor 249x";
-  el("text", { x: x1, y: Y(D.trirScreened[8]) - 12, "text-anchor": "end", class: "st-label-direct", fill: "var(--accent)" }, svg).textContent = "screened";
-  var rawLab = el("text", { x: x1, y: Y(D.trirRaw[8]) + 22, "text-anchor": "end", class: "st-label-direct", fill: "var(--ink-2)", opacity: 0 }, svg);
-  rawLab.textContent = "unscreened";
+  var mark = el("g", { opacity: 0 }, svg);
+  el("line", { x1: X(i19), x2: X(i19), y1: Y(D.trirRaw[i19]), y2: Y(D.trirScreened[i19]), class: "st-marker", "stroke-width": 3 }, mark);
+  el("circle", { cx: X(i19), cy: Y(D.trirScreened[i19]), r: 6.5, fill: "var(--accent)", class: "st-anno-dot" }, mark);
+  el("circle", { cx: X(i19), cy: Y(D.trirRaw[i19]), r: 6.5, fill: "var(--warn)", stroke: "var(--paper)", "stroke-width": 2 }, mark);
+  lead(mark, (X(i19) + 7) + ",343 470,442 552,442");
+  txt(mark, 560, 454, "249x", { "font-size": 48, fill: "var(--warn)", "font-weight": 700, "font-family": "var(--font-mono)" });
+  txt(mark, 560, 478, "correction factor in 2019: 4.02 screened, 0.016 raw", { class: "st-anno-text" });
+  txt(mark, 560, 498, "99.60% of that year's hours sat in flagged filings", { "font-size": 13 });
+
+  txt(svg, x1, Y(D.trirScreened[8]) - 16, "screened", { "text-anchor": "end", class: "st-label-direct", fill: "var(--accent)", "font-size": 17 });
+  var rawLab = txt(svg, x1, Y(D.trirRaw[8]) + 28, "unscreened", { "text-anchor": "end", class: "st-label-direct", fill: "var(--ink-2)", "font-size": 17, opacity: 0 });
+
+  /* keyboard and hover read-out of the exact pair for each year */
+  D.years.forEach(function (yr, i) {
+    var hw = (x1 - x0) / (D.years.length - 1);
+    var hit = el("rect", { x: X(i) - hw / 2, y: y0, width: hw, height: y1 - y0, class: "st-hit", tabindex: 0, role: "img" }, svg);
+    hit.setAttribute("aria-label", yr + ": screened TRIR " + fmt(D.trirScreened[i], 2) + ", unscreened " + fmt(D.trirRaw[i], 3));
+    tip(hit, yr + "\nscreened  " + fmt(D.trirScreened[i], 2) + "\nunscreened  " + fmt(D.trirRaw[i], 3));
+  });
 
   var gapD = path(D.trirScreened) + " L" + X(8) + " " + Y(D.trirRaw[8]) +
     D.trirRaw.slice().reverse().map(function (v, i) { return " L" + X(8 - i) + " " + Y(v); }).join("") + " Z";
@@ -2358,17 +3403,17 @@ function line(svg) {
   pScr.setAttribute("stroke-dashoffset", reduce ? 0 : lenS);
   var drawn = false;
   function set(state) {
-    if (!drawn) { drawn = true; tween(900, function (p) { pScr.setAttribute("stroke-dashoffset", String(lenS * (1 - p))); }); }
+    if (!drawn) { drawn = true; tween(1000, function (p) { pScr.setAttribute("stroke-dashoffset", String(lenS * (1 - p))); }); }
     var wantRaw = state !== "screen";
-    pRaw.setAttribute("stroke-dasharray", wantRaw ? "6 4" : lenR + " " + lenR);
-    if (wantRaw) { gap.setAttribute("d", gapD); }
-    tween(620, function (p) {
+    pRaw.setAttribute("stroke-dasharray", wantRaw ? "8 5" : lenR + " " + lenR);
+    if (wantRaw) gap.setAttribute("d", gapD);
+    tween(680, function (p) {
       pRaw.setAttribute("opacity", String(wantRaw ? p : 1 - p));
       rawLab.setAttribute("opacity", String(wantRaw ? p : 1 - p));
       gap.setAttribute("opacity", String(wantRaw ? p : 1 - p));
       mark.setAttribute("opacity", String(state === "2019" || state === "sens" ? p : 1 - p));
       sens.setAttribute("opacity", String(state === "sens" ? p : 1 - p));
-    });
+    }, "line");
   }
   set("screen");
   return set;
@@ -2376,42 +3421,51 @@ function line(svg) {
 
 /* ---------------- scene 3: persistence flow ---------------- */
 function flow(svg) {
-  var lx = 40, lw = 150, rx = 400, rw = 120;
+  var lx = 34, lw = 224, rx = 636, rw = 170;
+  var rowH = 190;
   var rows = [
-    { y: 74, h: 96, n: D.prevFlag, p: D.pFlag, hit: 5776, lab: "flagged in year t-1", sub: "21,243 establishment-years" },
-    { y: 236, h: 96, n: D.prevClean, p: D.pClean, hit: 13394, lab: "not flagged in year t-1", sub: "1,415,236 establishment-years" }
+    { y: 110, n: D.prevFlag, p: D.pFlag, hit: 5776, ty: 140, lab: "flagged in year t-1", sub: "21,243 establishment-years", big: "27.2%", small: "5,776 flagged again" },
+    { y: 342, n: D.prevClean, p: D.pClean, hit: 13394, ty: 398, lab: "not flagged in year t-1", sub: "1,415,236 establishment-years", big: "0.95%", small: "13,394 flagged next year" }
   ];
-  el("rect", { x: rx, y: 74, width: rw, height: 258, fill: "var(--surface-2)", stroke: "var(--rule-soft)" }, svg);
-  el("text", { x: rx + rw / 2, y: 60, "text-anchor": "middle", class: "st-label-direct" }, svg).textContent = "flagged in year t";
+  txt(svg, 30, 34, "chance that a site is flagged in year t", { class: "st-label-direct", "font-size": 18 });
+  txt(svg, 30, 58, "ribbon thickness is the transition rate, drawn to scale", {});
+  el("rect", { x: rx, y: 110, width: rw, height: 422, fill: "var(--surface-2)", stroke: "var(--rule-soft)", "stroke-width": 2 }, svg);
+  txt(svg, rx + rw / 2, 98, "flagged in year t", { "text-anchor": "middle", class: "st-label-direct" });
+
   var ribbons = [];
   rows.forEach(function (r, i) {
-    el("rect", { x: lx, y: r.y, width: lw, height: r.h, fill: i ? "var(--surface-2)" : "var(--warn-wash)", stroke: i ? "var(--rule-soft)" : "var(--warn)" }, svg);
-    el("text", { x: lx, y: r.y - 20, class: "st-label-direct" }, svg).textContent = r.lab;
-    el("text", { x: lx, y: r.y - 6 }, svg).textContent = r.sub;
-    var th = Math.max(2.2, r.h * r.p);
-    var y1 = r.y, y2 = r.y + th;
-    var ty = 110 + i * 130, ty2 = ty + th;
+    el("rect", { x: lx, y: r.y, width: lw, height: rowH, fill: i ? "var(--surface-2)" : "var(--warn-wash)", stroke: i ? "var(--rule-soft)" : "var(--warn)", "stroke-width": 2 }, svg);
+    txt(svg, lx, r.y - 26, r.lab, { class: "st-label-direct" });
+    txt(svg, lx, r.y - 7, r.sub, {});
+    var th = Math.max(3, rowH * r.p);
+    var y1 = r.y, y2 = r.y + th, ty = r.ty, ty2 = ty + th;
     var d = "M" + (lx + lw) + " " + y1 +
-      " C" + (lx + lw + 110) + " " + y1 + " " + (rx - 110) + " " + ty + " " + rx + " " + ty +
+      " C" + (lx + lw + 150) + " " + y1 + " " + (rx - 150) + " " + ty + " " + rx + " " + ty +
       " L" + rx + " " + ty2 +
-      " C" + (rx - 110) + " " + ty2 + " " + (lx + lw + 110) + " " + y2 + " " + (lx + lw) + " " + y2 + " Z";
+      " C" + (rx - 150) + " " + ty2 + " " + (lx + lw + 150) + " " + y2 + " " + (lx + lw) + " " + y2 + " Z";
     var rib = el("path", { d: d, fill: i ? "var(--accent)" : "var(--warn)", opacity: 0 }, svg);
-    var lab = el("text", { x: lx + lw + 16, y: (i ? ty + 30 : y1 + 26), class: "st-label-direct", fill: i ? "var(--accent)" : "var(--warn)", opacity: 0 }, svg);
-    lab.textContent = i ? "0.95% (13,394)" : "27.2% (5,776)";
-    ribbons.push({ rib: rib, lab: lab });
+    tip(rib, r.lab + "\n" + r.big + " flagged in year t\n" + r.small);
+    var lg = el("g", { opacity: 0 }, svg);
+    txt(lg, lx + lw + 24, i ? ty + 56 : y1 + 62, r.big, { "font-size": i ? 44 : 62, "font-weight": 700, "font-family": "var(--font-mono)", fill: i ? "var(--ink-2)" : "var(--warn)" });
+    txt(lg, lx + lw + 26, i ? ty + 80 : y1 + 88, r.small, { class: "st-anno-text" });
+    ribbons.push({ rib: rib, lab: lg });
   });
-  var or = el("text", { x: 40, y: 372, class: "st-label-direct", opacity: 0 }, svg);
-  or.textContent = "odds ratio 39.1, Cohen's kappa 0.276, n = 1,436,479 pairs";
+
+  var or = el("g", { opacity: 0 }, svg);
+  txt(or, 34, 580, "39.1", { "font-size": 54, "font-weight": 700, "font-family": "var(--font-mono)", fill: "var(--accent)" });
+  txt(or, 134, 562, "odds ratio, pooled over 1,436,479 pairs", { class: "st-anno-text" });
+  txt(or, 134, 584, "Cohen's kappa 0.276; every one of the eight year pairs lands between 24.7 and 63.1", { "font-size": 13 });
+
   function set(state) {
     var want = state === "setup" ? 0 : state === "top" ? 1 : 2;
-    tween(700, function (p) {
+    tween(760, function (p) {
       ribbons.forEach(function (o, i) {
         var on = i < want;
-        o.rib.setAttribute("opacity", String(on ? .55 * p + (on ? 0 : 0) : 0));
+        o.rib.setAttribute("opacity", String(on ? .62 * p : 0));
         o.lab.setAttribute("opacity", String(on ? p : 0));
       });
       or.setAttribute("opacity", String(want === 2 ? p : 0));
-    });
+    }, "flow");
   }
   set("setup");
   return set;
@@ -2419,32 +3473,41 @@ function flow(svg) {
 
 /* ---------------- scene 4: permutation null vs observed ---------------- */
 function nullScale(svg) {
-  var x0 = 64, x1 = 528, y = 220;
+  var x0 = 86, x1 = 840, y = 432;
   var lo = 0.7, hi = 60;
   var X = function (v) { return x0 + (Math.log(v) - Math.log(lo)) / (Math.log(hi) - Math.log(lo)) * (x1 - x0); };
-  el("line", { x1: x0, x2: x1, y1: y, y2: y, class: "st-axis-line" }, svg);
+  el("line", { x1: x0, x2: x1, y1: y, y2: y, class: "st-axis-line", "stroke-width": 2.5 }, svg);
   [1, 2, 5, 10, 20, 40].forEach(function (t) {
-    el("line", { x1: X(t), x2: X(t), y1: y, y2: y + 6, class: "st-axis-line" }, svg);
-    el("text", { x: X(t), y: y + 24, "text-anchor": "middle" }, svg).textContent = String(t);
+    el("line", { x1: X(t), x2: X(t), y1: y, y2: y + 10, class: "st-axis-line", "stroke-width": 2 }, svg);
+    txt(svg, X(t), y + 32, String(t), { "text-anchor": "middle", "font-size": 15 });
   });
-  el("text", { x: x0, y: y + 52 }, svg).textContent = "pooled persistence odds ratio, log scale";
+  txt(svg, x0, y + 60, "pooled persistence odds ratio, log scale", {});
+  txt(svg, 30, 34, "what chance produces, and what the panel produced", { class: "st-label-direct", "font-size": 18 });
+  txt(svg, 30, 58, "flag counts held fixed within each year, 200 draws, seed 20260909", {});
+
   var band = el("g", { opacity: 0 }, svg);
-  var bw = Math.max(4, X(D.permHi) - X(D.permLo));
-  el("rect", { x: X(D.permLo), y: y - 58, width: bw, height: 58, fill: "var(--ink-2)", opacity: .25 }, band);
-  el("line", { x1: X(D.permMean), x2: X(D.permMean), y1: y - 76, y2: y, stroke: "var(--ink)", "stroke-width": 2 }, band);
-  el("text", { x: X(D.permMean), y: y - 88, "text-anchor": "middle", class: "st-label-direct" }, band).textContent = "null mean 1.012";
-  el("text", { x: X(D.permMean), y: y - 72, "text-anchor": "middle" }, band).textContent = "95% interval 0.924 to 1.092";
+  var bw = Math.max(6, X(D.permHi) - X(D.permLo));
+  var bRect = el("rect", { x: X(D.permLo), y: y - 120, width: bw, height: 120, fill: "var(--ink-2)", opacity: .3 }, band);
+  tip(bRect, "permutation null\nmean 1.012\n95% interval 0.924 to 1.092");
+  el("line", { x1: X(D.permMean), x2: X(D.permMean), y1: y - 150, y2: y, stroke: "var(--ink)", "stroke-width": 2.5 }, band);
+  lead(band, X(D.permMean) + "," + (y - 152) + " " + (X(D.permMean) + 40) + "," + (y - 204) + " " + (X(D.permMean) + 130) + "," + (y - 204));
+  txt(band, X(D.permMean) + 138, y - 210, "1.012", { "font-size": 34, "font-weight": 700, "font-family": "var(--font-mono)", fill: "var(--ink)" });
+  txt(band, X(D.permMean) + 140, y - 188, "null mean; 95% interval 0.924 to 1.092", { class: "st-anno-text" });
+
   var obs = el("g", { opacity: 0 }, svg);
-  el("line", { x1: X(D.oddsRatio), x2: X(D.oddsRatio), y1: y - 150, y2: y, stroke: "var(--accent)", "stroke-width": 3 }, obs);
-  el("circle", { cx: X(D.oddsRatio), cy: y - 150, r: 6, fill: "var(--accent)" }, obs);
-  el("text", { x: X(D.oddsRatio), y: y - 164, "text-anchor": "end", class: "st-label-direct", fill: "var(--accent)" }, obs).textContent = "observed 39.1";
-  el("text", { x: x1, y: y - 186, "text-anchor": "end" }, obs).textContent = "0 of 200 permutations reached it";
-  el("text", { x: x0, y: 40, class: "st-label-direct" }, svg).textContent = "200 permutations, seed 20260909";
+  el("line", { x1: X(D.oddsRatio), x2: X(D.oddsRatio), y1: y - 250, y2: y, stroke: "var(--accent)", "stroke-width": 4 }, obs);
+  var oDot = el("circle", { cx: X(D.oddsRatio), cy: y - 250, r: 10, fill: "var(--accent)", class: "st-glow" }, obs);
+  tip(oDot, "observed pooled odds ratio 39.08\n0 of 200 permutations reached it");
+  txt(obs, X(D.oddsRatio) - 16, y - 268, "39.1", { "text-anchor": "end", "font-size": 62, "font-weight": 700, "font-family": "var(--font-mono)", fill: "var(--accent)" });
+  txt(obs, X(D.oddsRatio) - 16, y - 244, "observed, and 0 of 200 permutations reached it", { "text-anchor": "end", class: "st-anno-text" });
+  el("line", { x1: X(1.092) + 4, x2: X(D.oddsRatio) - 4, y1: y - 60, y2: y - 60, class: "st-ref-line" }, obs);
+  txt(obs, (X(1.092) + X(D.oddsRatio)) / 2, y - 70, "a factor of 36 between chance and the panel", { "text-anchor": "middle", "font-size": 13 });
+
   function set(state) {
-    tween(640, function (p) {
+    tween(700, function (p) {
       band.setAttribute("opacity", String(state === "build" ? 0 : p));
       obs.setAttribute("opacity", String(state === "obs" ? p : 0));
-    });
+    }, "null");
   }
   set("build");
   return set;
@@ -2452,37 +3515,51 @@ function nullScale(svg) {
 
 /* ---------------- scene 5: model selection bars ---------------- */
 function bars(svg) {
-  var x0 = 70, y1 = 320, y0 = 70, maxV = 22, bw = 74, gap = 42;
-  el("line", { x1: x0 - 14, x2: 540, y1: y1, y2: y1, class: "st-axis-line" }, svg);
+  var x0 = 128, y1 = 500, y0 = 104, maxV = 22, bw = 132, gap = 58;
+  el("line", { x1: x0 - 20, x2: 848, y1: y1, y2: y1, class: "st-axis-line", "stroke-width": 2.5 }, svg);
   [0, 5, 10, 15, 20].forEach(function (t) {
     var yy = y1 - (t / maxV) * (y1 - y0);
-    el("line", { x1: x0 - 14, x2: 540, y1: yy, y2: yy, class: "st-grid" }, svg);
-    el("text", { x: x0 - 22, y: yy + 4, "text-anchor": "end" }, svg).textContent = String(t);
+    el("line", { x1: x0 - 20, x2: 848, y1: yy, y2: yy, class: "st-grid" }, svg);
+    txt(svg, x0 - 30, yy + 5, String(t), { "text-anchor": "end" });
   });
-  el("text", { x: 14, y: 40, class: "st-label-direct" }, svg).textContent = "industries won on AIC, of 30";
-  var state = el("text", { x: 540, y: 40, "text-anchor": "end" }, svg);
+  txt(svg, 30, 34, "industries won on AIC, of 30", { class: "st-label-direct", "font-size": 18 });
+  var state = txt(svg, 848, 34, "", { "text-anchor": "end", "font-size": 15 });
+  txt(svg, 30, 58, "2024 recordable counts, 30 largest three-digit NAICS groups", {});
+  var NOTE = { Poisson: "never wins", ZIP: "never wins", NB2: "negative binomial", ZINB: "zero-inflated NB" };
   var items = D.modelNames.map(function (nm, i) {
     var x = x0 + i * (bw + gap);
-    var r = el("rect", { x: x, y: y1, width: bw, height: 0, fill: i < 2 ? "var(--ink-2)" : "var(--accent)", opacity: i < 2 ? .3 : 1 }, svg);
-    el("text", { x: x + bw / 2, y: y1 + 22, "text-anchor": "middle", class: "st-label-direct" }, svg).textContent = nm;
-    var v = el("text", { x: x + bw / 2, y: y1 - 10, "text-anchor": "middle", class: "st-label-direct" }, svg);
-    return { r: r, v: v, cur: 0 };
+    var r = el("rect", { x: x, y: y1, width: bw, height: 0, fill: i < 2 ? "var(--ink-2)" : "var(--accent)", opacity: i < 2 ? .28 : 1 }, svg);
+    txt(svg, x + bw / 2, y1 + 30, nm, { "text-anchor": "middle", class: "st-label-direct", "font-size": 17 });
+    txt(svg, x + bw / 2, y1 + 50, NOTE[nm], { "text-anchor": "middle", "font-size": 13 });
+    var v = txt(svg, x + bw / 2, y1 - 14, "", { "text-anchor": "middle", "font-size": 34, "font-weight": 700, "font-family": "var(--font-mono)", fill: i < 2 ? "var(--muted)" : "var(--accent)" });
+    var hit = el("rect", { x: x, y: y0, width: bw, height: y1 - y0, class: "st-hit", tabindex: 0, role: "img" }, svg);
+    return { r: r, v: v, hit: hit, nm: nm, cur: 0 };
   });
+  var foot = el("g", { opacity: 0 }, svg);
+  txt(foot, 30, 584, "NB2 beats Poisson in all 30 industries, boundary-corrected p < 0.001, median dispersion 0.785", { class: "st-anno-text" });
+
   function set(name) {
     var target = name === "bars-intercept" ? D.modelIntercept : D.modelCovariate;
     state.textContent = name === "bars-intercept" ? "intercept only" : "with size band and 4-digit sub-industry";
     var from = items.map(function (o) { return o.cur; });
-    tween(760, function (p) {
+    items.forEach(function (o, i) {
+      var s = o.nm + ": wins " + target[i] + " of 30 industries on AIC, " + state.textContent;
+      o.hit.setAttribute("aria-label", s);
+      var ti = o.hit.querySelector("title") || el("title", {}, o.hit);
+      ti.textContent = s;
+    });
+    tween(820, function (p) {
       items.forEach(function (o, i) {
         var val = from[i] + (target[i] - from[i]) * p;
         var h = (val / maxV) * (y1 - y0);
         o.r.setAttribute("y", String(y1 - h));
         o.r.setAttribute("height", String(Math.max(0, h)));
-        o.v.setAttribute("y", String(y1 - h - 10));
-        o.v.textContent = Math.round(val) ? String(Math.round(val)) : "0";
+        o.v.setAttribute("y", String(y1 - h - 14));
+        o.v.textContent = String(Math.round(val));
         if (p === 1) o.cur = target[i];
       });
-    });
+      foot.setAttribute("opacity", String(name === "bars-intercept" ? 0 : p));
+    }, "bars");
     if (reduce) items.forEach(function (o, i) { o.cur = target[i]; });
   }
   set("bars-intercept");
@@ -2554,9 +3631,59 @@ function localScenes(root, opts) {
 }
 
 /* ---------------- wiring ---------------- */
+/* the key number carried beside each stage, per step */
+var NUM = {
+  "dots-all":  ["2,801,064", "<b>establishment-year filings</b><br />2016 to 2024, after 4,703 duplicate rows dropped"],
+  "dots-flag": ["2.07%",     "<b>of filings fail the screen</b><br />57,857 of 2,801,064, on arithmetic alone"],
+  "dots-hours":["96.68%",    "<b>of all reported hours</b><br />sit inside those 57,857 filings"],
+  "line-screen":["3.98",     "<b>pooled screened TRIR</b><br />cases per 200,000 hours, 2016 to 2024"],
+  "line-raw":   ["0.13",     "<b>pooled unscreened TRIR</b><br />same filings, no plausibility screen"],
+  "line-2019":  ["249x",     "<b>correction factor in 2019</b><br />99.60% of that year's hours sat in flagged filings"],
+  "line-sens":  ["0.030",    "<b>total movement in the answer</b><br />across all 25 variants of the screen bounds"],
+  "flow-setup": ["1,436,479","<b>establishment-year pairs</b><br />each restricted to sites that filed in both years"],
+  "flow-top":   ["27.2%",    "<b>flagged again the next year</b><br />5,776 of 21,243 flagged establishment-years"],
+  "flow-both":  ["39.1",     "<b>persistence odds ratio</b><br />against 0.95% for clean establishment-years"],
+  "null-build": ["200",      "<b>permutations, seed 20260909</b><br />flag counts held fixed within each year"],
+  "null-band":  ["1.012",    "<b>odds ratio under chance</b><br />95% interval 0.924 to 1.092"],
+  "null-obs":   ["39.1",     "<b>observed odds ratio</b><br />0 of 200 permutations reached it"],
+  "bars-intercept":["0 of 30","<b>industries won by Poisson</b><br />intercept-only fits, compared on AIC"],
+  "bars-cov":   ["20 of 30", "<b>won by NB2</b><br />once size band and sub-industry are in the mean"],
+  "bars-why":   ["0.785",    "<b>median NB2 dispersion</b><br />Poisson assumes it is zero, so its limits are too tight"]
+};
+
+function setNum(scene, key) {
+  var spec = NUM[key];
+  if (!spec) return;
+  var n = document.getElementById("num-" + scene), t = document.getElementById("note-" + scene);
+  if (!n || n.textContent === spec[0]) return;
+  if (reduce) { n.textContent = spec[0]; if (t) t.innerHTML = spec[1]; return; }
+  n.classList.add("is-fading"); if (t) t.classList.add("is-fading");
+  setTimeout(function () {
+    n.textContent = spec[0]; if (t) t.innerHTML = spec[1];
+    n.classList.remove("is-fading"); if (t) t.classList.remove("is-fading");
+  }, 170);
+}
+
 function boot() {
   var canvas = document.getElementById("orb");
-  var orb = (S && typeof S.orb === "function") ? S.orb(canvas, { density: 420 }) : localOrb(canvas);
+  var orb = (S && typeof S.orb === "function") ? S.orb(canvas, { density: 900 }) : localOrb(canvas);
+
+  /* ambient dot field behind the hero and the closing card */
+  if (S && typeof S.field === "function") {
+    var hero = document.getElementById("hero");
+    if (hero) { try { S.field(hero, { density: 1.2 }); } catch (e) {} }
+  }
+  /* orb on the next-story card */
+  var nx = document.getElementById("orb-next");
+  if (nx && S && typeof S.orb === "function") {
+    var nOrb = S.orb(nx, { state: "breathing", density: 520, parallax: false, label: "Orb waiting on the next story" });
+    if (S.inView) S.inView(nx, function () { nOrb.setState("searching"); }, { once: true, margin: "0px 0px -20% 0px" });
+  }
+  /* "open the map" link in the closing card */
+  var mapLink = document.querySelector("[data-map-open]");
+  if (mapLink) mapLink.addEventListener("click", function (e) {
+    if (S && typeof S.wayfinder === "function") { e.preventDefault(); S.wayfinder().open(); }
+  });
 
   var builders = { sc1: dots, sc2: line, sc3: flow, sc4: nullScale, sc5: bars };
   var svgIds = { sc1: "ch-dots", sc2: "ch-line", sc3: "ch-flow", sc4: "ch-null", sc5: "ch-bars" };
@@ -2571,19 +3698,33 @@ function boot() {
   Object.keys(builders).forEach(function (id) {
     var root = document.getElementById(id);
     if (!root) return;
+    var scene = id.slice(2);
     var svg = document.getElementById(svgIds[id]);
     var set = builders[id](svg);
     var onStep = function (i, stepEl) {
       var key = stepEl.getAttribute("data-step");
       if (key && stepMap[key]) set(stepMap[key]);
+      if (key) setNum(scene, key);
       var os = stepEl.getAttribute("data-orb");
       if (os && orb && orb.setState) orb.setState(os);
       var wrap = canvas.parentNode;
       if (os && wrap) wrap.setAttribute("data-state", os);
     };
-    if (S && typeof S.scenes === "function") S.scenes(root, { orb: orb, onStep: onStep });
+    if (S && typeof S.scenes === "function") S.scenes(root, { onStep: onStep, companionSize: 120 });
     else localScenes(root, { onStep: onStep });
   });
+
+  /* 20px orbs beside the live numbers. Built after Story.scenes, because the
+     engine only docks its companion orb on a stage that has no orb canvas yet. */
+  if (S && typeof S.orbInline === "function") {
+    [].slice.call(document.querySelectorAll(".stage-num-note")).forEach(function (n) {
+      var i = document.createElement("i");
+      i.className = "st-orb-inline";
+      i.setAttribute("aria-hidden", "true");
+      n.insertBefore(i, n.firstChild);
+      try { S.orbInline(i, { state: "working" }); } catch (e) {}
+    });
+  }
 
   if (S) {
     if (typeof S.reveal === "function") S.reveal(document.body);

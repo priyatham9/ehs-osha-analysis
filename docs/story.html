@@ -37,7 +37,12 @@
  --font-sans:"Archivo",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
  --font-mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
  --maxw:1180px;
+ --r:14px; --r-sm:10px;
+ --hair-c:rgba(16,19,17,.14);
+ --hair:1px solid var(--hair-c);
+ --lift:0 10px 34px -16px rgba(16,19,17,.22);
 }
+@supports (color:color-mix(in srgb,#000 10%,transparent)){:root{--hair-c:color-mix(in srgb, var(--ink) 14%, transparent)}}
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
  color-scheme:dark;
@@ -47,6 +52,7 @@
  --accent:#7C9EFF; --accent-2:#5B7FE8; --accent-ink:#06101F; --accent-wash:#151C33;
  --warn:#E3B25F; --warn-wash:#241C0C;
  --grid-dot:rgba(234,236,242,.09); --shadow:rgba(0,0,0,.4);
+ --hair-c:rgba(234,236,242,.16); --lift:0 10px 40px -14px rgba(0,0,0,.5);
   }
 }
 :root[data-theme="dark"] {
@@ -57,6 +63,7 @@
  --accent:#7C9EFF; --accent-2:#5B7FE8; --accent-ink:#06101F; --accent-wash:#151C33;
  --warn:#E3B25F; --warn-wash:#241C0C;
  --grid-dot:rgba(234,236,242,.09); --shadow:rgba(0,0,0,.4);
+ --hair-c:rgba(234,236,242,.16); --lift:0 10px 40px -14px rgba(0,0,0,.5);
 }
 :root[data-theme="light"]{color-scheme:light}
 *{box-sizing:border-box}
@@ -90,7 +97,7 @@ code,.mono,.src,.f-src,.backlink{overflow-wrap:anywhere}
 }
 
 /* ============ hero ============ */
-.hero{position:relative;padding:74px 0 56px;border-bottom:2px solid var(--rule);background-image:radial-gradient(var(--grid-dot) 1px,transparent 1px);background-size:22px 22px}
+.hero{position:relative;padding:74px 0 56px;border-bottom:var(--hair);background-image:radial-gradient(var(--grid-dot) 1px,transparent 1px);background-size:22px 22px}
 .hero-eyebrow{display:inline-flex;align-items:center;gap:9px;margin-bottom:24px}
 .pulse{width:7px;height:7px;background:var(--accent);flex:none;animation:pulse 2.4s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
@@ -98,23 +105,23 @@ code,.mono,.src,.f-src,.backlink{overflow-wrap:anywhere}
 .hero h1{font-size:clamp(2.4rem,6.4vw,4.6rem);max-width:16ch;overflow-wrap:break-word;hyphens:auto}
 .hero-role{margin-top:18px;font-size:1.05rem;color:var(--ink-2);max-width:62ch}
 .hero-lede{margin-top:14px;font-size:1rem;color:var(--muted);max-width:66ch}
-.hero-links{display:flex;flex-wrap:wrap;margin-top:30px}
-.btn{display:inline-flex;align-items:center;gap:9px;padding:13px 19px;border:2px solid var(--rule);margin:0 -2px -2px 0;font-family:var(--font-mono);font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;text-decoration:none;color:var(--ink);background:var(--surface);transition:background .15s,color .15s}
-.btn:hover{background:var(--surface-2)}
+.hero-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:30px}
+.btn{display:inline-flex;align-items:center;gap:9px;padding:13px 20px;border:var(--hair);border-radius:999px;margin:0;font-family:var(--font-mono);font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;text-decoration:none;color:var(--ink);background:var(--surface);transition:background .15s,color .15s}
+.btn:hover{background:var(--surface-2);border-color:var(--accent);color:var(--accent)}
 .btn-primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn-primary:hover{border-color:var(--accent)}
 .btn-primary:hover{background:var(--accent-2);color:var(--accent-ink)}
 
 /* ============ status strip ============ */
-.status{display:grid;grid-template-columns:repeat(4,1fr);border:2px solid var(--rule);background:var(--surface);margin-top:34px;max-width:940px}
-.st-cell{padding:13px 16px;border-left:2px solid var(--rule-soft);min-width:0}
-.st-cell:first-child{border-left:0}
+.status{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:34px;max-width:940px}
+.st-cell{padding:14px 16px;border:var(--hair);border-radius:var(--r-sm);background:var(--surface);min-width:0}
 .st-k{font-family:var(--font-mono);font-size:.5625rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px}
 .st-v{font-family:var(--font-mono);font-size:1.05rem;font-weight:700;font-variant-numeric:tabular-nums}
 .st-v.accent{color:var(--accent)}
-@media(max-width:760px){.status{grid-template-columns:1fr 1fr}.st-cell:nth-child(3){border-left:0}.st-cell:nth-child(n+3){border-top:2px solid var(--rule-soft)}}
+@media(max-width:760px){.status{grid-template-columns:1fr 1fr}}
 
 /* ============ sections ============ */
-.section{padding:66px 0;border-bottom:2px solid var(--rule)}
+.section{padding:66px 0;border-bottom:var(--hair)}
 .rail-head{display:flex;align-items:baseline;gap:16px;margin-bottom:34px;flex-wrap:wrap}
 .rail-head h2{font-size:clamp(1.5rem,3vw,2.1rem)}
 .rail-num{font-family:var(--font-mono);font-size:.6875rem;color:var(--accent);font-weight:700;letter-spacing:.16em}
@@ -198,11 +205,11 @@ body:has(.st-progress) .rs-header .rs-progress{display:none}
 @media(max-width:800px){.stage-num{min-height:0;gap:14px;margin-bottom:8px}.stage-num .st-bignum{font-size:clamp(2rem,9vw,3rem)}.stage-num .stage-num-note{display:none}}
 
 /* chapter cards: keep the text on the same measure as the rest of the page */
-.st-chapter{padding-inline:max(40px,calc((100vw - 1560px) / 2 + 40px));border-bottom:2px solid var(--rule)}
+.st-chapter{padding-inline:max(40px,calc((100vw - 1560px) / 2 + 40px));border-bottom:var(--hair)}
 .st-chapter .st-chapter-num{color:var(--accent);opacity:.9}
 
-.honest{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2px;background:var(--rule-soft);border:2px solid var(--rule)}
-.hcard{background:var(--surface);padding:24px 22px}
+.honest{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.hcard{background:var(--surface);border:var(--hair);border-radius:var(--r);padding:24px 22px}
 .hcard h3{font-family:var(--font-mono);font-size:.8125rem;letter-spacing:.04em;text-transform:uppercase;color:var(--warn);font-weight:700;line-height:1.35}
 .hcard p{margin:10px 0 0;font-size:.875rem;color:var(--ink-2);line-height:1.6}
 
@@ -210,8 +217,8 @@ body:has(.st-progress) .rs-header .rs-progress{display:none}
 .mon-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,.7fr);gap:40px;align-items:start}
 .mon-lede{font-stretch:125%;font-weight:900;text-transform:uppercase;font-size:clamp(1.3rem,3vw,2rem);line-height:1.1;margin-bottom:18px}
 .mon-grid p{font-size:.95rem;color:var(--ink-2)}
-.mon-side{border:2px solid var(--rule);background:var(--surface);padding:22px 20px}
-.mon-pre{margin:12px 0 0;padding:14px;background:var(--surface-2);overflow-x:auto}
+.mon-side{border:var(--hair);border-radius:var(--r);background:var(--surface);padding:24px 22px}
+.mon-pre{margin:12px 0 0;padding:14px;background:var(--surface-2);border:var(--hair);border-radius:var(--r-sm);overflow-x:auto}
 .mon-pre code{font-family:var(--font-mono);font-size:.75rem;line-height:1.9;white-space:pre}
 .mon-note{margin-top:14px;font-size:.8125rem!important;color:var(--muted)!important}
 @media(max-width:860px){.mon-grid{grid-template-columns:1fr;gap:26px}}
@@ -220,19 +227,72 @@ body:has(.st-progress) .rs-header .rs-progress{display:none}
 /* tail room so the sticky stage is not pushed off-screen on the last step */
 .st-scene .st-steps{padding-bottom:18vh}
 @media(max-width:800px){.st-scene .st-steps{padding-bottom:0}}
-.st-presenting .hero,.st-presenting .prog{display:none!important}
+html:not(.st-printing) .st-presenting .hero,html:not(.st-printing) .st-presenting .prog{display:none!important}
 
 /* ============ next card ============ */
-.prog{padding:0;border-bottom:2px solid var(--rule)}
-.next-card{display:block;padding:72px 0;border-bottom:2px solid var(--rule-soft);text-decoration:none;color:var(--ink)}
+.prog{padding:0;border-bottom:var(--hair)}
+.next-card{display:block;padding:44px 34px;margin:40px 0 0;border:var(--hair);border-radius:var(--r);background:var(--surface);text-decoration:none;color:var(--ink)}
 .next-card:hover .next-name{color:var(--accent)}
 .next-tag{font-family:var(--font-mono);font-size:.6875rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:700}
 .next-name{display:block;margin-top:14px;font-stretch:125%;font-weight:900;text-transform:uppercase;font-size:clamp(2rem,5.6vw,4.2rem);line-height:1.02;transition:color .18s}
 .next-note{display:block;margin-top:16px;font-size:1.05rem;color:var(--ink-2);max-width:46ch}
-.next-rest{display:flex;flex-wrap:wrap;gap:0;padding:26px 0 60px;align-items:center}
-.next-rest a{font-family:var(--font-mono);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;color:var(--ink);border:2px solid var(--rule);padding:12px 18px;margin:0 -2px -2px 0}
+.next-rest{display:flex;flex-wrap:wrap;gap:10px;padding:26px 0 60px;align-items:center}
+.next-rest a{font-family:var(--font-mono);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;color:var(--ink);border:var(--hair);border-radius:999px;padding:12px 18px;background:var(--surface)}
 .next-rest a:hover{border-color:var(--accent);color:var(--accent)}
-@media(max-width:860px){.next-card{grid-template-columns:1fr;gap:22px;padding:44px 0}}
+@media(max-width:860px){.next-card{padding:30px 22px}}
+
+/* ============ handout: @media print and the ?print=1 preview together ============ */
+@media print{
+  .crumb,.hero-eyebrow,.hero-lede,.hero-links,.prog,.next-card,.next-rest,.footer{display:none!important}
+  .hero{border:0!important;padding:0 0 8pt!important;background:none!important}
+  .hero h1{font-size:22pt!important;color:#000!important}
+  .hero-role{font-size:11pt!important;color:#000!important;max-width:none!important}
+  .section{padding:8pt 0!important;border:0!important;border-top:1pt solid #000!important;break-inside:auto}
+  .wrap,.wrap-wide{max-width:none!important;padding:0!important}
+  .rail-head{margin-bottom:8pt!important}
+  .rail-head h2{font-size:15pt!important;color:#000!important}
+  .rail-num{color:#000!important}
+  .honest{gap:0!important;display:block!important}
+  .hcard{background:none!important;border:0!important;border-radius:0!important;padding:0 0 7pt!important;break-inside:avoid}
+  .hcard h3{color:#000!important;font-size:10pt!important}
+  .hcard p{color:#000!important;font-size:9.5pt!important;margin-top:3pt!important}
+  .monday{background:none!important}
+  .mon-grid{display:block!important}
+  .mon-lede{font-size:13pt!important;color:#000!important}
+  .mon-grid p{color:#000!important;font-size:10pt!important}
+  .mon-side{background:none!important;border:1pt solid #000!important;border-radius:0!important;padding:8pt!important;margin-top:10pt;break-inside:avoid}
+  .mon-pre{background:none!important;border:0!important;border-radius:0!important;padding:0!important}
+  .mon-pre code{font-size:9pt!important;color:#000!important}
+  .stage-num{min-height:0!important;margin:0 0 4pt!important;gap:10pt!important;align-items:baseline}
+  .stage-num .st-bignum{font-size:16pt!important;color:#000!important}
+  .stage-num .stage-num-note{color:#000!important;font-size:8pt!important;padding:0!important;line-height:1.4!important}
+  .st-figure figcaption{color:#000!important;font-size:8pt!important}
+}
+html.st-printing .crumb,html.st-printing .hero-eyebrow,html.st-printing .hero-lede,html.st-printing .hero-links,html.st-printing .prog,html.st-printing .next-card,html.st-printing .next-rest,html.st-printing .footer{display:none!important}
+html.st-printing .hero{border:0!important;padding:0 0 8pt!important;background:none!important}
+html.st-printing .hero h1{font-size:22pt!important;color:#000!important}
+html.st-printing .hero-role{font-size:11pt!important;color:#000!important;max-width:none!important}
+html.st-printing .section{padding:8pt 0!important;border:0!important;border-top:1pt solid #000!important}
+html.st-printing .wrap,html.st-printing .wrap-wide{max-width:none!important;padding:0!important}
+html.st-printing .rail-head{margin-bottom:8pt!important}
+html.st-printing .rail-head h2{font-size:15pt!important;color:#000!important}
+html.st-printing .rail-num{color:#000!important}
+html.st-printing .honest{gap:0!important;display:block!important}
+html.st-printing .hcard{background:none!important;border:0!important;border-radius:0!important;padding:0 0 7pt!important}
+html.st-printing .hcard h3{color:#000!important;font-size:10pt!important}
+html.st-printing .hcard p{color:#000!important;font-size:9.5pt!important;margin-top:3pt!important}
+html.st-printing .monday{background:none!important}
+html.st-printing .mon-grid{display:block!important}
+html.st-printing .mon-lede{font-size:13pt!important;color:#000!important}
+html.st-printing .mon-grid p{color:#000!important;font-size:10pt!important}
+html.st-printing .mon-side{background:none!important;border:1pt solid #000!important;border-radius:0!important;padding:8pt!important;margin-top:10pt}
+html.st-printing .mon-pre{background:none!important;border:0!important;border-radius:0!important;padding:0!important}
+html.st-printing .mon-pre code{font-size:9pt!important;color:#000!important}
+html.st-printing .stage-num{min-height:0!important;margin:0 0 4pt!important;gap:10pt!important;align-items:baseline}
+html.st-printing .stage-num .st-bignum{font-size:16pt!important;color:#000!important}
+html.st-printing .stage-num .stage-num-note{color:#000!important;font-size:8pt!important;padding:0!important;line-height:1.4!important}
+html.st-printing .st-figure figcaption{color:#000!important;font-size:8pt!important}
+html.st-printing body{padding:0 24px!important}
 </style>
 <style id="story-css">/*STORY_CSS_START*/
 /* ============================================================
@@ -530,6 +590,310 @@ html{scroll-padding-top:16px}
 .st-reduced .st-scene.st-flow .st-step > *{opacity:1!important;transform:none!important;transition:none!important}
 .st-reduced .st-stage-inner.st-layers > [data-show]{transition:none!important}
 .st-reduced .st-companion .st-companion-cap{transition:none!important}
+
+
+/* ---------- v1.3 print handout ---------- */
+.st-print-foot,.st-print-terms{display:none}
+@media print{
+  @page{size:A4;margin:14mm}
+:root{--paper:#fff;--surface:#fff;--surface-2:#fff;--ink:#000;--ink-2:#1a1a1a;--muted:#444;--rule:#000;--rule-soft:#b8b8b8;--accent:#000;--accent-2:#000;--accent-ink:#fff;--accent-wash:#fff;--warn:#000;--warn-wash:#fff;background:#fff;color:#000}
+  body{background:#fff!important;color:#000!important;padding-bottom:0!important;font-size:11pt}
+  .st-way,  .st-way-map,  .st-progress,  .st-present-dots,  .st-present-hint,  .st-notes,  .st-gloss-tip,  .st-companion,  .st-field,  .st-hero-orb,  .st-orb-wrap,  canvas.st-orb,  .st-orb,  .presbtn,  .skip,  header.banner,  .rs-header,  .footer,  nav.pgm,  .story-nav,  .st-scene-rail,  details{display:none!important}
+  *{box-shadow:none!important;text-shadow:none!important;transition:none!important;animation:none!important;filter:none!important}
+  .st-scene,  .st-scene[data-side="left"]{display:block!important;grid-template-columns:none!important;gap:0!important}
+  .st-stage,  .st-scene .st-stage,  .st-scene[data-side="left"] .st-stage{position:static!important;height:auto!important;min-height:0!important;max-height:none!important;order:0!important;padding:0!important;border:0!important;background:transparent!important;display:block!important}
+  .st-steps,  .st-scene[data-side="left"] .st-steps{order:0!important}
+  .st-stage-inner{position:static!important;min-height:0!important;display:block!important;height:auto!important}
+  .st-stage-inner.st-layers > [data-show]{display:none!important}
+  .st-stage-inner.st-layers > [data-show].is-shown{display:block!important;opacity:1!important;transform:none!important;pointer-events:auto}
+  .st-stage-inner svg,  .st-stage-inner canvas:not(.st-orb),  .st-stage-inner .st-figure{max-height:9cm!important;height:auto!important;width:100%!important;max-width:100%!important;margin:0 auto 8pt;break-inside:avoid;page-break-inside:avoid}
+  .st-chart.st-in-stage{height:auto!important;max-height:9cm!important}
+  .st-step{min-height:0!important;opacity:1!important;padding:0 0 9pt!important;display:block!important;break-inside:avoid;page-break-inside:avoid}
+  .st-step > *{opacity:1!important;transform:none!important}
+  .st-step h3{font-size:12.5pt!important;margin:0 0 3pt!important;color:#000}
+  .st-step p{font-size:10.5pt!important;color:#000!important;max-width:none!important;line-height:1.36}
+  .st-step .label,  .st-bignum small{color:#444!important}
+  .st-bignum{font-size:20pt!important;color:#000!important}
+  .st-chapter{min-height:0!important;padding:11pt 0 5pt!important;border-top:1pt solid #000!important;margin:0!important;max-width:none!important;break-after:avoid;page-break-after:avoid;break-inside:avoid}
+  .st-chapter h2,  .st-chapter .st-chapter-title{font-size:15pt!important;max-width:none!important;margin:0 0 3pt!important}
+  .st-chapter p{font-size:10.5pt!important;color:#000!important;max-width:none!important}
+  .st-chapter .st-chapter-num{color:#000!important;font-size:8.5pt!important;margin:0 0 4pt!important}
+  .st-hero{min-height:0!important;display:block!important;padding:0!important}
+  .st-hero h1{font-size:20pt!important;margin:0 0 6pt}
+  .st-hero p,  .hero-lede{font-size:11pt!important;color:#000!important;max-width:none!important}
+  .st-findings{padding:6pt 0 4pt!important;max-width:none!important;break-inside:avoid}
+  .st-findings ol{display:block!important;border:0!important;counter-reset:f}
+  .st-findings li{border:0!important;background:none!important;break-inside:avoid;page-break-inside:avoid}
+  .st-findings a{padding:0 0 4pt!important;color:#000!important;display:block!important}
+  .st-findings a::before{display:inline!important;margin:0 6pt 0 0!important;color:#000!important;font-size:9pt!important}
+  .st-findings b{display:inline!important;font-size:10.5pt!important}
+  .st-findings span{display:block!important;color:#222!important;font-size:9.5pt!important;padding-left:26pt}
+  .st-chart text,  svg text,  .st-chart .st-label-direct,  .st-chart .st-anno-text{fill:#000!important}
+  .st-chart .st-caption,  .st-chart .st-ref-text,  .st-figure figcaption{fill:#333!important;color:#333!important}
+  .st-chart .st-grid,  .st-chart .st-axis-line{stroke:#888!important}
+  .st-gloss{border-bottom:0!important;text-decoration:none!important}
+  a{color:#000!important;text-decoration:none!important}
+  a[href]::after{content:""!important}
+  .st-print-next a[href]::after,  a[rel="next"]::after,  figcaption a[href]::after{content:" (" attr(href) ")"!important;font-size:8pt;color:#333}
+  .st-print-terms{display:block!important;padding:9pt 0 0;margin-top:10pt;border-top:1pt solid #000;break-inside:auto}
+  .st-print-terms h2{font-size:12pt;margin:0 0 5pt}
+  .st-print-terms dl{margin:0;columns:2;column-gap:16pt}
+  .st-print-terms dt{font-weight:700;font-size:9pt;margin-top:4pt;break-after:avoid}
+  .st-print-terms dd{margin:0;font-size:9pt;color:#222;break-inside:avoid}
+  .st-print-foot{display:block!important;margin-top:9pt;padding-top:4pt;border-top:.5pt solid #777;font-size:8pt;color:#333;font-family:var(--font-mono)}
+}
+/* screen mirror of the handout rules, for previewing with ?print=1 */
+html.st-printing{--paper:#fff;--surface:#fff;--surface-2:#fff;--ink:#000;--ink-2:#1a1a1a;--muted:#444;--rule:#000;--rule-soft:#b8b8b8;--accent:#000;--accent-2:#000;--accent-ink:#fff;--accent-wash:#fff;--warn:#000;--warn-wash:#fff;background:#fff;color:#000}
+html.st-printing body{background:#fff!important;color:#000!important;padding-bottom:0!important;font-size:11pt}
+html.st-printing .st-way,html.st-printing .st-way-map,html.st-printing .st-progress,html.st-printing .st-present-dots,html.st-printing .st-present-hint,html.st-printing .st-notes,html.st-printing .st-gloss-tip,html.st-printing .st-companion,html.st-printing .st-field,html.st-printing .st-hero-orb,html.st-printing .st-orb-wrap,html.st-printing canvas.st-orb,html.st-printing .st-orb,html.st-printing .presbtn,html.st-printing .skip,html.st-printing header.banner,html.st-printing .rs-header,html.st-printing .footer,html.st-printing nav.pgm,html.st-printing .story-nav,html.st-printing .st-scene-rail,html.st-printing details{display:none!important}
+html.st-printing *{box-shadow:none!important;text-shadow:none!important;transition:none!important;animation:none!important;filter:none!important}
+html.st-printing .st-scene,html.st-printing .st-scene[data-side="left"]{display:block!important;grid-template-columns:none!important;gap:0!important}
+html.st-printing .st-stage,html.st-printing .st-scene .st-stage,html.st-printing .st-scene[data-side="left"] .st-stage{position:static!important;height:auto!important;min-height:0!important;max-height:none!important;order:0!important;padding:0!important;border:0!important;background:transparent!important;display:block!important}
+html.st-printing .st-steps,html.st-printing .st-scene[data-side="left"] .st-steps{order:0!important}
+html.st-printing .st-stage-inner{position:static!important;min-height:0!important;display:block!important;height:auto!important}
+html.st-printing .st-stage-inner.st-layers > [data-show]{display:none!important}
+html.st-printing .st-stage-inner.st-layers > [data-show].is-shown{display:block!important;opacity:1!important;transform:none!important;pointer-events:auto}
+html.st-printing .st-stage-inner svg,html.st-printing .st-stage-inner canvas:not(.st-orb),html.st-printing .st-stage-inner .st-figure{max-height:9cm!important;height:auto!important;width:100%!important;max-width:100%!important;margin:0 auto 8pt;break-inside:avoid;page-break-inside:avoid}
+html.st-printing .st-chart.st-in-stage{height:auto!important;max-height:9cm!important}
+html.st-printing .st-step{min-height:0!important;opacity:1!important;padding:0 0 9pt!important;display:block!important;break-inside:avoid;page-break-inside:avoid}
+html.st-printing .st-step > *{opacity:1!important;transform:none!important}
+html.st-printing .st-step h3{font-size:12.5pt!important;margin:0 0 3pt!important;color:#000}
+html.st-printing .st-step p{font-size:10.5pt!important;color:#000!important;max-width:none!important;line-height:1.36}
+html.st-printing .st-step .label,html.st-printing .st-bignum small{color:#444!important}
+html.st-printing .st-bignum{font-size:20pt!important;color:#000!important}
+html.st-printing .st-chapter{min-height:0!important;padding:11pt 0 5pt!important;border-top:1pt solid #000!important;margin:0!important;max-width:none!important;break-after:avoid;page-break-after:avoid;break-inside:avoid}
+html.st-printing .st-chapter h2,html.st-printing .st-chapter .st-chapter-title{font-size:15pt!important;max-width:none!important;margin:0 0 3pt!important}
+html.st-printing .st-chapter p{font-size:10.5pt!important;color:#000!important;max-width:none!important}
+html.st-printing .st-chapter .st-chapter-num{color:#000!important;font-size:8.5pt!important;margin:0 0 4pt!important}
+html.st-printing .st-hero{min-height:0!important;display:block!important;padding:0!important}
+html.st-printing .st-hero h1{font-size:20pt!important;margin:0 0 6pt}
+html.st-printing .st-hero p,html.st-printing .hero-lede{font-size:11pt!important;color:#000!important;max-width:none!important}
+html.st-printing .st-findings{padding:6pt 0 4pt!important;max-width:none!important;break-inside:avoid}
+html.st-printing .st-findings ol{display:block!important;border:0!important;counter-reset:f}
+html.st-printing .st-findings li{border:0!important;background:none!important;break-inside:avoid;page-break-inside:avoid}
+html.st-printing .st-findings a{padding:0 0 4pt!important;color:#000!important;display:block!important}
+html.st-printing .st-findings a::before{display:inline!important;margin:0 6pt 0 0!important;color:#000!important;font-size:9pt!important}
+html.st-printing .st-findings b{display:inline!important;font-size:10.5pt!important}
+html.st-printing .st-findings span{display:block!important;color:#222!important;font-size:9.5pt!important;padding-left:26pt}
+html.st-printing .st-chart text,html.st-printing svg text,html.st-printing .st-chart .st-label-direct,html.st-printing .st-chart .st-anno-text{fill:#000!important}
+html.st-printing .st-chart .st-caption,html.st-printing .st-chart .st-ref-text,html.st-printing .st-figure figcaption{fill:#333!important;color:#333!important}
+html.st-printing .st-chart .st-grid,html.st-printing .st-chart .st-axis-line{stroke:#888!important}
+html.st-printing .st-gloss{border-bottom:0!important;text-decoration:none!important}
+html.st-printing a{color:#000!important;text-decoration:none!important}
+html.st-printing a[href]::after{content:""!important}
+html.st-printing .st-print-next a[href]::after,html.st-printing a[rel="next"]::after,html.st-printing figcaption a[href]::after{content:" (" attr(href) ")"!important;font-size:8pt;color:#333}
+html.st-printing .st-print-terms{display:block!important;padding:9pt 0 0;margin-top:10pt;border-top:1pt solid #000;break-inside:auto}
+html.st-printing .st-print-terms h2{font-size:12pt;margin:0 0 5pt}
+html.st-printing .st-print-terms dl{margin:0;columns:2;column-gap:16pt}
+html.st-printing .st-print-terms dt{font-weight:700;font-size:9pt;margin-top:4pt;break-after:avoid}
+html.st-printing .st-print-terms dd{margin:0;font-size:9pt;color:#222;break-inside:avoid}
+html.st-printing .st-print-foot{display:block!important;margin-top:9pt;padding-top:4pt;border-top:.5pt solid #777;font-size:8pt;color:#333;font-family:var(--font-mono)}
+
+/* ---------- v1.3 speaker notes (presenter mode only) ---------- */
+.st-notes{position:fixed;left:22px;bottom:22px;z-index:78;max-width:46ch;padding:12px 15px 13px;background:var(--surface);border:2px solid var(--ink);color:var(--ink)}
+.st-notes.st-notes-right{left:auto;right:22px;bottom:54px}
+.st-notes-lab{font-family:var(--font-mono);font-size:.625rem;letter-spacing:.2em;font-weight:700;color:var(--accent);margin-bottom:7px}
+.st-notes-body{font-size:1rem;line-height:1.45;color:var(--ink)}
+html:not(.st-presenting) .st-notes{display:none!important}
+@media(max-width:800px){.st-notes{max-width:calc(100vw - 32px);left:16px;right:16px;bottom:16px}.st-notes.st-notes-right{left:16px;right:16px;bottom:16px}}
+
+/* ---------- v1.3 glossary ---------- */
+abbr.st-gloss{border-bottom:1px dotted var(--muted);text-decoration:none;cursor:help;color:inherit}
+abbr.st-gloss:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.st-gloss-tip{position:absolute;left:0;top:0;z-index:95;max-width:34ch;padding:9px 11px;background:var(--surface);border:2px solid var(--rule);color:var(--ink);font-size:.8125rem;line-height:1.4;pointer-events:none}
+.st-gloss-tip[hidden]{display:none}
+.st-presenting abbr.st-gloss{border-bottom-color:transparent}
+
+/* print handout, second pass */
+@media print{
+  /* only the layout boxes go static; figures keep their own absolutely placed parts */
+  .st-stage,.st-stage-inner,.st-frame,.st-steps,.st-step,.st-hero,.st-hero > *{position:static!important}
+  .st-figure figcaption{margin:4pt 0 0!important;padding:0!important}
+  .st-steps{padding-top:8pt!important;min-height:0!important}
+  .st-scene,  .st-scene .st-steps,  .st-scene .st-stage{min-height:0!important}
+  button,  .btn,  [class*="btn"],  [class*="cta"]{background:none!important;background-color:transparent!important;color:#000!important;border-color:#000!important}
+  [style*="position:fixed"],  [style*="position: fixed"]{display:none!important}
+}
+html.st-printing .st-stage,html.st-printing .st-stage-inner,html.st-printing .st-frame,html.st-printing .st-steps,html.st-printing .st-step,html.st-printing .st-hero,html.st-printing .st-hero > *{position:static!important}
+html.st-printing .st-figure figcaption{margin:4pt 0 0!important;padding:0!important}
+html.st-printing .st-steps{padding-top:8pt!important;min-height:0!important}
+html.st-printing .st-scene,html.st-printing .st-scene .st-steps,html.st-printing .st-scene .st-stage{min-height:0!important}
+html.st-printing button,html.st-printing .btn,html.st-printing [class*="btn"],html.st-printing [class*="cta"]{background:none!important;background-color:transparent!important;color:#000!important;border-color:#000!important}
+html.st-printing [style*="position:fixed"],html.st-printing [style*="position: fixed"]{display:none!important}
+
+/* ============================================================
+   v1.3 UI refresh: surface system, dock, bento, step card,
+   spotlight, stage frame, word reveal, beam, ticker
+   ============================================================ */
+:root{
+  --st-radius:14px;--st-radius-sm:10px;
+  --st-hair-c:rgba(90,90,90,.22);
+  --st-glass:var(--surface);
+  --st-shadow:0 10px 40px -12px rgba(16,19,17,.18);
+  --st-ease:cubic-bezier(.2,.8,.2,1);
+  --st-hair:1px solid var(--st-hair-c);
+}
+@supports (color: color-mix(in srgb, red, blue)){
+  :root{--st-hair-c:color-mix(in srgb, var(--ink) 14%, transparent);--st-glass:color-mix(in srgb, var(--surface) 78%, transparent)}
+}
+html[data-theme="dark"]{--st-shadow:0 10px 40px -12px rgba(0,0,0,.45)}
+@media (prefers-color-scheme: dark){html:not([data-theme="light"]){--st-shadow:0 10px 40px -12px rgba(0,0,0,.45)}}
+
+/* ---------- 1. dock ---------- */
+body.st-has-way{padding-bottom:calc(var(--st-way-h,64px) + 22px)}
+.st-way{position:fixed;left:50%;right:auto;bottom:12px;transform:translateX(-50%);
+  width:min(720px,calc(100vw - 24px));border:var(--st-hair);border-top:var(--st-hair);border-radius:999px;
+  background:var(--st-glass);box-shadow:var(--st-shadow);overflow:hidden;z-index:75}
+@supports (backdrop-filter: blur(4px)){.st-way{backdrop-filter:blur(14px) saturate(1.2);-webkit-backdrop-filter:blur(14px) saturate(1.2)}}
+.st-way-seg{position:absolute;top:0;left:16px;right:16px;height:3px;display:flex;gap:3px;padding:0;z-index:1}
+.st-way-seg i{height:3px;border-radius:2px;background:var(--rule-soft);opacity:.55}
+.st-way-seg i.is-done{background:var(--accent);opacity:.4}
+.st-way-seg i.is-now{background:transparent}
+.st-way-lamp{position:absolute;top:0;height:3px;border-radius:2px;background:var(--accent);z-index:2;
+  transition:left .5s var(--st-ease),width .5s var(--st-ease);box-shadow:0 0 12px 1px var(--accent)}
+.st-way-lamp::after{content:"";position:absolute;left:50%;top:2px;width:150%;height:26px;transform:translateX(-50%);
+  background:radial-gradient(60% 100% at 50% 0%,var(--accent),transparent 72%);opacity:.20;pointer-events:none}
+.st-way-row{padding:10px 8px 9px 18px;gap:10px;min-height:44px}
+.st-way-crumb{font-size:.6875rem;letter-spacing:.1em}
+.st-way-btns{gap:4px}
+.st-way a.st-way-btn,.st-way button.st-way-btn{display:inline-flex;align-items:center;gap:6px;border-radius:999px;
+  border:var(--st-hair);background:transparent;padding:7px 12px;transition:transform .18s var(--st-ease),border-color .18s,color .18s,background .18s}
+.st-way a.st-way-btn:hover,.st-way button.st-way-btn:hover{transform:translateY(-1px);border-color:var(--accent);background:var(--accent-wash)}
+.st-way .st-way-btn svg{width:13px;height:13px;flex:0 0 auto;display:block}
+.st-way .st-way-btn .st-way-lab{display:inline}
+@media(max-width:520px){.st-way .st-way-btn .st-way-lab{display:none}.st-way a.st-way-btn,.st-way button.st-way-btn{padding:8px 10px}.st-way-row{padding-left:14px}}
+.st-presenting .st-way,.st-presenting .st-way-lamp{display:none!important}
+
+/* ---------- 2. spotlight ---------- */
+.st-spot{position:relative;isolation:isolate}
+.st-spot::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:0;opacity:0;
+  transition:opacity .3s var(--st-ease);
+  background:radial-gradient(220px circle at var(--mx,50%) var(--my,0%),var(--accent-wash),transparent 72%)}
+@supports (color: color-mix(in srgb, red, blue)){
+  .st-spot::before{background:radial-gradient(220px circle at var(--mx,50%) var(--my,0%),color-mix(in srgb,var(--accent) 12%,transparent),transparent 72%)}
+}
+.st-spot.is-spot::before{opacity:1}
+.st-spot.is-spot{border-color:var(--accent)}
+.st-spot > *{position:relative;z-index:1}
+
+/* ---------- 3. findings bento ---------- */
+.st-findings ol{border:0!important;gap:12px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.st-findings li{border:var(--st-hair)!important;border-radius:var(--st-radius);background:var(--surface);overflow:hidden;
+  transition:transform .22s var(--st-ease),box-shadow .22s var(--st-ease),border-color .22s}
+.st-findings li:hover{box-shadow:var(--st-shadow)}
+.st-findings li.st-bento-lead{grid-column:span 2}
+@media(max-width:900px){.st-findings li.st-bento-lead{grid-column:span 1}}
+.st-findings a{padding:18px 20px 20px;position:relative}
+.st-findings a:hover{background:transparent}
+.st-findings a::before{display:inline-flex;align-items:center;justify-content:center;min-width:26px;height:22px;
+  border:var(--st-hair);border-radius:999px;font-size:.6875rem;color:var(--accent);margin-bottom:12px}
+.st-findings b{font-size:1.2rem}
+.st-find-key{position:absolute;top:16px;right:18px;font-family:var(--font-mono);font-style:normal;font-weight:700;
+  font-size:1.35rem;letter-spacing:-.02em;color:var(--accent);opacity:.9}
+
+/* ---------- 5. stage frame ---------- */
+@media(min-width:801px){
+  .st-stage-inner.st-frame{--fp:min(calc(var(--p,0) * 4),1);
+    border:var(--st-hair);border-radius:var(--st-radius);background:var(--surface);padding:16px 18px;
+    box-shadow:var(--st-shadow);transform-origin:50% 0;will-change:transform;
+    transform:perspective(1200px) rotateX(calc((1 - var(--fp)) * 10deg)) scale(calc(.96 + .04 * var(--fp))) translateY(calc((1 - var(--fp)) * 24px))}
+  .st-stage-inner.st-frame::before{content:"";position:absolute;left:1px;right:1px;top:0;height:1px;
+    background:linear-gradient(90deg,transparent,var(--st-hair-c),transparent);pointer-events:none}
+}
+.st-presenting .st-stage-inner.st-frame,.st-reduced .st-stage-inner.st-frame{transform:none!important;box-shadow:none}
+@media (prefers-reduced-motion: reduce){.st-stage-inner.st-frame{transform:none!important}}
+
+/* ---------- 6. active step card ---------- */
+.st-step{border:1px solid transparent;border-radius:var(--st-radius);padding:22px 24px;
+  transition:opacity .45s ease,background .35s var(--st-ease),border-color .35s var(--st-ease)}
+.st-step.is-active{background:var(--st-glass);border:var(--st-hair)}
+@supports (backdrop-filter: blur(4px)){.st-step.is-active{backdrop-filter:blur(14px) saturate(1.15);-webkit-backdrop-filter:blur(14px) saturate(1.15)}}
+.st-presenting .st-step.is-active{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;padding:28px 30px;background:var(--surface)}
+
+/* ---------- 4. word reveal ---------- */
+.st-w{display:inline-block;opacity:0;transform:translateY(.36em);transition:opacity .5s var(--st-ease),transform .5s var(--st-ease),color .3s linear}
+.st-words.is-in .st-w{opacity:1;transform:none}
+.st-chapter h2.st-words .st-w{opacity:1;transform:none;color:var(--muted)}
+.st-chapter h2.st-words .st-w.is-lit{color:var(--ink)}
+.st-reduced .st-w,.st-printing .st-w{opacity:1!important;transform:none!important;color:inherit!important;transition:none!important}
+@media (prefers-reduced-motion: reduce){.st-w{opacity:1!important;transform:none!important;transition:none!important}}
+
+/* ---------- 7. beam ---------- */
+.st-beam-base{fill:none;stroke:var(--rule-soft);stroke-width:1.5}
+.st-beam-run{fill:none;stroke-width:2.4;stroke-linecap:round}
+
+/* ---------- 8. number ticker ---------- */
+.st-tick{display:inline-flex;align-items:baseline;overflow:hidden;vertical-align:baseline}
+.st-tick-col{display:inline-block;overflow:hidden;height:1em;line-height:1}
+.st-tick-col i{display:block;font-style:normal;transition:transform .9s var(--st-ease)}
+
+/* ---------- 9. surfaces ---------- */
+.st-way-map{background:var(--paper)}
+.st-map-card{border:var(--st-hair);border-radius:var(--st-radius);background:var(--surface)}
+.st-map-card.is-now{border-color:var(--accent)}
+.st-map-card a{border-left:2px solid var(--st-hair-c);border-radius:0 var(--st-radius-sm) var(--st-radius-sm) 0}
+.st-way-map .st-way-btn,.st-map-extra .st-way-btn{border:var(--st-hair);border-radius:999px;transition:transform .18s var(--st-ease),border-color .18s}
+.st-way-map .st-way-btn:hover,.st-map-extra .st-way-btn:hover{transform:translateY(-1px);border-color:var(--accent)}
+.st-gloss-tip{border:var(--st-hair);border-radius:var(--st-radius-sm);background:var(--st-glass);box-shadow:var(--st-shadow)}
+@supports (backdrop-filter: blur(4px)){.st-gloss-tip,.st-notes,.st-present-dots{backdrop-filter:blur(14px) saturate(1.2);-webkit-backdrop-filter:blur(14px) saturate(1.2)}}
+.st-notes{border:var(--st-hair);border-radius:var(--st-radius);background:var(--st-glass);box-shadow:var(--st-shadow)}
+.st-present-dots{border:var(--st-hair);border-radius:999px;background:var(--st-glass);box-shadow:var(--st-shadow);padding:10px 14px}
+.st-present-dots b{transition:background .3s var(--st-ease),transform .3s var(--st-ease)}
+.st-present-dots b.is-on{transform:scale(1.25)}
+.st-present-hint{opacity:.8}
+
+/* ---------- 10. hero background ---------- */
+.st-hero{isolation:isolate}
+.st-hero::before{content:"";position:absolute;inset:-10% -4%;z-index:-2;pointer-events:none;
+  background-image:radial-gradient(var(--st-hair-c) 1px,transparent 1px);background-size:22px 22px;
+  -webkit-mask-image:radial-gradient(70% 60% at 50% 40%,#000,transparent 75%);
+  mask-image:radial-gradient(70% 60% at 50% 40%,#000,transparent 75%)}
+.st-hero::after{content:"";position:absolute;right:6%;top:18%;width:46%;height:56%;z-index:-3;pointer-events:none;
+  background:radial-gradient(closest-side,var(--accent),transparent 70%);opacity:.12;filter:blur(28px);
+  animation:st-aurora 18s ease-in-out infinite alternate}
+@keyframes st-aurora{from{transform:translate3d(-3%,2%,0) scale(1)}to{transform:translate3d(4%,-3%,0) scale(1.08)}}
+.st-reduced .st-hero::after{animation:none}
+@media (prefers-reduced-motion: reduce){.st-hero::after{animation:none}}
+@keyframes st-beam-run{from{stroke-dashoffset:calc(var(--len,200) * 1px)}to{stroke-dashoffset:0}}
+.st-tick-col i span{display:block;height:1em;line-height:1}
+.st-reduced .st-tick-col i{transition:none!important}
+@media (prefers-reduced-motion: reduce){.st-tick-col i{transition:none!important}.st-way-lamp{transition:none}}
+
+/* print handout: neutralise the v1.3 surfaces */
+@media print{
+  .st-hero::before,  .st-hero::after,  .st-way-lamp,  .st-spot::before{display:none!important;content:none!important}
+  .st-stage-inner.st-frame{border:0!important;box-shadow:none!important;padding:0!important;transform:none!important;background:none!important}
+  .st-step,  .st-step.is-active{background:none!important;border:0!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;border-radius:0!important;padding:0 0 9pt!important}
+  .st-findings li{border:.5pt solid #999!important;border-radius:0!important;box-shadow:none!important;background:none!important}
+  .st-findings a::before{border:0!important;min-width:0!important;height:auto!important}
+  .st-find-key{position:static!important;color:#000!important;font-size:10pt!important}
+  .st-w{opacity:1!important;transform:none!important;color:#000!important}
+  .st-beam-run{display:none!important}
+  .st-tick-col{height:auto!important;overflow:visible!important}
+}
+html.st-printing .st-hero::before,html.st-printing .st-hero::after,html.st-printing .st-way-lamp,html.st-printing .st-spot::before{display:none!important;content:none!important}
+html.st-printing .st-stage-inner.st-frame{border:0!important;box-shadow:none!important;padding:0!important;transform:none!important;background:none!important}
+html.st-printing .st-step,html.st-printing .st-step.is-active{background:none!important;border:0!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;border-radius:0!important;padding:0 0 9pt!important}
+html.st-printing .st-findings li{border:.5pt solid #999!important;border-radius:0!important;box-shadow:none!important;background:none!important}
+html.st-printing .st-findings a::before{border:0!important;min-width:0!important;height:auto!important}
+html.st-printing .st-find-key{position:static!important;color:#000!important;font-size:10pt!important}
+html.st-printing .st-w{opacity:1!important;transform:none!important;color:#000!important}
+html.st-printing .st-beam-run{display:none!important}
+html.st-printing .st-tick-col{height:auto!important;overflow:visible!important}
+@media print{.st-tick-col{height:1em!important;overflow:hidden!important}}
+html.st-printing .st-tick-col{height:1em!important;overflow:hidden!important}
+.st-presenting .st-stage-inner.st-frame{border:0!important;background:none!important;padding:0!important;box-shadow:none!important}
+.st-way-map .st-way-btn{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:.6875rem;letter-spacing:.12em;text-transform:uppercase;padding:8px 14px;background:var(--surface);color:var(--ink);text-decoration:none;cursor:pointer;line-height:1.1}
+.st-way-map .st-way-btn:hover,.st-way-map .st-way-btn:focus-visible{color:var(--accent);border-color:var(--accent)}
+
+@media print{
+  [class*="stat"],  [class*="kpi"],  [class*="metric"],  [class*="tile"]{background:none!important;background-color:transparent!important;color:#000!important;border-color:#999!important}
+}
+html.st-printing [class*="stat"],html.st-printing [class*="kpi"],html.st-printing [class*="metric"],html.st-printing [class*="tile"]{background:none!important;background-color:transparent!important;color:#000!important;border-color:#999!important}
+
+/* print tokens must beat page theme blocks (:root[data-theme], prefers-color-scheme) */
+html.st-printing:root,html.st-printing:root[data-theme="dark"],html.st-printing:root[data-theme="light"],html.st-printing:root:not([data-theme="light"]){--paper:#fff;--surface:#fff;--surface-2:#fff;--ink:#000;--ink-2:#1a1a1a;--muted:#444;--rule:#000;--rule-soft:#b8b8b8;--accent:#000;--accent-2:#000;--accent-ink:#fff;--accent-wash:#fff;--warn:#000;--warn-wash:#fff;background:#fff;color:#000}
+@media print{:root,:root[data-theme="dark"],:root[data-theme="light"],:root:not([data-theme="light"]){--paper:#fff;--surface:#fff;--surface-2:#fff;--ink:#000;--ink-2:#1a1a1a;--muted:#444;--rule:#000;--rule-soft:#b8b8b8;--accent:#000;--accent-2:#000;--accent-ink:#fff;--accent-wash:#fff;--warn:#000;--warn-wash:#fff;background:#fff;color:#000}}
 /*STORY_CSS_END*/</style>
 <script id="rs-theme-init">try{var t=localStorage.getItem("pc-theme")||localStorage.getItem("ehs-ai-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t);}catch(e){}</script><style id="rs-header-css">
 .rs-header{
@@ -669,7 +1033,7 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
 </section>
 
 <!-- ================= chapter 1 ================= -->
-<section class="st-chapter" id="scene-1" data-num="01" data-orb="searching" data-orb-label="Chapter one: reading the whole panel">
+<section class="st-chapter" id="scene-1" data-key="96.68%" data-num="01" data-orb="searching" data-orb-label="Chapter one: reading the whole panel">
   <h2 class="display" id="h1-1">2% of filings carry 97% of the hours</h2>
   <p>57,857 filings in the public OSHA panel cannot be true, and almost every reported hour sits inside them. A rate built on the raw panel is a rate about those rows.</p>
 </section>
@@ -690,17 +1054,17 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
       </div></div>
       <div class="st-steps">
         <span class="st-scene-rail" aria-hidden="true"></span>
-        <div class="st-step" data-step="dots-all" data-orb="searching">
+        <div class="st-step" data-step="dots-all" data-note="Everything on this page comes from the full public panel, not a sample we picked. Nine years, every filer who had to report. Hold that in mind, because the next slide is about a very small slice of it." data-orb="searching">
           <span class="label">Scene 01 / step 1</span>
           <h3>2,801,064 filings, nine years, not a sample</h3>
           <p>2,801,064 establishment-year filings from 2016 through 2024, after 4,703 duplicate rows were dropped. Each dot stands for about 2,800 of them. This is the whole public Injury Tracking Application panel.</p>
         </div>
-        <div class="st-step" data-step="dots-flag" data-orb="solving">
+        <div class="st-step" data-step="dots-flag" data-note="Two percent is the kind of number most of us would wave off in a data review. Watch what happens when we ask what those rows are carrying." data-orb="solving">
           <span class="label">Scene 01 / step 2</span>
           <h3>57,857 of them cannot be true</h3>
           <p>57,857 filings, 2.07% of the panel, fail an arithmetic screen: hours worked divided by average employees has to land between 120 and 4,500 a year, hours and employees have to be present, counts cannot be negative. By count that is a rounding error.</p>
         </div>
-        <div class="st-step" data-step="dots-hours" data-orb="wrong">
+        <div class="st-step" data-step="dots-hours" data-note="This is the whole problem in one picture. Ask your team tonight: whose payroll export is filling that box, and does anyone check it before it goes out the door?" data-orb="wrong">
           <span class="label">Scene 01 / step 3</span>
           <h3>Those 57,857 filings hold 96.68% of the hours</h3>
           <p>One failure mode does it: 24,617 filings report more than 4,500 hours per employee and carry 96.65% of all hours. Someone put a company's payroll hours in the box meant for one site. Quote a rate off the raw panel and you are quoting those rows.</p>
@@ -711,7 +1075,7 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
 </section>
 
 <!-- ================= chapter 2 ================= -->
-<section class="st-chapter" id="scene-2" data-num="02" data-orb="working" data-orb-label="Chapter two: what the bad rows do to the rate">
+<section class="st-chapter" id="scene-2" data-key="249x" data-num="02" data-orb="working" data-orb-label="Chapter two: what the bad rows do to the rate">
   <h2 class="display" id="h1-2">In 2019 the screen moves TRIR by a factor of 249</h2>
   <p>The same filings give 0.016 unscreened and 4.02 screened. The low answer is the one that looks like a record year on a slide.</p>
 </section>
@@ -732,22 +1096,22 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
       </div></div>
       <div class="st-steps">
         <span class="st-scene-rail" aria-hidden="true"></span>
-        <div class="st-step" data-step="line-screen" data-orb="working">
+        <div class="st-step" data-step="line-screen" data-note="This is the line you would be comfortable presenting. It is steady, it is boring, and it is the one that is actually about your sites." data-orb="working">
           <span class="label">Scene 02 / step 1</span>
           <h3>Screened, TRIR runs 3.15 to 4.60</h3>
           <p>Aggregate TRIR on filings that pass the screen stays between 3.15 and 4.60 across the nine years, pooled at 3.98. That is the kind of series you would put on a slide.</p>
         </div>
-        <div class="st-step" data-step="line-raw" data-orb="working">
+        <div class="st-step" data-step="line-raw" data-note="Same filings, same math, one screen removed. If you have ever been handed a rate that looked too good, this is the shape that hands it to you." data-orb="working">
           <span class="label">Scene 02 / step 2</span>
           <h3>Unscreened, the pooled rate is 0.13</h3>
           <p>The same filings with no screen give a pooled TRIR of 0.13, a thirtyfold difference. The shaded gap is not an adjustment or a modelling choice. It is hours that do not exist inflating a denominator.</p>
         </div>
-        <div class="st-step" data-step="line-2019" data-orb="wrong">
+        <div class="st-step" data-step="line-2019" data-note="A factor of 249 does not show up as a spike or an error message. It shows up as a great year. That is what makes it dangerous." data-orb="wrong">
           <span class="label">Scene 02 / step 3</span>
           <h3>2019 reads 0.016 instead of 4.02</h3>
           <p>In 2019, 99.60% of all reported hours sat in flagged filings, so unscreened TRIR reads 0.016 against 4.02 screened. The correction factor is 249x, and 2024 is next worst at 13.0x. Neither year announces itself; both look like record years.</p>
         </div>
-        <div class="st-step" data-step="line-sens" data-orb="solving">
+        <div class="st-step" data-step="line-sens" data-note="Somebody always asks whether we picked the bounds to get the answer. We swept them. Ask me after and I will walk you through the twenty five variants." data-orb="solving">
           <span class="label">Scene 02 / step 4</span>
           <h3>Move the bounds 25 ways and the answer moves 0.03</h3>
           <p>The 120 to 4,500 bounds are a judgement call, so the pipeline sweeps 25 variants. Corrected pooled TRIR moves only between 3.963 and 3.993 while the flagged share moves between 1.79% and 4.49%. Where you draw the line changes who gets excluded, not the answer.</p>
@@ -758,7 +1122,7 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
 </section>
 
 <!-- ================= chapter 3 ================= -->
-<section class="st-chapter" id="scene-3" data-num="03" data-orb="connecting" data-orb-label="Chapter three: following the same sites across years">
+<section class="st-chapter" id="scene-3" data-key="27.2%" data-num="03" data-orb="connecting" data-orb-label="Chapter three: following the same sites across years">
   <h2 class="display" id="h1-3">A flagged site is flagged again 27% of the time</h2>
   <p>Clean sites fail at 0.95%. Bad hours belong to the filer, so an entry rule at a few hundred sites beats an annual cleanup.</p>
 </section>
@@ -779,17 +1143,17 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
       </div></div>
       <div class="st-steps">
         <span class="st-scene-rail" aria-hidden="true"></span>
-        <div class="st-step" data-step="flow-setup" data-orb="connecting">
+        <div class="st-step" data-step="flow-setup" data-note="Here is the question that decides what you do Monday. Is this sloppy typing everywhere, or is it the same handful of sites every year? Those two answers need completely different fixes." data-orb="connecting">
           <span class="label">Scene 03 / step 1</span>
           <h3>1,436,479 site-year pairs separate typos from filers</h3>
           <p>If implausible hours are independent keying errors, a flag this year says nothing about next year. If certain establishments misreport systematically, the flags cluster. 1,436,479 establishment-year pairs, each restricted to sites that filed in both years, tell the two apart.</p>
         </div>
-        <div class="st-step" data-step="flow-top" data-orb="connecting">
+        <div class="st-step" data-step="flow-top" data-note="Hold off judging that number until you see what a clean site does. On its own it means nothing." data-orb="connecting">
           <span class="label">Scene 03 / step 2</span>
           <h3>Flagged once, flagged again 27.2% of the time</h3>
           <p>5,776 of 21,243 flagged establishment-years were flagged again the following year. Hold that number against the base rate in the next step.</p>
         </div>
-        <div class="st-step" data-step="flow-both" data-orb="grounded">
+        <div class="st-step" data-step="flow-both" data-note="That gap is the finding. Bad hours belong to a filer, not to a keyboard, which means a validation rule at entry beats a cleanup every December. The kappa line is there so nobody oversells it." data-orb="grounded">
           <span class="label">Scene 03 / step 3</span>
           <h3>Clean sites fail at 0.95%, an odds ratio of 39.1</h3>
           <p>13,394 of 1,415,236 clean establishment-years were flagged the next year. That is an odds ratio of 39.1 with Cohen's kappa 0.276, and all eight year pairs land between 24.7 and 63.1. Kappa 0.28 is the honest half: most flags in a given year are still one-offs, so fixing the repeat filers fixes the hours, not every flag.</p>
@@ -800,7 +1164,7 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
 </section>
 
 <!-- ================= chapter 4 ================= -->
-<section class="st-chapter" id="scene-4" data-num="04" data-orb="solving" data-orb-label="Chapter four: testing the result against chance">
+<section class="st-chapter" id="scene-4" data-key="39.1" data-num="04" data-orb="solving" data-orb-label="Chapter four: testing the result against chance">
   <h2 class="display" id="h1-4">Chance gives an odds ratio of 1.01, the panel gives 39.1</h2>
   <p>200 random reshuffles of the flags never came within a factor of 35 of the observed value. The clustering is real.</p>
 </section>
@@ -821,17 +1185,17 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
       </div></div>
       <div class="st-steps">
         <span class="st-scene-rail" aria-hidden="true"></span>
-        <div class="st-step" data-step="null-build" data-orb="working">
+        <div class="st-step" data-step="null-build" data-note="We did not want to argue about this, so we built the sceptic's version and ran it. Random typing, flag counts held the same, two hundred times." data-orb="working">
           <span class="label">Scene 04 / step 1</span>
           <h3>200 reshuffles test the typo explanation</h3>
           <p>Hold each year's count of flagged filings fixed, scatter those flags at random among that year's filers, and recompute the pooled persistence odds ratio. 200 draws, seed 20260909. That is the typo hypothesis made explicit.</p>
         </div>
-        <div class="st-step" data-step="null-band" data-orb="solving">
+        <div class="st-step" data-step="null-band" data-note="Chance lands right where it should if flags were independent. Note that we show the interval the file reports rather than drawing a histogram we do not have." data-orb="solving">
           <span class="label">Scene 04 / step 2</span>
           <h3>Chance answers 1.012</h3>
           <p>The permutation mean is 1.012 with a 95% interval of 0.924 to 1.092, centred where it should be if flags were independent year to year. The 200 individual draws are not stored in the repository, so this figure shows the interval the file reports rather than a fabricated histogram.</p>
         </div>
-        <div class="st-step" data-step="null-obs" data-orb="grounded">
+        <div class="st-step" data-step="null-obs" data-note="This is not a close call that needs a p-value to survive. And because it is a property of certain filers, it is something you can actually fix." data-orb="grounded">
           <span class="label">Scene 04 / step 3</span>
           <h3>The panel answers 39.1, and 0 of 200 reshuffles reached it</h3>
           <p>39.1 against a null of 1.012 is a different order of magnitude, not a borderline result that needs a p-value convention to survive. Bad hours are a property of certain filers, not of keyboards. That makes them fixable at the point of entry.</p>
@@ -842,7 +1206,7 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
 </section>
 
 <!-- ================= chapter 5 ================= -->
-<section class="st-chapter" id="scene-5" data-num="05" data-orb="wrong" data-orb-label="Chapter five: the distribution behind the control chart">
+<section class="st-chapter" id="scene-5" data-key="0 of 30" data-num="05" data-orb="wrong" data-orb-label="Chapter five: the distribution behind the control chart">
   <h2 class="display" id="h1-5">Poisson wins 0 of 30 industries</h2>
   <p>Control limits on injury counts assume Poisson. On this panel the assumption fails in every large industry tested, so the limits come out too tight.</p>
 </section>
@@ -863,17 +1227,17 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
       </div></div>
       <div class="st-steps">
         <span class="st-scene-rail" aria-hidden="true"></span>
-        <div class="st-step" data-step="bars-intercept" data-orb="working">
+        <div class="st-step" data-step="bars-intercept" data-note="This one is about your control charts. Nearly every run chart in our industry assumes Poisson without saying so out loud." data-orb="working">
           <span class="label">Scene 05 / step 1</span>
           <h3>Poisson wins 0 of 30 industries</h3>
           <p>2024 recordable counts in the 30 largest three-digit NAICS groups with at least 500 screened establishments, fitted with Poisson, negative binomial and the zero-inflated version of each, compared on AIC. Intercept-only, NB2 and ZINB split the 30 evenly at 15 each. Poisson takes none.</p>
         </div>
-        <div class="st-step" data-step="bars-cov" data-orb="solving">
+        <div class="st-step" data-step="bars-cov" data-note="Adding real structure to the model helps, but the spread does not go away. The assumption is still wrong in every industry we tested." data-orb="solving">
           <span class="label">Scene 05 / step 2</span>
           <h3>With structure in the mean, NB2 wins 20 of 30</h3>
           <p>Add size-band and four-digit sub-industry fixed effects with a log-hours offset and NB2 wins 20, ZINB 10: part of the apparent excess zeros was mean heterogeneity. Overdispersion does not move. NB2 beats Poisson in all 30 industries at a boundary-corrected p below 0.001, median dispersion 0.785.</p>
         </div>
-        <div class="st-step" data-step="bars-why" data-orb="grounded">
+        <div class="st-step" data-step="bars-why" data-note="So the practical harm is false alarms. Someone gets a corrective action for a quarter that was ordinary variance. Before you act on a signal, check the distribution it came from." data-orb="grounded">
           <span class="label">Scene 05 / step 3</span>
           <h3>Poisson control limits are too tight in all 30</h3>
           <p>Control charts, run charts and significance tests on injury counts are usually built on a Poisson assumption that holds in none of these 30 industries. Median dispersion is 0.785, so the limits come out too tight and sites get flagged for a quarter that was ordinary variance. Check the distribution before you act on a signal.</p>
@@ -888,27 +1252,27 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
   <div class="wrap">
     <div class="rail-head"><span class="rail-num">06</span><h2 class="display" id="h1-6">What this does not establish</h2></div>
     <div class="honest">
-      <div class="hcard">
+      <div class="hcard" data-st-spotlight>
         <h3>The screen excludes, it does not repair</h3>
         <p>Failing filings are dropped from aggregates because the true hours cannot be recovered from the filing alone. The persistence result suggests per-establishment repair might be possible; no repair has been attempted or validated.</p>
       </div>
-      <div class="hcard">
+      <div class="hcard" data-st-spotlight>
         <h3>The establishment key is a location, not a company</h3>
         <p>313,527 of 1,238,236 establishment IDs (25.3%) appear with more than one EIN across years, and 108,855 (8.8%) with more than one company name. State is stable for 99.7% of IDs. The panel result reads as a property of physical sites and their filing practice, not of corporate entities.</p>
       </div>
-      <div class="hcard">
+      <div class="hcard" data-st-spotlight>
         <h3>Nothing here is causal</h3>
         <p>Size-band and sub-industry coefficients are descriptive contrasts inside a screened administrative panel. Excess zeros cannot be split between incident-free operation and under-recording; the model measures the excess, not its source.</p>
       </div>
-      <div class="hcard">
+      <div class="hcard" data-st-spotlight>
         <h3>The BLS comparison was not made</h3>
         <p>The intended chart against the BLS SOII published rate is missing. The BLS series catalog returned HTTP 403 from this machine, so no series ID could be confirmed, and no published rate was typed in from memory. The attempt is logged in data/bls/PROVENANCE.txt.</p>
       </div>
-      <div class="hcard">
+      <div class="hcard" data-st-spotlight>
         <h3>Coverage is filers, not industry</h3>
         <p>The ITA panel covers establishments required to submit electronically: larger, and in higher-hazard industries. The 30 fitted NAICS groups were chosen on size alone and are a statement about large industries, not about every industry.</p>
       </div>
-      <div class="hcard">
+      <div class="hcard" data-st-spotlight>
         <h3>The day-count fields are unscreened</h3>
         <p>The screen acts on hours and employees only. Severity rates stay exposed to mistyped day totals; the swings in screened severity in 2022 and 2024 are a reason to build a day-count screen, not a finding about injuries.</p>
       </div>
@@ -926,7 +1290,7 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
         <p>Take the establishment-year rows behind your last TRIR number. Divide hours worked by average employees. Anything outside 120 to 4,500 is not a data-quality footnote, it is a filing you cannot compute a rate from. Count how many there are, then count what share of your total hours they carry. If those two numbers disagree the way they do here, the rate you presented was about the bad rows.</p>
         <p>Then check whether the same sites fail twice. If they do, the fix is a validation rule at entry and a conversation with whoever owns that site's payroll export, not an annual data cleanup.</p>
       </div>
-      <div class="mon-side">
+      <div class="mon-side" data-st-spotlight>
         <span class="label">Do it against this repository</span>
         <pre class="mon-pre"><code>python scripts/download_data.py
 python scripts/run_analysis.py
@@ -940,7 +1304,7 @@ python3 -m ehs_osha.panel</code></pre>
 <nav class="prog" aria-labelledby="prog-h">
   <div class="wrap wrap-wide">
     <h2 class="sr-only" id="prog-h">Where to go next</h2>
-    <a class="next-card" href="https://priyatham9.github.io/ehs-ai-grounding-eval/story.html">
+    <a class="next-card" data-st-spotlight href="https://priyatham9.github.io/ehs-ai-grounding-eval/story.html">
       <span>
         <span class="next-tag">Next story &middot; 3 of 7</span>
         <span class="next-name">The adjacent clause</span>
@@ -985,7 +1349,10 @@ python3 -m ehs_osha.panel</code></pre>
   // ?reduced=1 forces the reduced-motion path so it can be tested without changing OS settings
   var forceReduced = /[?&]reduced=1/.test(location.search);
   if (forceReduced) document.documentElement.classList.add("st-reduced");
-  function reduced() { return forceReduced || !!(mqReduce && mqReduce.matches); }
+  // while a handout is being prepared every tween and spring lands immediately,
+  // so the paper shows the final state of each figure
+  var printing = false;
+  function reduced() { return forceReduced || printing || !!(mqReduce && mqReduce.matches); }
   function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
   function lerp(a, b, t) { return a + (b - a) * t; }
   function isEl(x) { return x && x.nodeType === 1; }
@@ -1220,7 +1587,15 @@ python3 -m ehs_osha.panel</code></pre>
         if (grp) s = s.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         n.textContent = pre + s + post;
       }
-      var run = function () { tween(opts.from == null ? 0 : opts.from, target, function (v) { paint(v); }, { duration: opts.duration || 1100 }); };
+      // data-st-ticker: digits roll into place instead of counting by value
+      var isTick = opts.ticker || (n.hasAttribute && n.hasAttribute("data-st-ticker"));
+      var run = isTick
+        ? function () {
+          var s = Math.abs(target) >= 1000 && dec === 0 ? Math.round(target).toString() : target.toFixed(dec);
+          if (grp) s = s.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          tickerPaint(n, pre + s + post, !reduced());
+        }
+        : function () { tween(opts.from == null ? 0 : opts.from, target, function (v) { paint(v); }, { duration: opts.duration || 1100 }); };
       if (opts.now) run(); else inView(n, run, { once: true });
     });
   }
@@ -1647,10 +2022,16 @@ python3 -m ehs_osha.panel</code></pre>
       }
     }
 
-    // reduced motion: one static, representative frame, no loop
+    // reduced motion: one calm, static frame. Most states have a moment in their
+    // cycle that reads as broken glass when frozen, so only wrong and the two
+    // lattice states keep their own shape; everything else rests as breathing.
     function renderStatic() {
       blend = 1;
-      paint(state === "solving" ? 1.05 : 1.2);
+      var realState = state, realFrom = fromState;
+      if (state !== "wrong" && state !== "grounded" && state !== "resolved") { state = "breathing"; }
+      fromState = state;
+      paint(1.2);
+      state = realState; fromState = realFrom;
     }
 
     function step(dt) {
@@ -1952,6 +2333,19 @@ python3 -m ehs_osha.panel</code></pre>
       });
     }
 
+    /* stage frame: the figure sits on a lifted card that eases flat as the
+       scene enters. Skipped when the page already draws its own box. */
+    if (inner && stage && opts.frame !== false && stage.getAttribute("data-st-frame") !== "off"
+      && inner.getAttribute("data-st-frame") !== "off" && !reduced()
+      && !(global.matchMedia && matchMedia("(max-width:800px)").matches)) {
+      var boxed = Array.prototype.slice.call(inner.children).some(function (n) {
+        if (n.classList && (n.classList.contains("st-field") || n.classList.contains("st-companion"))) return false;
+        var cs = getComputedStyle(n);
+        return cs.borderTopStyle !== "none" && parseFloat(cs.borderTopWidth) > 0;
+      });
+      if (!boxed) inner.classList.add("st-frame");
+    }
+
     // layered stage children driven by [data-show="0 1 2"]
     var layers = inner ? els("[data-show]", inner).filter(function (n) { return n.parentNode === inner; }) : [];
     if (layers.length && inner) inner.classList.add("st-layers");
@@ -1990,7 +2384,8 @@ python3 -m ehs_osha.panel</code></pre>
         // pick the entry closest to the middle band of the viewport
         var best = null, bestD = Infinity;
         es.forEach(function (e) { if (e.isIntersecting) { var d = Math.abs(e.boundingClientRect.top + e.boundingClientRect.height / 2 - innerHeight * bandMid); if (d < bestD) { bestD = d; best = e; } } });
-        if (best && !presentState) setActive(steps.indexOf(best.target));
+        // presenter mode and the print handout drive steps directly; scroll must not fight them
+        if (best && !presentState && !printing) setActive(steps.indexOf(best.target));
       }, { rootMargin: narrow ? "-56% 0px -24% 0px" : "-45% 0px -45% 0px", threshold: 0 });
       steps.forEach(function (s) { ioStep.observe(s); });
     } else { steps.forEach(function (s) { s.classList.add("is-entered"); }); setActive(0); }
@@ -2855,19 +3250,58 @@ python3 -m ehs_osha.panel</code></pre>
       document.body.appendChild(dots);
     }
     var hint = html("div", "st-present-hint");
-    hint.textContent = "arrows step  ·  esc exits";
+    hint.textContent = "arrows step  ·  N notes  ·  esc exits";
     document.body.appendChild(hint);
+
+    /* ---- speaker notes: data-note on a step (or its chapter) ---- */
+    var notesOn = false;
+    try { notesOn = sessionStorage.getItem("st-notes") === "1"; } catch (e) { }
+    if (/[?&]notes=1/.test(location.search)) notesOn = true;
+    var noteBox = html("div", "st-notes");
+    noteBox.setAttribute("aria-live", "polite");
+    var noteLab = html("div", "st-notes-lab", noteBox);
+    noteLab.textContent = "SAY";
+    var noteBody = html("div", "st-notes-body", noteBox);
+    noteBox.hidden = true;
+    document.body.appendChild(noteBox);
+    function noteText(node) {
+      if (!node || !node.getAttribute) return "";
+      var n = node.getAttribute("data-note");
+      if (!n && node.closest) { var c = node.closest("[data-note]"); if (c) n = c.getAttribute("data-note"); }
+      return (n || "").trim();
+    }
+    function paintNote() {
+      var node = steps[i], txt = noteText(node);
+      noteBody.textContent = txt;
+      noteBox.hidden = !(notesOn && txt);
+      // keep the card off the figure: it sits on the steps column side
+      var sc = node && node.closest ? node.closest(".st-scene") : null;
+      var figureRight = !!(sc && sc.getAttribute("data-side") === "left");
+      noteBox.classList.toggle("st-notes-right", !figureRight);
+    }
+    function toggleNotes() {
+      notesOn = !notesOn;
+      try { sessionStorage.setItem("st-notes", notesOn ? "1" : "0"); } catch (e) { }
+      paintNote();
+    }
     function go(n) {
       i = clamp(n, 0, steps.length - 1);
       if (dots) Array.prototype.forEach.call(dots.children, function (b, j) { b.classList.toggle("is-on", j === i); });
       // instant jump: the figure still animates, and a smooth scroll can stall between steps on some displays
       if (steps[i]) { var r = steps[i].getBoundingClientRect(); global.scrollTo({ top: r.top + global.pageYOffset - (global.innerHeight - r.height) / 2, behavior: "instant" }); }
       if (steps[i] && steps[i].__stActivate) { var cur = steps[i]; cur.__stActivate(); setTimeout(function () { if (steps[i] === cur) cur.__stActivate(); }, 150); }
+      paintNote();
       if (opts.onStep) opts.onStep(i, steps[i]);
     }
     function key(e) {
       // capture phase + stop: pages may carry their own arrow handlers, the presenter must be the only one acting
       if (e.key === "Escape") { e.stopImmediatePropagation(); exit(); return; }
+      if (e.key === "n" || e.key === "N") {
+        var t = e.target;
+        if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable)) return;
+        if (e.metaKey || e.ctrlKey || e.altKey) return;
+        e.preventDefault(); e.stopImmediatePropagation(); toggleNotes(); return;
+      }
       if (e.key === "ArrowRight" || e.key === "ArrowDown" || e.key === " " || e.key === "PageDown") { e.preventDefault(); e.stopImmediatePropagation(); go(i + 1); }
       else if (e.key === "ArrowLeft" || e.key === "ArrowUp" || e.key === "PageUp") { e.preventDefault(); e.stopImmediatePropagation(); go(i - 1); }
     }
@@ -2877,12 +3311,17 @@ python3 -m ehs_osha.panel</code></pre>
       removeEventListener("keydown", key, true);
       if (dots) dots.remove();
       hint.remove();
+      noteBox.remove();
       presentState = null;
       if (opts.onExit) opts.onExit();
     }
     addEventListener("keydown", key, true);
     go(0);
-    presentState = { go: go, exit: exit, get index() { return i; }, steps: steps };
+    paintNote();
+    presentState = {
+      go: go, exit: exit, get index() { return i; }, steps: steps,
+      get notes() { return notesOn; }, toggleNotes: toggleNotes
+    };
     return presentState;
   }
   function autoPresent(opts) {
@@ -3040,36 +3479,81 @@ python3 -m ehs_osha.panel</code></pre>
     ttl.textContent = " · " + here.title + (door !== "story" ? " · " + DOOR_LABEL[door] : "");
 
     var btns = html("div", "st-way-btns", row);
-    function link(text, target, rel) {
+    // inline icons, drawn once per button (no icon font, no sprite sheet)
+    var ICON = {
+      prev: "M14.5 5 L8 12 L14.5 19",
+      next: "M9.5 5 L16 12 L9.5 19",
+      map: "M4 4h6v6H4z M14 4h6v6h-6z M4 14h6v6H4z M14 14h6v6h-6z",
+      play: "M7 4.5 L19 12 L7 19.5 Z"
+    };
+    function deco(node, name, text) {
+      var svg = mk("svg", { viewBox: "0 0 24 24", "aria-hidden": "true", fill: "none" });
+      mk("path", {
+        d: ICON[name], stroke: "currentColor", "stroke-width": 2,
+        "stroke-linecap": "round", "stroke-linejoin": "round",
+        fill: name === "play" || name === "map" ? "currentColor" : "none"
+      }, svg);
+      var lab = html("span", "st-way-lab");
+      lab.textContent = text;
+      if (name === "next") { node.appendChild(lab); node.appendChild(svg); }
+      else { node.appendChild(svg); node.appendChild(lab); }
+      if (!node.getAttribute("aria-label")) node.setAttribute("aria-label", text);
+      return node;
+    }
+    function link(text, target, rel, icon) {
       var a = document.createElement("a");
       a.className = "st-way-btn";
-      a.textContent = text;
+      deco(a, icon, text);
       if (target) { a.href = U(target.url); a.title = target.title; if (rel) a.rel = rel; }
       else a.setAttribute("aria-disabled", "true");
       btns.appendChild(a);
       return a;
     }
-    link("← Prev", idx > 0 ? WAY.path[idx - 1] : null, "prev");
+    var prevBtn = link("Prev", idx > 0 ? WAY.path[idx - 1] : null, "prev", "prev");
     var mapBtn = document.createElement("button");
     mapBtn.type = "button"; mapBtn.className = "st-way-btn";
-    mapBtn.textContent = "Map (M)";
+    deco(mapBtn, "map", "Map");
+    mapBtn.title = "Site map (M)";
     mapBtn.setAttribute("aria-expanded", "false");
     btns.appendChild(mapBtn);
     if (document.querySelector(".st-step")) {
       var prBtn = document.createElement("button");
-      prBtn.type = "button"; prBtn.className = "st-way-btn st-way-present"; prBtn.textContent = "Present (P)";
+      prBtn.type = "button"; prBtn.className = "st-way-btn st-way-present";
+      deco(prBtn, "play", "Present");
+      prBtn.title = "Presenter mode (P)";
       prBtn.addEventListener("click", function () { if (presentState) presentState.exit(); else present(); });
       btns.appendChild(prBtn);
     }
-    link("Next →", idx < WAY.path.length - 1 ? WAY.path[idx + 1] : WAY.end, "next");
+    var nextBtn = link("Next", idx < WAY.path.length - 1 ? WAY.path[idx + 1] : WAY.end, "next", "next");
     document.body.appendChild(bar);
     document.body.classList.add("st-has-way");
 
+    /* the lit segment: a short glowing bar that slides along the progress row */
+    var lamp = html("i", "st-way-lamp", bar);
+    function lampTo(n) {
+      var s = seg.children[clamp(n, 0, seg.children.length - 1)];
+      if (!s) return;
+      var br = bar.getBoundingClientRect(), r = s.getBoundingClientRect();
+      if (!br.width) return;
+      lamp.style.left = (r.left - br.left).toFixed(1) + "px";
+      lamp.style.width = r.width.toFixed(1) + "px";
+    }
     function measure() {
-      document.documentElement.style.setProperty("--st-way-h", Math.round(bar.getBoundingClientRect().height || 60) + "px");
+      document.documentElement.style.setProperty("--st-way-h", Math.round(bar.getBoundingClientRect().height || 64) + "px");
+      lampTo(idx);
     }
     measure();
     addEventListener("resize", measure);
+    // hovering Prev or Next previews where the light would move
+    function peek(btn, to) {
+      if (!btn) return;
+      btn.addEventListener("pointerenter", function () { lampTo(to); });
+      btn.addEventListener("focus", function () { lampTo(to); });
+      btn.addEventListener("pointerleave", function () { lampTo(idx); });
+      btn.addEventListener("blur", function () { lampTo(idx); });
+    }
+    peek(prevBtn, idx - 1);
+    peek(nextBtn, idx + 1);
 
     /* ---- map overlay ---- */
     var map = html("div", "st-way-map");
@@ -3140,6 +3624,11 @@ python3 -m ehs_osha.panel</code></pre>
     card(WAY.hub);
     WAY.projects.forEach(card);
     var extra = html("div", "st-map-extra", map);
+    var printBtn = document.createElement("button");
+    printBtn.type = "button"; printBtn.className = "st-way-btn st-way-print";
+    printBtn.textContent = "Print handout";
+    printBtn.addEventListener("click", function () { close(); setTimeout(printHandout, 120); });
+    extra.appendChild(printBtn);
     WAY.extras.forEach(function (e) {
       var a = document.createElement("a");
       a.className = "st-way-btn"; a.href = U(e.url); a.textContent = e.label;
@@ -3220,16 +3709,444 @@ python3 -m ehs_osha.panel</code></pre>
     nav.setAttribute("aria-label", "Findings in this story");
     var h = html("div", "st-findings-h", nav); h.textContent = "The findings, in order";
     var ol = html("ol", "", nav);
-    ch.forEach(function (c) {
+    ch.forEach(function (c, i) {
       var t = c.querySelector("h2,.st-chapter-title"), p = c.querySelector("p");
       var li = html("li", "", ol), a = html("a", "", li);
       a.href = "#" + c.id;
       var b = html("b", "", a); b.textContent = t ? t.textContent : "";
       if (p) { var sp = html("span", "", a); sp.textContent = p.textContent; }
+      // optional headline number for the card, e.g. data-key="249x"
+      var kk = c.getAttribute("data-key");
+      if (kk) { var em = html("em", "st-find-key", a); em.textContent = kk; }
+      // bento: the first card is wide when there are five or six findings
+      if (i === 0 && ch.length >= 5 && ch.length <= 6) li.classList.add("st-bento-lead");
     });
     ch[0].parentNode.insertBefore(nav, ch[0]);
   }
-  function boot() { autoChapters(); autoFindings(); autoWayfinder(); }
+  /* ---------------------------------------------------------
+     8b2. surface components: spotlight, word reveal, beam, ticker
+     --------------------------------------------------------- */
+
+  /* Story.spotlight(rootOrSelector, selector?)
+     Pointer-following accent wash inside cards. One listener per root. */
+  var SPOT_SEL = ".st-findings li,.st-card,[data-st-spotlight],.doors > *,.st-map-card";
+  function spotlight(root, sel) {
+    var host = root == null ? document : (isEl(root) || root.nodeType === 9 ? root : el(root));
+    if (!host) return;
+    sel = sel || SPOT_SEL;
+    els(sel, host.nodeType === 9 ? document : host).forEach(function (n) { n.classList.add("st-spot"); });
+    if (host.__stSpot) return;
+    host.__stSpot = 1;
+    if (reduced()) return;                       // static hairline only
+    var pending = 0, cur = null;
+    host.addEventListener("pointermove", function (e) {
+      if (e.pointerType === "touch") return;
+      var c = e.target && e.target.closest ? e.target.closest(".st-spot") : null;
+      if (cur && cur !== c) { cur.classList.remove("is-spot"); cur = null; }
+      if (!c) return;
+      cur = c;
+      if (pending) return;
+      var cx = e.clientX, cy = e.clientY;
+      pending = requestAnimationFrame(function () {
+        pending = 0;
+        var r = c.getBoundingClientRect();
+        if (!r.width) return;
+        c.style.setProperty("--mx", ((cx - r.left) / r.width * 100).toFixed(1) + "%");
+        c.style.setProperty("--my", ((cy - r.top) / r.height * 100).toFixed(1) + "%");
+        c.classList.add("is-spot");
+      });
+    }, { passive: true });
+    host.addEventListener("pointerleave", function () { if (cur) { cur.classList.remove("is-spot"); cur = null; } }, { passive: true });
+  }
+
+  /* Story.words(el) - split into word spans that fade in on entry.
+     Element children (an annotated term, say) travel as one word. */
+  function words(node) {
+    node = isEl(node) ? node : el(node);
+    if (!node || node.__stWords) return null;
+    var full = (node.textContent || "").replace(/\s+/g, " ").trim();
+    if (!full || full.length > 400) return null;
+    node.__stWords = 1;
+    var kids = Array.prototype.slice.call(node.childNodes);
+    var frag = document.createDocumentFragment(), k = 0;
+    function wordSpan() {
+      var s = document.createElement("span");
+      s.className = "st-w";
+      s.setAttribute("aria-hidden", "true");
+      s.style.transitionDelay = Math.min(k * 28, 700) + "ms";   // long paragraphs never crawl
+      s.style.setProperty("--i", k);
+      k++;
+      return s;
+    }
+    kids.forEach(function (n) {
+      if (n.nodeType === 3) {
+        n.nodeValue.split(/(\s+)/).forEach(function (p) {
+          if (!p) return;
+          if (/^\s+$/.test(p)) { frag.appendChild(document.createTextNode(" ")); return; }
+          var s = wordSpan(); s.textContent = p; frag.appendChild(s);
+        });
+      } else {
+        var w = wordSpan(); w.appendChild(n); frag.appendChild(w);
+      }
+    });
+    while (node.firstChild) node.removeChild(node.firstChild);
+    node.appendChild(frag);
+    node.classList.add("st-words");
+    if (!node.getAttribute("aria-label")) node.setAttribute("aria-label", full);
+    var ws = els(".st-w", node);
+    inView(node, function () { node.classList.add("is-in"); }, { once: true, margin: "0px 0px -8% 0px" });
+    if (/^H[1-3]$/.test(node.tagName) && node.closest(".st-chapter") && !reduced()) litOnScroll(node, ws);
+    return ws;
+  }
+  // heading words brighten as the heading crosses the middle of the viewport
+  function litOnScroll(node, ws) {
+    var on = false, queued = 0;
+    function paint() {
+      queued = 0;
+      var r = node.getBoundingClientRect();
+      var p = clamp((innerHeight * 0.88 - r.top) / (innerHeight * 0.42), 0, 1);
+      var kk = Math.round(p * ws.length);
+      for (var i = 0; i < ws.length; i++) ws[i].classList.toggle("is-lit", i < kk);
+    }
+    function onScroll() { if (on && !queued) queued = requestAnimationFrame(paint); }
+    if (global.IntersectionObserver) {
+      new IntersectionObserver(function (es) { on = es[0].isIntersecting; if (on) paint(); }, { rootMargin: "20% 0px" }).observe(node);
+    } else { on = true; }
+    addEventListener("scroll", onScroll, { passive: true });
+    paint();
+  }
+  function autoWords() {
+    els(".st-hero h1 + p, .st-hero .st-thesis, .st-chapter h2, [data-st-words]").forEach(function (n) {
+      try { words(n); } catch (e) { if (global.console) console.error(e); }
+    });
+  }
+
+  /* Story.beam(svg, [{from:[x,y], to:[x,y], curve?}|{d}], {color, baseColor})
+     Connector paths with one short light segment travelling along each. */
+  function beam(svgNode, segs, opts) {
+    opts = opts || {};
+    var svg = isEl(svgNode) ? svgNode : el(svgNode);
+    if (!svg) return { destroy: function () { } };
+    var g = mk("g", { class: "st-beam" }, svg), runs = [];
+    (segs || []).forEach(function (s, i) {
+      var d = s.d;
+      if (!d && s.from && s.to) {
+        var x0 = s.from[0], y0 = s.from[1], x1 = s.to[0], y1 = s.to[1];
+        var c = s.curve == null ? 0.18 : s.curve;
+        var mx = (x0 + x1) / 2, my = (y0 + y1) / 2, dx = x1 - x0, dy = y1 - y0;
+        d = "M" + x0 + "," + y0 + "Q" + (mx - dy * c) + "," + (my + dx * c) + " " + x1 + "," + y1;
+      }
+      if (!d) return;
+      mk("path", { class: "st-beam-base", d: d, stroke: opts.baseColor ? (tok(opts.baseColor) || opts.baseColor) : null }, g);
+      if (reduced()) return;
+      var p = mk("path", { class: "st-beam-run", d: d, stroke: opts.color ? (tok(opts.color) || opts.color) : tok("accent") }, g);
+      var len = p.getTotalLength ? p.getTotalLength() : 240;
+      var seg = Math.max(14, len * 0.16);
+      p.setAttribute("stroke-dasharray", seg.toFixed(1) + " " + (len + seg).toFixed(1));
+      p.style.setProperty("--len", (len + seg).toFixed(1));
+      p.style.animation = "st-beam-run 2.4s linear infinite";
+      p.style.animationDelay = (i * 0.35).toFixed(2) + "s";
+      runs.push(p);
+    });
+    return {
+      el: g,
+      destroy: function () { if (g.parentNode) g.parentNode.removeChild(g); runs.length = 0; }
+    };
+  }
+
+  /* per-digit roll used by countUp when the node carries data-st-ticker */
+  function tickerPaint(node, text, animate) {
+    while (node.firstChild) node.removeChild(node.firstChild);
+    var box = html("span", "st-tick", node), di = 0, cols = [];
+    text.split("").forEach(function (ch) {
+      if (/\d/.test(ch)) {
+        var col = html("span", "st-tick-col", box);
+        var strip = document.createElement("i");
+        for (var d = 0; d <= 9; d++) { var s = document.createElement("span"); s.textContent = String(d); strip.appendChild(s); }
+        col.appendChild(strip);
+        strip.style.transform = "translateY(" + (animate ? 0 : -parseInt(ch, 10)) + "em)";
+        strip.style.transitionDelay = (di * 55) + "ms";
+        cols.push([strip, parseInt(ch, 10)]);
+        di++;
+      } else {
+        var t = document.createElement("span");
+        t.textContent = ch; box.appendChild(t);
+      }
+    });
+    node.setAttribute("aria-label", text);
+    if (animate) requestAnimationFrame(function () {
+      cols.forEach(function (c) { c[0].style.transform = "translateY(-" + c[1] + "em)"; });
+    });
+  }
+
+  /* ---------------------------------------------------------
+     8c. glossary  -  plain-language definitions, annotated in place
+     --------------------------------------------------------- */
+  var glossary = {
+    "TRIR": "Recordable injuries per 200,000 hours worked. The standard yearly injury rate, so sites of different sizes can be compared.",
+    "DART": "Rate of injuries that cost days away from work, restricted duty, or a job transfer. A severity-weighted cousin of TRIR.",
+    "LTIR": "Rate of injuries that kept someone away from work at least one full day. Narrower than DART.",
+    "NAICS": "The federal industry code. It says what a site makes or does, and decides which peers it is compared against.",
+    "OSHA Form 300A": "The yearly summary of injury counts and hours that larger employers post and file. One row per site.",
+    "ITA": "The federal portal where employers submit their yearly injury summary. The public file of those submissions is the data used here.",
+    "establishment": "One physical site, not the whole company. Rates are calculated per site because hazards are local.",
+    "plausibility screen": "A rule that drops records whose hours or counts cannot be true, such as more hours than workers could have worked.",
+    "odds ratio": "How much more likely an outcome is in one group than another. One means no difference.",
+    "permutation test": "Shuffle the labels thousands of times to see how often chance alone produces the result you observed.",
+    "kappa": "Agreement between two raters after removing the agreement you would expect by luck. One is perfect, zero is chance.",
+    "Poisson": "A count model that assumes the average and the spread of the counts are the same.",
+    "negative binomial (NB2)": "A count model for data more spread out than a Poisson allows. Used when a few sites carry many injuries.",
+    "ZINB": "A count model with two parts: whether a site can report any injury at all, and how many it then reports.",
+    "TF-IDF": "A way to score words by how often they appear here and how rare they are elsewhere. Used to match text.",
+    "BM25": "A text ranking formula that scores documents against a query. A strong search baseline with no machine learning.",
+    "co-hyponym": "A sibling term under the same parent, such as two clauses in the same section. Easy for a system to confuse.",
+    "grounding": "Tying an answer to the exact source passage it came from, so a reader can check it.",
+    "retrieval": "Finding the passages most likely to answer a question before anything is written.",
+    "oracle baseline": "A score computed with the right answer handed over. It shows the ceiling a real system could reach.",
+    "PIF (performance influencing factor)": "A condition that makes error more or less likely, such as time pressure, poor labels, or fatigue.",
+    "IDHEAS-G": "A federal human-reliability framework built around how people take in and act on information.",
+    "SPAR-H": "A simple human-error method from the nuclear industry that adjusts a base error rate by a few conditions.",
+    "CREAM": "A human-error method that scores the working context first and predicts likely control of the task.",
+    "HFACS": "A classification of accident causes in four layers, from the act itself up to management decisions.",
+    "macrocognitive function": "A broad mental task such as noticing, understanding, deciding, or acting. Errors are sorted by which one failed.",
+    "ontology": "A written structure of terms and how they relate, so the same word means the same thing everywhere.",
+    "crosswalk": "A mapping that says which term in one framework corresponds to which term in another.",
+    "SEM (structural equation model)": "A model that estimates relations among things you cannot measure directly, such as safety climate, from things you can.",
+    "latent variable": "Something you cannot measure directly, estimated from several questions or indicators that stand in for it.",
+    "CFI": "A fit score for a model. Above about .95 means the model reproduces the data pattern well.",
+    "RMSEA": "A fit score where lower is better. Below about .06 is usually treated as close fit.",
+    "coverage (of an interval)": "How often a stated 95 percent interval really contains the true value when the method is repeated.",
+    "bootstrap": "Resample your own data many times to see how much an estimate would move if the sample changed.",
+    "confounder": "A third factor that drives both things you are comparing, and can fake a relation between them.",
+    "AUC": "How well a score separates two groups. One is perfect, .5 is a coin flip.",
+    "base rate": "How common the outcome is to begin with. A rare outcome makes most positive flags wrong.",
+    "Monte Carlo": "Run the model thousands of times with random inputs to see the range of outcomes, not one number.",
+    "tornado chart": "A sorted bar chart showing which assumption moves the result most. The widest bar matters most.",
+    "payback period": "How long until the savings from an investment equal what it cost.",
+    "percentile (p76 style)": "Your position in a ranked list. At the 76th percentile, 76 out of 100 peers are below you.",
+    "peer group": "The set of sites you are compared against, chosen by industry code and size band."
+  };
+  // extra surface forms; the key stays the display term
+  var GLOSS_ALT = {
+    "OSHA Form 300A": ["OSHA Form 300A", "Form 300A", "300A"],
+    "negative binomial (NB2)": ["negative binomial", "NB2"],
+    "PIF (performance influencing factor)": ["performance influencing factor", "PIFs", "PIF"],
+    "SEM (structural equation model)": ["structural equation model", "SEM"],
+    "coverage (of an interval)": ["coverage"],
+    "percentile (p76 style)": ["percentile"],
+    "odds ratio": ["odds ratio", "odds ratios"],
+    "permutation test": ["permutation test", "permutation tests"],
+    "co-hyponym": ["co-hyponym", "co-hyponyms"],
+    "establishment": ["establishment", "establishments"],
+    "confounder": ["confounder", "confounders"],
+    "plausibility screen": ["plausibility screen", "plausibility screens"],
+    "latent variable": ["latent variable", "latent variables"],
+    "tornado chart": ["tornado chart", "tornado charts"],
+    "macrocognitive function": ["macrocognitive function", "macrocognitive functions"],
+    "peer group": ["peer group", "peer groups"],
+    "oracle baseline": ["oracle baseline"],
+    "ontology": ["ontology", "ontologies"]
+  };
+  var GLOSS_SKIP = "a,abbr,code,pre,kbd,samp,button,svg,canvas,figure,figcaption,script,style,textarea,input,select,label,h1,h2,h3,h4,h5,h6,[data-no-gloss],.st-way,.st-way-map,.st-gloss-tip,.st-print-terms";
+  var glossUsed = [];
+  function reEsc(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
+  function glossEntries() {
+    var out = [];
+    Object.keys(glossary).forEach(function (key) {
+      (GLOSS_ALT[key] || [key]).forEach(function (form) {
+        var acronym = /^[A-Z0-9][A-Z0-9-]*$/.test(form);
+        out.push({
+          key: key, form: form, len: form.length,
+          re: new RegExp("\\b" + reEsc(form) + "\\b", acronym ? "g" : "gi")
+        });
+      });
+    });
+    out.sort(function (a, b) { return b.len - a.len; });
+    return out;
+  }
+  function glossSkip(node) {
+    var p = node.parentElement;
+    while (p && p !== document.body) {
+      if (p.matches && p.matches(GLOSS_SKIP)) return true;
+      // never touch an element that carries its own inline handler
+      var at = p.attributes;
+      for (var i = 0; i < at.length; i++) if (at[i].name.indexOf("on") === 0 && at[i].name.length > 2) return true;
+      p = p.parentElement;
+    }
+    return false;
+  }
+  function autoGloss() {
+    if (global.STORY_NO_GLOSSARY) return;
+    if (document.querySelector("abbr.st-gloss")) return;
+    var entries = glossEntries();
+    var conts = els(".st-step p, .st-chapter p, .st-hero p, .hero-lede, .st-findings span, main p");
+    if (!conts.length) return;
+    var seen = new Map();                     // section element -> {term:true}
+    var usedKeys = {};
+    conts.forEach(function (cont) {
+      var sect = (cont.closest && cont.closest(".st-scene,.st-chapter,.st-hero,.st-findings,main")) || document.body;
+      if (!seen.has(sect)) seen.set(sect, {});
+      var done = seen.get(sect);
+      var nodes = [], tw = document.createTreeWalker(cont, NodeFilter.SHOW_TEXT, null);
+      var n; while ((n = tw.nextNode())) nodes.push(n);
+      nodes.forEach(function (tn) {
+        if (!tn.nodeValue || tn.nodeValue.length < 3) return;
+        if (glossSkip(tn)) return;
+        var text = tn.nodeValue, hits = [];
+        entries.forEach(function (en) {
+          if (done[en.key]) return;
+          en.re.lastIndex = 0;
+          var m = en.re.exec(text);
+          if (!m) return;
+          hits.push({ key: en.key, start: m.index, end: m.index + m[0].length });
+        });
+        if (!hits.length) return;
+        hits.sort(function (a, b) { return a.start - b.start || (b.end - b.start) - (a.end - a.start); });
+        var frag = document.createDocumentFragment(), pos = 0, any = false;
+        hits.forEach(function (h) {
+          if (h.start < pos || done[h.key]) return;
+          done[h.key] = true; any = true;
+          if (usedKeys[h.key] == null) { usedKeys[h.key] = 1; glossUsed.push(h.key); }
+          if (h.start > pos) frag.appendChild(document.createTextNode(text.slice(pos, h.start)));
+          var ab = document.createElement("abbr");
+          ab.className = "st-gloss";
+          ab.setAttribute("tabindex", "0");
+          ab.setAttribute("data-gloss", glossary[h.key]);
+          ab.setAttribute("title", "");
+          ab.textContent = text.slice(h.start, h.end);
+          frag.appendChild(ab);
+          pos = h.end;
+        });
+        if (!any) return;
+        if (pos < text.length) frag.appendChild(document.createTextNode(text.slice(pos)));
+        tn.parentNode.replaceChild(frag, tn);
+      });
+    });
+    if (glossUsed.length) glossTipWire();
+  }
+  /* one shared tooltip for every annotated term */
+  var glossTip = null, glossCur = null;
+  function glossTipEl() {
+    if (glossTip) return glossTip;
+    glossTip = html("div", "st-gloss-tip");
+    glossTip.id = "st-gloss-tip";
+    glossTip.setAttribute("role", "tooltip");
+    glossTip.hidden = true;
+    document.body.appendChild(glossTip);
+    return glossTip;
+  }
+  function glossShow(ab) {
+    if (!ab || printing) return;
+    var t = glossTipEl();
+    t.textContent = ab.getAttribute("data-gloss") || "";
+    t.hidden = false;
+    t.style.left = "0px"; t.style.top = "0px";
+    var r = ab.getBoundingClientRect(), tr = t.getBoundingClientRect();
+    var sx = global.pageXOffset || 0, sy = global.pageYOffset || 0;
+    var left = clamp(r.left + r.width / 2 - tr.width / 2, 8, Math.max(8, innerWidth - tr.width - 8));
+    var top = r.top - tr.height - 10;
+    if (top < 4) top = r.bottom + 10;                 // no room above: sit under the term
+    t.style.left = (left + sx).toFixed(0) + "px";
+    t.style.top = (top + sy).toFixed(0) + "px";
+    if (glossCur && glossCur !== ab) glossCur.removeAttribute("aria-describedby");
+    ab.setAttribute("aria-describedby", "st-gloss-tip");
+    glossCur = ab;
+  }
+  function glossHide() {
+    if (glossTip) glossTip.hidden = true;
+    if (glossCur) { glossCur.removeAttribute("aria-describedby"); glossCur = null; }
+  }
+  function glossTipWire() {
+    function target(e) { var t = e.target; return t && t.closest ? t.closest("abbr.st-gloss") : null; }
+    document.addEventListener("pointerover", function (e) { var a = target(e); if (a && e.pointerType !== "touch") glossShow(a); });
+    document.addEventListener("pointerout", function (e) { if (target(e) && e.pointerType !== "touch") glossHide(); });
+    document.addEventListener("focusin", function (e) { var a = target(e); if (a) glossShow(a); else glossHide(); });
+    document.addEventListener("focusout", function (e) { if (target(e)) glossHide(); });
+    document.addEventListener("click", function (e) {
+      var a = target(e);
+      if (!a) { glossHide(); return; }
+      e.preventDefault();
+      if (glossCur === a && glossTip && !glossTip.hidden) glossHide(); else glossShow(a);
+    });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") glossHide(); });
+    addEventListener("scroll", glossHide, { passive: true });
+    addEventListener("resize", glossHide);
+  }
+
+  /* ---------------------------------------------------------
+     8d. print handout
+     --------------------------------------------------------- */
+  var printSaved = null, printExtra = [];
+  function printPrepare() {
+    if (printSaved) return;
+    if (presentState) presentState.exit(); // presenter layout and handout layout must never combine
+    printing = true;
+    glossHide();
+    document.documentElement.classList.add("st-printing");
+    printSaved = [];
+    els(".st-scene").forEach(function (sc) {
+      var list = els(".st-step", sc);
+      if (!list.length) return;
+      var at = -1;
+      list.forEach(function (s, j) { if (s.classList.contains("is-active")) at = j; });
+      printSaved.push({ steps: list, idx: at });
+      var lastStep = list[list.length - 1];
+      if (lastStep.__stActivate) lastStep.__stActivate();
+    });
+    // pages register their scenes after the engine boots: re-assert the final steps a few times
+    // so every figure prints in its last state
+    [0, 150, 600, 1500].forEach(function (ms) {
+      setTimeout(function () {
+        if (!printSaved) return;
+        els(".st-scene").forEach(function (sc) {
+          var list = els(".st-step", sc), lastStep = list[list.length - 1];
+          if (lastStep && lastStep.__stActivate) lastStep.__stActivate();
+        });
+      }, ms);
+    });
+    if (glossUsed.length) {
+      var box = html("div", "st-print-terms");
+      var h = document.createElement("h2"); h.textContent = "Terms used on this page"; box.appendChild(h);
+      var dl = document.createElement("dl"); box.appendChild(dl);
+      glossUsed.slice().sort().forEach(function (k) {
+        var dt = document.createElement("dt"); dt.textContent = k;
+        var dd = document.createElement("dd"); dd.textContent = glossary[k] || "";
+        dl.appendChild(dt); dl.appendChild(dd);
+      });
+      document.body.appendChild(box); printExtra.push(box);
+    }
+    var foot = html("div", "st-print-foot");
+    foot.textContent = (document.title || "") + "  ·  " + location.origin + location.pathname;
+    document.body.appendChild(foot); printExtra.push(foot);
+  }
+  function printRestore() {
+    if (!printSaved) return;
+    printExtra.forEach(function (n) { n.remove(); }); printExtra = [];
+    printSaved.forEach(function (s) {
+      if (s.idx >= 0 && s.steps[s.idx] && s.steps[s.idx].__stActivate) s.steps[s.idx].__stActivate();
+    });
+    printSaved = null; printing = false;
+    document.documentElement.classList.remove("st-printing");
+  }
+  function printHandout() {
+    printPrepare();
+    setTimeout(function () {
+      try { global.print(); } catch (e) { }
+      setTimeout(printRestore, 300);
+    }, 80);
+  }
+  addEventListener("beforeprint", printPrepare);
+  addEventListener("afterprint", printRestore);
+
+  function boot() {
+    autoChapters(); autoFindings();
+    try { autoGloss(); } catch (e) { if (global.console) console.error(e); }
+    try { autoWords(); } catch (e) { if (global.console) console.error(e); }
+    autoWayfinder();
+    try { spotlight(document); } catch (e) { if (global.console) console.error(e); }
+    // ?print=1 previews the handout layout on screen; reload or call Story._printRestore() to leave it
+    if (/[?&]print=1/.test(location.search)) printPrepare();
+  }
   if (document.readyState === "loading") addEventListener("DOMContentLoaded", boot);
   else boot();
 
@@ -3237,7 +4154,7 @@ python3 -m ehs_osha.panel</code></pre>
      9. export
      --------------------------------------------------------- */
   var Story = {
-    version: "1.1.0",
+    version: "1.3.0",
     orb: orb,
     orbInline: orbInline,
     companion: companion,
@@ -3256,6 +4173,15 @@ python3 -m ehs_osha.panel</code></pre>
     progressBar: progressBar,
     present: present,
     autoPresent: autoPresent,
+    glossary: glossary,
+    annotate: autoGloss,
+    spotlight: spotlight,
+    words: words,
+    beam: beam,
+    print: printHandout,
+    _printPrepare: printPrepare,
+    _printRestore: printRestore,
+    get printing() { return printing; },
     theme: Theme,
     reduced: reduced,
     tick: tick,
@@ -3533,9 +4459,8 @@ function flowPhone(svg) {
   });
 
   var or = el("g", { opacity: 0 }, svg);
-  txt(or, x0, 330, "39.1", { "font-size": 48, "font-weight": 700, "font-family": "var(--font-mono)", fill: "var(--accent)" });
-  txt(or, x0 + 136, 316, "odds ratio", { class: "st-anno-text", "font-size": 15 });
-  txt(or, x0 + 136, 338, "1,436,479 site-year pairs", { "font-size": 14 });
+  txt(or, x0, 324, "odds ratio 39.1", { class: "st-anno-text", "font-size": 16, fill: "var(--accent)" });
+  txt(or, x0, 348, "1,436,479 site-year pairs", { "font-size": 14 });
 
   function set(state) {
     var want = state === "setup" ? 0 : state === "top" ? 1 : 2;
@@ -3583,9 +4508,8 @@ function flow(svg, ph) {
   });
 
   var or = el("g", { opacity: 0 }, svg);
-  txt(or, 34, 580, "39.1", { "font-size": 54, "font-weight": 700, "font-family": "var(--font-mono)", fill: "var(--accent)" });
-  txt(or, 186, 562, "odds ratio, pooled over 1,436,479 pairs", { class: "st-anno-text" });
-  txt(or, 186, 584, "Cohen's kappa 0.276; every one of the eight year pairs lands between 24.7 and 63.1", { "font-size": 13 });
+  txt(or, 34, 566, "odds ratio 39.1, pooled over 1,436,479 pairs", { class: "st-anno-text", fill: "var(--accent)" });
+  txt(or, 34, 588, "Cohen's kappa 0.276; every one of the eight year pairs lands between 24.7 and 63.1", { "font-size": 13 });
 
   function set(state) {
     var want = state === "setup" ? 0 : state === "top" ? 1 : 2;
@@ -3815,6 +4739,15 @@ function boot() {
     if (rt) clearTimeout(rt);
     rt = setTimeout(relayout, 180);
   }, { passive: true });
+
+  function finalSteps() {
+    Array.prototype.forEach.call(document.querySelectorAll(".st-scene"), function (sc) {
+      var list = sc.querySelectorAll(".st-step"), last = list[list.length - 1];
+      if (last && last.__stActivate) last.__stActivate();
+    });
+  }
+  if (/[?&]print=1/.test(location.search)) setTimeout(finalSteps, 40);
+  window.addEventListener("beforeprint", function () { setTimeout(finalSteps, 0); });
 
   if (S) {
     if (typeof S.reveal === "function") S.reveal(document.body);

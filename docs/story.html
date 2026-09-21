@@ -3185,7 +3185,8 @@ python3 -m ehs_osha.panel</code></pre>
   }
   function autoFindings() {
     var ch = els(".st-chapter");
-    if (/story\.html$/.test(location.pathname)) document.body.classList.add("st-story");
+    // story pages and the hub (itself a story) keep one fixed bar only: the wayfinder
+    if (/story\.html$/.test(location.pathname) || /\/grounded\/(docs\/)?(index\.html)?$/.test(location.pathname)) document.body.classList.add("st-story");
     if (ch.length < 2 || document.querySelector(".st-findings")) return;
     var nav = html("nav", "st-findings");
     nav.setAttribute("aria-label", "Findings in this story");
@@ -3432,8 +3433,8 @@ function line(svg) {
   el("circle", { cx: X(i19), cy: Y(D.trirRaw[i19]), r: 6.5, fill: "var(--warn)", stroke: "var(--paper)", "stroke-width": 2 }, mark);
   lead(mark, (X(i19) + 7) + ",343 470,442 552,442");
   txt(mark, 560, 454, "249x", { "font-size": 48, fill: "var(--warn)", "font-weight": 700, "font-family": "var(--font-mono)" });
-  txt(mark, 560, 478, "correction factor in 2019: 4.02 screened, 0.016 raw", { class: "st-anno-text" });
-  txt(mark, 560, 498, "99.60% of that year's hours sat in flagged filings", { "font-size": 13 });
+  txt(mark, 560, 478, "2019: 4.02 screened, 0.016 raw", { class: "st-anno-text" });
+  txt(mark, 560, 498, "99.60% of hours sat in flagged filings", { "font-size": 13 });
 
   txt(svg, x1, Y(D.trirScreened[8]) - 16, "screened", { "text-anchor": "end", class: "st-label-direct", fill: "var(--accent)", "font-size": 17 });
   var rawLab = txt(svg, x1, Y(D.trirRaw[8]) + 28, "unscreened", { "text-anchor": "end", class: "st-label-direct", fill: "var(--ink-2)", "font-size": 17, opacity: 0 });

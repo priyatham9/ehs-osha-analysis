@@ -364,8 +364,8 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
 
 <div class="tool-out" id="result">
 <div class="verdicts">
-<div id="vTrir"><span class="v-k">Your TRIR</span><span class="v-n" id="trirN">&mdash;</span><span class="v-s" id="trirS"></span></div>
-<div id="vScreen"><span class="v-k">Hours check</span><span class="v-n" id="hpeN">&mdash;</span><span class="v-s" id="hpeS"></span></div>
+<div id="vTrir"><span class="v-k">Your TRIR</span><span class="v-n" id="trirN">-</span><span class="v-s" id="trirS"></span></div>
+<div id="vScreen"><span class="v-k">Hours check</span><span class="v-n" id="hpeN">-</span><span class="v-s" id="hpeS"></span></div>
 </div>
 <p class="readout" id="readout" aria-live="polite"></p>
 <figure>
@@ -584,7 +584,7 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
     /* TRIR */
     var trir = okH && okC ? cases * 200000 / hours : NaN;
     var trirRaw = S.typo && isFinite(hours0) && hours0 > 0 && okC ? cases * 200000 / hours0 : NaN;
-    $("trirN").innerHTML = isFinite(trir) ? rate(trir) : "&mdash;";
+    $("trirN").innerHTML = isFinite(trir) ? rate(trir) : "-";
     $("trirS").textContent = !isFinite(trir) ? "Enter hours above zero and a whole number of cases."
       : S.typo ? "As typed, with three extra zeros. The real rate is " + rate(trirRaw) + ", so the typo makes this site look " + nf(1000) + " times safer."
       : "Recordable cases per 200,000 hours, about 100 full-time workers for a year.";

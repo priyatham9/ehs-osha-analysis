@@ -4,17 +4,17 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Denominator explorer - ehs-osha-analysis</title>
-<meta name="description" content="Pick a NAICS-3 peer group and size band, place your own TRIR on the screened percentile band, and see the hours-plausibility screen year by year." />
+<meta name="description" content="Put one site-year next to its NAICS-3 and size-band peers, check its hours against the plausibility screen, and see how 2% of filings hold 97% of the hours." />
 <link rel="canonical" href="https://priyatham9.github.io/ehs-osha-analysis/explore.html" />
 <meta property="og:title" content="Denominator explorer - ehs-osha-analysis" />
-<meta property="og:description" content="Pick a NAICS-3 peer group and size band, place your own TRIR on the screened percentile band, and see the hours-plausibility screen year by year." />
+<meta property="og:description" content="Put one site-year next to its NAICS-3 and size-band peers, check its hours against the plausibility screen, and see how 2% of filings hold 97% of the hours." />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://priyatham9.github.io/ehs-osha-analysis/explore.html" />
 <meta property="og:image" content="https://priyatham9.github.io/ehs-osha-analysis/og.png" />
 <meta property="og:site_name" content="Grounded" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Denominator explorer - ehs-osha-analysis" />
-<meta name="twitter:description" content="Pick a NAICS-3 peer group and size band, place your own TRIR on the screened percentile band, and see the hours-plausibility screen year by year." />
+<meta name="twitter:description" content="Put one site-year next to its NAICS-3 and size-band peers, check its hours against the plausibility screen, and see how 2% of filings hold 97% of the hours." />
 <meta name="twitter:image" content="https://priyatham9.github.io/ehs-osha-analysis/og.png" />
 <meta name="theme-color" content="#F7F7F3" media="(prefers-color-scheme: light)" />
 <meta name="theme-color" content="#0A0C10" media="(prefers-color-scheme: dark)" />
@@ -81,51 +81,127 @@ code,.mono,.src{overflow-wrap:anywhere}
 @media print{ .skip{display:none!important} body{background:#fff!important;color:#000!important} a{color:#000!important;text-decoration:underline} }
 
 /* page */
-.hero{padding:44px 0 30px;border-bottom:2px solid var(--rule);background-image:radial-gradient(var(--grid-dot) 1px,transparent 1px);background-size:22px 22px}
-.hero h1{font-size:clamp(1.9rem,5vw,2.9rem);max-width:20ch}
-.hero p{margin-top:14px;color:var(--muted);max-width:66ch;font-size:1rem}
-.section{padding:36px 0;border-bottom:2px solid var(--rule)}
-.section h2{font-size:1.4rem;margin-bottom:6px}
-.sec-lede{color:var(--muted);max-width:70ch;margin-bottom:20px}
+:root{--ok:#17693A}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ok:#5ECFA6}}
+:root[data-theme="dark"]{--ok:#5ECFA6}
+.display{font-stretch:125%;font-weight:900;text-transform:uppercase}
+.hero{padding:46px 0 34px;border-bottom:2px solid var(--rule);background-image:radial-gradient(var(--grid-dot) 1px,transparent 1px);background-size:22px 22px}
+.crumb{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:16px;font-family:var(--font-mono);font-size:.6875rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.crumb a{color:var(--muted);text-decoration:none;border-bottom:1px solid var(--rule-soft)}
+.crumb a:hover{color:var(--accent);border-bottom-color:var(--accent)}
+.crumb b{color:var(--ink)}
+.hero h1{font-size:clamp(2rem,6vw,3.6rem);max-width:18ch;line-height:1.02}
+.hero-lede{margin-top:16px;color:var(--ink-2);max-width:62ch;font-size:1.0625rem}
+.hero-lede b{color:var(--ink)}
+.hero-how{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin-top:26px;border:2px solid var(--rule);background:var(--surface);max-width:900px}
+.hero-how div{padding:14px 16px;border-left:2px solid var(--rule-soft);font-size:.875rem;color:var(--ink-2);line-height:1.5}
+.hero-how div:first-child{border-left:0}
+.hero-how b{display:block;font-family:var(--font-mono);font-size:.6875rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
+@media(max-width:700px){.hero-how{grid-template-columns:1fr}.hero-how div{border-left:0;border-top:2px solid var(--rule-soft)}.hero-how div:first-child{border-top:0}}
+
+.section{padding:40px 0;border-bottom:2px solid var(--rule)}
+.section h2{font-size:clamp(1.35rem,3vw,1.9rem);margin-bottom:8px;font-stretch:115%;font-weight:800}
+.sec-k{display:block;font-family:var(--font-mono);font-size:.6875rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:8px}
+.sec-lede{color:var(--ink-2);max-width:70ch;margin-bottom:22px}
 .card{background:var(--surface);border:2px solid var(--rule);padding:20px}
-.controls{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;margin-bottom:20px}
-@media (max-width:600px){.controls{grid-template-columns:minmax(0,1fr)}}
-.field{min-width:0}.field select{max-width:100%;min-width:0}
-.field{display:flex;flex-direction:column;gap:6px}
-.field label{font-family:var(--font-mono);font-size:.6875rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
-select,input[type="number"]{font:inherit;font-family:var(--font-mono);font-size:.9375rem;padding:9px 10px;border:2px solid var(--rule);background:var(--paper);color:var(--ink);border-radius:0;min-height:40px}
-.stat-row{display:flex;flex-wrap:wrap;gap:20px;margin:16px 0}
-.stat{min-width:110px}
-.stat .v{font-family:var(--font-mono);font-size:1.25rem;font-weight:700}
-.stat .k{font-family:var(--font-mono);font-size:.6875rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-.pub-yes{color:var(--s3)}
-.pub-no{color:var(--warn)}
-.fig-scroll{overflow-x:auto}
-.fig-scroll svg{display:block;min-width:320px;width:100%;height:auto}
+
+/* tool layout: form left, live result right */
+.tool{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);border:2px solid var(--rule);background:var(--surface)}
+.tool-form{padding:22px 22px 18px;border-right:2px solid var(--rule-soft)}
+.tool-out{padding:22px;min-width:0}
+@media(max-width:900px){.tool{grid-template-columns:minmax(0,1fr)}.tool-form{border-right:0;border-bottom:2px solid var(--rule-soft)}}
+@media(max-width:480px){.tool-form,.tool-out{padding:16px 14px}}
+.example{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:10px 12px;margin-bottom:16px;background:var(--accent-wash);border-left:4px solid var(--accent);font-size:.875rem;color:var(--ink-2)}
+.example b{color:var(--ink)}
+.example[data-mode="own"]{background:var(--surface-2);border-left-color:var(--rule-soft)}
+fieldset{border:0;margin:0 0 14px;padding:0;min-width:0}
+legend{display:flex;align-items:center;gap:8px;padding:0;margin-bottom:10px;font-family:var(--font-mono);font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--ink)}
+.step-no{display:inline-grid;place-items:center;width:22px;height:22px;background:var(--ink);color:var(--paper);font-size:.6875rem}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0;margin-bottom:12px}
+.field label,.field .fl{font-family:var(--font-mono);font-size:.6875rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.field .hint{font-size:.8125rem;color:var(--muted);line-height:1.45}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 12px}
+@media(max-width:380px){.grid2{grid-template-columns:minmax(0,1fr)}}
+select,input[type="number"],input[type="search"]{font:inherit;font-family:var(--font-mono);font-size:1rem;padding:9px 10px;border:2px solid var(--rule);background:var(--paper);color:var(--ink);border-radius:0;min-height:44px;width:100%;max-width:100%;min-width:0}
+input[type="number"]{font-variant-numeric:tabular-nums}
+input[aria-invalid="true"]{border-color:var(--warn)}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.btn{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:8px 14px;border:2px solid var(--rule);background:var(--surface);color:var(--ink);font-family:var(--font-mono);font-size:.6875rem;letter-spacing:.1em;text-transform:uppercase;font-weight:700;cursor:pointer;border-radius:0;text-decoration:none}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn[aria-pressed="true"]{background:var(--warn);border-color:var(--warn);color:var(--paper)}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn-primary:hover{background:var(--accent-2);color:var(--accent-ink)}
+.mini-res{display:none}
+@media(max-width:900px){.mini-res{display:block;margin-top:12px;padding:10px 12px;border:2px solid var(--rule);background:var(--surface-2);font-family:var(--font-mono);font-size:.8125rem;color:var(--ink);text-decoration:none}.mini-res b{color:var(--accent)}}
+.status-msg{font-family:var(--font-mono);font-size:.75rem;color:var(--muted);min-height:1.2em;margin-top:6px}
+
+/* result */
+.verdicts{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0;border:2px solid var(--rule);margin-bottom:16px}
+.verdicts > div{padding:14px 16px;min-width:0}
+.verdicts > div + div{border-left:2px solid var(--rule-soft)}
+@media(max-width:560px){.verdicts{grid-template-columns:minmax(0,1fr)}.verdicts > div + div{border-left:0;border-top:2px solid var(--rule-soft)}}
+.v-k{display:block;font-family:var(--font-mono);font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.v-n{display:block;font-family:var(--font-mono);font-weight:700;font-size:clamp(2rem,5vw,2.8rem);line-height:1.05;font-variant-numeric:tabular-nums;color:var(--ink)}
+.v-n small{font-size:.9rem;color:var(--muted);font-weight:600}
+.v-s{display:block;margin-top:6px;font-size:.875rem;color:var(--ink-2);line-height:1.45}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;font-family:var(--font-mono);font-size:.6875rem;letter-spacing:.1em;text-transform:uppercase;font-weight:700;border:2px solid currentColor}
+.pill.ok{color:var(--ok)}
+.pill.bad{color:var(--warn);background:var(--warn-wash)}
+.pill.na{color:var(--muted)}
+.is-bad .v-n{color:var(--warn)}
+.readout{font-size:1.0625rem;line-height:1.55;color:var(--ink);margin:0 0 14px;max-width:62ch}
+.readout b{font-weight:700}
+.readout .warnw{color:var(--warn);font-weight:700}
+.chart{width:100%;min-width:0}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:8px;font-family:var(--font-mono);font-size:.6875rem;color:var(--ink-2)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{display:inline-block;width:14px;height:10px}
+.legend i.dash{height:0;border-top:3px dashed var(--ink-2);width:18px}
 figure{margin:0}
 figcaption{margin-top:10px;color:var(--muted);font-size:.875rem}
-.src{display:block;margin-top:6px;font-family:var(--font-mono);font-size:.75rem;color:var(--muted)}
-details.datatbl{margin-top:10px}
-details.datatbl summary{cursor:pointer;font-family:var(--font-mono);font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--accent)}
-table{border-collapse:collapse;width:100%;margin-top:10px;font-size:.875rem}
-th,td{border:1px solid var(--rule-soft);padding:6px 9px;text-align:right}
+.src{display:block;margin-top:8px;font-family:var(--font-mono);font-size:.6875rem;color:var(--muted)}
+details.datatbl{margin-top:12px}
+details.datatbl summary{cursor:pointer;font-family:var(--font-mono);font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);min-height:32px;display:flex;align-items:center}
+.tbl-scroll{overflow-x:auto;max-width:100%}
+table{border-collapse:collapse;width:100%;margin-top:10px;font-size:.875rem;font-variant-numeric:tabular-nums}
+th,td{border:1px solid var(--rule-soft);padding:6px 9px;text-align:right;white-space:nowrap}
 th:first-child,td:first-child{text-align:left}
 th{font-family:var(--font-mono);font-size:.6875rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
-.screen-rule{background:var(--surface-2);border-left:4px solid var(--accent);padding:14px 16px;margin:16px 0;font-size:.9375rem}
-.screen-rule code{font-family:var(--font-mono);background:var(--surface);padding:1px 4px}
-.flag-yes{color:var(--warn);font-weight:700}
-.flag-no{color:var(--s3);font-weight:700}
-.plain-box{background:var(--surface);border:2px solid var(--rule);padding:20px}
-.plain-box h3{font-size:1rem;margin-bottom:10px}
-.plain-box ul{margin:0;padding-left:20px}
-.plain-box li{margin-bottom:8px}
+tr.is-sel td{background:var(--accent-wash)}
+.rule-box{background:var(--surface-2);border-left:4px solid var(--accent);padding:12px 14px;margin:14px 0 0;font-size:.875rem;color:var(--ink-2)}
+.rule-box code{font-family:var(--font-mono);background:var(--surface);padding:1px 4px}
+
+/* year section */
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}
+.chip{min-height:36px;min-width:52px;padding:6px 10px;border:2px solid var(--rule-soft);background:var(--surface);color:var(--ink);font-family:var(--font-mono);font-size:.75rem;font-weight:700;cursor:pointer;border-radius:0}
+.chip:hover{border-color:var(--accent)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.year-read{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:2px solid var(--rule);margin-bottom:18px}
+.year-read > div{padding:12px 14px;min-width:0}
+.year-read > div + div{border-left:2px solid var(--rule-soft)}
+.year-read .v-n{font-size:clamp(1.4rem,3.4vw,2rem)}
+@media(max-width:700px){.year-read{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.year-read > div:nth-child(3){border-left:0}.year-read > div:nth-child(n+3){border-top:2px solid var(--rule-soft)}}
+.fig-h{font-family:var(--font-mono);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--ink);margin:22px 0 8px}
+
+.plain-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0;border:2px solid var(--rule);background:var(--surface)}
+.plain-grid > div{padding:20px}
+.plain-grid > div + div{border-left:2px solid var(--rule-soft)}
+@media(max-width:760px){.plain-grid{grid-template-columns:minmax(0,1fr)}.plain-grid > div + div{border-left:0;border-top:2px solid var(--rule-soft)}}
+.plain-grid h3{font-family:var(--font-mono);font-size:.8125rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px}
+.plain-grid ul{margin:0;padding-left:20px;font-size:.9375rem;color:var(--ink-2)}
+.plain-grid li{margin-bottom:8px}
+.next-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
 .footer{padding:30px 0;color:var(--muted);font-size:.8125rem}
 .footer-links{display:flex;flex-wrap:wrap;gap:14px;margin:10px 0}
 .footer-links a{text-decoration:none;display:flex;align-items:center;min-height:24px}
 .pn-wrap{border-top:2px solid var(--rule)}
-.pn{max-width:var(--maxw);margin:0 auto;padding:0 30px;display:flex;justify-content:space-between}
-.pn a{text-decoration:none;padding:16px 0;color:var(--ink)}
+.pn{max-width:var(--maxw);margin:0 auto;padding:0 30px;display:flex;justify-content:space-between;gap:16px}
+.pn a{text-decoration:none;padding:16px 0;color:var(--ink);display:flex;flex-direction:column}
 .pn a:hover{color:var(--accent)}
+@media(max-width:600px){.wrap,.pn{padding:0 16px}}
+@media (prefers-reduced-motion: reduce){.chart *{transition:none!important}}
+@media print{.btns,.chips,.hero-how{display:none!important}.tool{display:block}}
 </style>
 <script id="rs-theme-init">try{var t=localStorage.getItem("pc-theme")||localStorage.getItem("ehs-ai-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t);}catch(e){}</script><style id="rs-header-css">
 .rs-header{
@@ -235,79 +311,127 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
 
 <main id="main">
 <div class="hero"><div class="wrap">
+<nav class="crumb" aria-label="You are here"><a href="https://priyatham9.github.io/grounded/">Grounded</a><span aria-hidden="true">&rsaquo;</span><a href="index.html">ehs-osha-analysis</a><span aria-hidden="true">&rsaquo;</span><b>Explorer</b></nav>
 <h1 class="display">Denominator explorer</h1>
-<p>Pick a peer group, see the screened TRIR spread, and place your own numbers on it. Same pipeline, same screen, as <a href="./index.html">the main page</a>.</p>
+<p class="hero-lede">Put one site's year next to its real peers, and check first whether its hours would survive the screen that <b>57,857</b> public OSHA filings failed. Those filings are 2.07% of the panel and hold <b>96.68%</b> of every hour reported.</p>
+<div class="hero-how" aria-label="How to use this page">
+<div><b>1 &middot; Peer group</b>Industry and size band. Percentiles come from 2.7 million screened filings, 2016 to 2024.</div>
+<div><b>2 &middot; Your year</b>Headcount, hours, recordables. The rate and the hours check update as you type.</div>
+<div><b>3 &middot; Share it</b>The address bar keeps your inputs. Copy the link to send the exact view.</div>
+</div>
 </div></div>
 
-<section class="section" id="peer"><div class="wrap">
-<h2>1. Pick a peer group</h2>
-<p class="sec-lede">NAICS-3 industry and establishment-size band, pooled across 2016-2024. Values are the screened TRIR distribution within that cell, straight from the pipeline's percentile table.</p>
-<div class="card">
-<div class="controls">
-<div class="field"><label for="naics3">NAICS-3 industry</label>
-<select id="naics3"></select></div>
+<section class="section" id="peer" aria-labelledby="h-peer"><div class="wrap">
+<span class="sec-k">The tool</span>
+<h2 id="h-peer">Your site against its peers</h2>
+<p class="sec-lede">A worked example is loaded so you can see what a result looks like. Change any field and the rate, the hours check and the peer placement update at once.</p>
+
+<div class="tool">
+<form class="tool-form" id="tool-form" autocomplete="off" novalidate>
+<div class="example" id="example" data-mode="example" aria-live="polite"></div>
+
+<fieldset>
+<legend><span class="step-no" aria-hidden="true">1</span>Peer group</legend>
+<div class="field"><label for="naics3">Industry (NAICS-3)</label>
+<select id="naics3" aria-describedby="naics-hint"></select>
+<span class="hint" id="naics-hint">Official 2022 subsector titles. Codes with no 2022 title are listed at the end as filed.</span></div>
 <div class="field"><label for="sizeband">Size band (average employees)</label>
-<select id="sizeband"></select></div>
+<select id="sizeband" aria-describedby="band-hint"></select>
+<span class="hint" id="band-hint">Set from your headcount when you enter one.</span></div>
+</fieldset>
+
+<fieldset id="mark">
+<legend><span class="step-no" aria-hidden="true">2</span>Your site, one calendar year</legend>
+<div class="grid2">
+<div class="field"><label for="inEmp">Average employees</label>
+<input type="number" id="inEmp" min="0" step="1" inputmode="numeric" /></div>
+<div class="field"><label for="inHours">Hours worked</label>
+<input type="number" id="inHours" min="0" step="1000" inputmode="numeric" /></div>
 </div>
-<div class="stat-row" id="cellStats"></div>
-<figure class="fig-scroll">
-<div id="bandChartWrap"></div>
+<div class="field"><label for="inCases">Recordable cases</label>
+<input type="number" id="inCases" min="0" step="1" inputmode="numeric" /></div>
+</fieldset>
+
+<div class="btns">
+<button type="button" class="btn" id="btnTypo" aria-pressed="false" aria-describedby="typo-hint">Add three zeros to the hours</button>
+<button type="button" class="btn" id="btnCopy">Copy link to this view</button>
+<button type="button" class="btn" id="btnReset">Back to the worked example</button>
+</div>
+<p class="hint status-msg" id="typo-hint">The typo button shows what one keying error does to the rate, and whether the screen catches it.</p>
+<p class="status-msg" id="copyStatus" role="status" aria-live="polite"></p>
+<a class="mini-res" id="miniRes" href="#result"></a>
+</form>
+
+<div class="tool-out" id="result">
+<div class="verdicts">
+<div id="vTrir"><span class="v-k">Your TRIR</span><span class="v-n" id="trirN">-</span><span class="v-s" id="trirS"></span></div>
+<div id="vScreen"><span class="v-k">Hours check</span><span class="v-n" id="hpeN">-</span><span class="v-s" id="hpeS"></span></div>
+</div>
+<p class="readout" id="readout" aria-live="polite"></p>
+<figure>
+<div class="chart" id="bandChart"></div>
+<div class="legend" aria-hidden="true">
+<span><i style="background:var(--s1);opacity:.25"></i>p10 to p90</span>
+<span><i style="background:var(--s1);opacity:.55"></i>p25 to p75</span>
+<span><i style="background:var(--s1);height:10px;width:3px"></i>median</span>
+<span><i style="background:var(--s2)"></i>your rate</span>
+</div>
 <figcaption id="bandCaption"></figcaption>
 </figure>
-<details class="datatbl"><summary>Data table</summary><div id="bandTable"></div></details>
-<span class="src">Source artifact: outputs/tables/peer_percentiles_pooled.csv</span>
+<details class="datatbl"><summary>Peer percentiles as a table</summary><div class="tbl-scroll" id="bandTable"></div></details>
+<div class="rule-box">The hours check is the pipeline's own rule: a filing is excluded when hours worked divided by average employees falls outside <code>120</code> to <code>4,500</code> a year, or either field is missing. Source: <a href="https://github.com/priyatham9/ehs-osha-analysis/blob/main/src/ehs_osha/quality.py">src/ehs_osha/quality.py</a>.</div>
+<span class="src">Peer percentiles: outputs/tables/peer_percentiles_pooled.csv (screened filings, pooled 2016 to 2024)</span>
+</div>
 </div>
 </div></section>
 
-<section class="section" id="mark"><div class="wrap">
-<h2>2. Where would you sit</h2>
-<p class="sec-lede">Enter recordable cases and total hours worked for the reporting period. TRIR = cases &times; 200,000 &divide; hours. The marker lands on the band above, and the hours value is run through the same plausibility screen the pipeline uses.</p>
-<div class="card">
-<div class="controls">
-<div class="field"><label for="inCases">Recordable cases</label>
-<input type="number" id="inCases" min="0" step="1" value="3" /></div>
-<div class="field"><label for="inHours">Total hours worked</label>
-<input type="number" id="inHours" min="0" step="1000" value="150000" /></div>
-</div>
-<div class="stat-row" id="markStats"></div>
-<div class="screen-rule" id="screenResult"></div>
-<p class="src">Rule: a filing is flagged <code>flag_hours_per_employee_high</code> or <code>flag_hours_per_employee_low</code> when hours &divide; employees falls outside [120, 4,500] per year. This tool does not collect an employee count, so it screens on total hours alone against the same bounds as a rough check. Exact rule and source:
-<a href="https://github.com/priyatham9/ehs-osha-analysis/blob/main/src/ehs_osha/quality.py">src/ehs_osha/quality.py</a>.</p>
-</div>
-</div></section>
-
-<section class="section" id="year"><div class="wrap">
-<h2>3. The denominator effect, year by year</h2>
-<p class="sec-lede">Share of filings flagged implausible each year (bars), and aggregate TRIR before and after the screen (lines). The 2019 point is the extreme case: one keying error in the hours field put 99.6% of that year's reported hours inside implausible filings.</p>
-<div class="card">
-<figure class="fig-scroll">
-<div id="shareChartWrap"></div>
-<figcaption>Share of filings flagged implausible, by year.</figcaption>
+<section class="section" id="year" aria-labelledby="h-year"><div class="wrap">
+<span class="sec-k">The national picture</span>
+<h2 id="h-year">A few filings, most of the hours, every year</h2>
+<p class="sec-lede">Each year a small share of filings fails the hours check, and those filings hold a far larger share of the hours. Pick a year to see what that does to the national rate.</p>
+<div class="chips" id="yearChips" role="group" aria-label="Choose a year"></div>
+<div class="year-read" id="yearRead" aria-live="polite"></div>
+<p class="fig-h" id="fh-share">Share of filings flagged, against share of hours they hold</p>
+<figure aria-labelledby="fh-share">
+<div class="chart" id="shareChart"></div>
+<div class="legend" aria-hidden="true"><span><i style="background:var(--s1)"></i>filings flagged</span><span><i style="background:var(--warn)"></i>hours in flagged filings</span></div>
 </figure>
-<figure class="fig-scroll" style="margin-top:24px">
-<div id="trirChartWrap"></div>
+<p class="fig-h" id="fh-trir">National TRIR, screened and as filed</p>
+<figure aria-labelledby="fh-trir">
+<div class="chart" id="trirChart"></div>
+<div class="legend" aria-hidden="true"><span><i style="background:var(--accent)"></i>screened</span><span><i class="dash"></i>as filed (unscreened)</span></div>
 <figcaption id="trirCaption"></figcaption>
 </figure>
-<details class="datatbl"><summary>Data table</summary><div id="yearTable"></div></details>
-<span class="src">Source artifact: outputs/tables/quality_by_year.csv, outputs/summary.json</span>
-</div>
+<details class="datatbl"><summary>Year-by-year data table</summary><div class="tbl-scroll" id="yearTable"></div></details>
+<span class="src">Source: outputs/tables/quality_by_year.csv, quality_overall.csv, quality_top50_implausible_hours.csv</span>
 </div></section>
 
-<section class="section" id="plain" style="border-bottom:0"><div class="wrap">
-<h2>4. What this can and cannot tell you</h2>
-<div class="plain-box">
+<section class="section" id="plain" style="border-bottom:0" aria-labelledby="h-plain"><div class="wrap">
+<span class="sec-k">Read before you quote it</span>
+<h2 id="h-plain">What this can and cannot tell you</h2>
+<div class="plain-grid">
+<div>
 <h3>Can</h3>
 <ul>
-<li>Show where a screened TRIR sits against a public, self-reported peer distribution for a NAICS-3 industry and size band.</li>
-<li>Show how much a national or industry aggregate rate depends on whether implausible hours values are screened out first.</li>
+<li>Show where one site-year's TRIR sits against a public, self-reported peer distribution for a NAICS-3 industry and size band, after the hours screen.</li>
+<li>Show whether a set of hours and headcount would pass the pipeline's plausibility screen.</li>
+<li>Show how much a national aggregate rate depends on screening implausible hours first.</li>
 </ul>
+</div>
+<div>
 <h3>Cannot</h3>
 <ul>
-<li>Stand in for OSHA's own enforcement data or a regulator's determination. This is Form 300A summary data only, not inspection or citation records.</li>
-<li>Guarantee any individual filing is accurate. The screen catches implausible hours values; it cannot verify case counts, classification, or intent.</li>
-<li>Identify a peer group more precisely than NAICS-3 and one of seven size bands. Two establishments in the same cell can differ a great deal in process, geography and workforce.</li>
-<li>Treat a small n as reliable. Check the <span class="mono">publishable</span> flag and the n shown for the selected cell before reading percentiles as a fact.</li>
+<li>Stand in for OSHA's enforcement data or a regulator's view. This is Form 300A summary data only, not inspections or citations.</li>
+<li>Prove any single filing is accurate. The screen catches implausible hours; it cannot verify case counts, classification or intent.</li>
+<li>Match peers more closely than NAICS-3 and one of seven size bands. Two sites in the same cell can differ a great deal.</li>
+<li>Give an exact percentile. The table stores p10, p25, p50, p75, p90 and p95, so a rate is placed between two of them, not interpolated.</li>
+<li>Treat a small cell as reliable. Cells under 30 filings are marked below the publishing threshold; read them with caution.</li>
 </ul>
+</div>
+</div>
+<div class="next-links">
+<a class="btn btn-primary" href="story.html">Read the story: The denominator</a>
+<a class="btn" href="index.html">Project page</a>
 </div>
 </div></section>
 </main>
@@ -325,298 +449,428 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
 <a href="https://github.com/priyatham9">GitHub</a>
 <a href="https://linkedin.com/in/priyatham9">LinkedIn</a>
 </div>
-<p>Peer percentiles, year-by-year quality figures and the 2019 note are read from <span class="mono">docs/explore-data.json</span>, generated once from committed tables under <span class="mono">outputs/tables/</span> and <span class="mono">outputs/summary.json</span>.</p>
+<p>Every number on this page is read from <span class="mono">docs/explore-data.json</span>, built by <span class="mono">scripts/build_explore_data.py</span> from committed tables under <span class="mono">outputs/tables/</span> and <span class="mono">outputs/summary.json</span>. Your inputs never leave the browser.</p>
 </div></footer>
 
 
-<script>
+<script id="page-js">
+/* Denominator explorer. Every figure is read from explore-data.json, which
+   scripts/build_explore_data.py builds from committed outputs/ tables. */
 (function () {
   "use strict";
   var DATA = null;
+  var SVGNS = "http://www.w3.org/2000/svg";
+  var EXAMPLE = { naics: "493", band: "050-099", emp: 60, hours: 120000, cases: 4, typo: false };
+  var PKEYS = ["p10", "p25", "p50", "p75", "p90", "p95"];
+  var S = { naics: "", band: "", emp: "", hours: "", cases: "", typo: false };
+  var isExample = true;
+  var selYear = 2019;
 
-  function fmt(n, d) { d = d == null ? 2 : d; return Number(n).toLocaleString(undefined, {minimumFractionDigits:d, maximumFractionDigits:d}); }
-  function pct(n) { return (n * 100).toFixed(1) + '%'; }
-  function el(tag, attrs, parent) {
-    var e = document.createElementNS('http://www.w3.org/2000/svg', tag);
-    for (var k in attrs) e.setAttribute(k, attrs[k]);
+  function $(id) { return document.getElementById(id); }
+  function nf(v, d) { return Number(v).toLocaleString("en-US", { minimumFractionDigits: d || 0, maximumFractionDigits: d || 0 }); }
+  function pct(v, d) { return (v * 100).toFixed(d == null ? 1 : d) + "%"; }
+  function rate(v) { return v >= 100 ? nf(v, 0) : v >= 10 ? v.toFixed(1) : v >= 0.1 ? v.toFixed(2) : v.toFixed(3); }
+  function svg(tag, attrs, parent) {
+    var e = document.createElementNS(SVGNS, tag);
+    for (var k in attrs) if (attrs[k] != null) e.setAttribute(k, String(attrs[k]));
     if (parent) parent.appendChild(e);
     return e;
+  }
+  function t(parent, x, y, s, attrs) {
+    var a = { x: x, y: y, fill: "var(--ink-2)", "font-size": 12, "font-family": "var(--font-mono)" };
+    for (var k in attrs) a[k] = attrs[k];
+    var n = svg("text", a, parent); n.textContent = s; return n;
   }
   function h(tag, attrs, parent) {
     var e = document.createElement(tag);
-    for (var k in attrs) { if (k === 'text') e.textContent = attrs[k]; else e.setAttribute(k, attrs[k]); }
+    for (var k in attrs) { if (k === "text") e.textContent = attrs[k]; else if (k === "html") e.innerHTML = attrs[k]; else e.setAttribute(k, attrs[k]); }
     if (parent) parent.appendChild(e);
     return e;
   }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function widthOf(node) { return Math.max(280, Math.round(node.getBoundingClientRect().width || node.clientWidth || 600)); }
+  function title(code) { return DATA.titles[code] || ""; }
+  function bandFor(emp) {
+    var edges = [1, 20, 50, 100, 250, 500, 1000];
+    if (!(emp >= 1)) return null;
+    for (var i = edges.length - 1; i >= 0; i--) if (emp >= edges[i]) return DATA.size_bands[i];
+    return null;
+  }
+  function num(v) { if (v === "" || v == null) return NaN; var n = Number(v); return isFinite(n) ? n : NaN; }
 
+  /* ---------------- state and URL ---------------- */
+  function readUrl() {
+    var q = new URLSearchParams(location.search);
+    var has = false;
+    ["naics", "band", "emp", "hours", "cases"].forEach(function (k) { if (q.has(k)) { S[k] = q.get(k); has = true; } });
+    if (q.get("typo") === "1") { S.typo = true; has = true; }
+    return has;
+  }
+  function loadExample() {
+    S.naics = EXAMPLE.naics; S.band = EXAMPLE.band; S.emp = String(EXAMPLE.emp);
+    S.hours = String(EXAMPLE.hours); S.cases = String(EXAMPLE.cases); S.typo = false;
+  }
+  var urlTimer = null;
+  function writeUrl() {
+    if (urlTimer) clearTimeout(urlTimer);
+    urlTimer = setTimeout(function () {
+      var q = new URLSearchParams();
+      q.set("naics", S.naics); q.set("band", S.band);
+      if (S.emp !== "") q.set("emp", S.emp);
+      if (S.hours !== "") q.set("hours", S.hours);
+      if (S.cases !== "") q.set("cases", S.cases);
+      if (S.typo) q.set("typo", "1");
+      var url = location.pathname + "?" + q.toString() + location.hash;
+      try { history.replaceState(null, "", url); } catch (e) { /* file:// or sandboxed frame */ }
+    }, 150);
+  }
+  function pushToForm() {
+    $("naics3").value = S.naics; $("sizeband").value = S.band;
+    $("inEmp").value = S.emp; $("inHours").value = S.hours; $("inCases").value = S.cases;
+    $("btnTypo").setAttribute("aria-pressed", S.typo ? "true" : "false");
+  }
+
+  /* ---------------- selects ---------------- */
   function populateSelects() {
-    var naicsSel = document.getElementById('naics3');
-    DATA.naics3_list.forEach(function (code) {
-      var title = DATA.titles[code];
-      var label = title ? (code + ': ' + title) : code;
-      h('option', {value: code, text: label}, naicsSel);
-    });
-    var sbSel = document.getElementById('sizeband');
-    DATA.size_bands.forEach(function (sb) {
-      h('option', {value: sb, text: sb + ' employees'}, sbSel);
-    });
-    // default: pick a mid-size well-populated cell if present
-    var pref = DATA.peers.find(function(p){return p.naics3==='238' && p.size_band==='020-049';}) || DATA.peers[0];
-    if (pref) { naicsSel.value = pref.naics3; sbSel.value = pref.size_band; }
+    var sel = $("naics3");
+    var titled = DATA.naics3_list.filter(function (c) { return title(c); })
+      .sort(function (a, b) { return title(a).localeCompare(title(b)); });
+    var other = DATA.naics3_list.filter(function (c) { return !title(c); });
+    var g1 = h("optgroup", { label: "NAICS 2022 subsectors" }, sel);
+    titled.forEach(function (c) { h("option", { value: c, text: title(c) + " (" + c + ")" }, g1); });
+    var g2 = h("optgroup", { label: "Codes with no 2022 subsector title, as filed" }, sel);
+    other.forEach(function (c) { h("option", { value: c, text: c + " (no 2022 title)" }, g2); });
+    var sb = $("sizeband");
+    DATA.size_bands.forEach(function (b) { h("option", { value: b, text: bandLabel(b) }, sb); });
+  }
+  function cell() {
+    for (var i = 0; i < DATA.peers.length; i++) { var p = DATA.peers[i]; if (p.naics3 === S.naics && p.size_band === S.band) return p; }
+    return null;
   }
 
-  function currentCell() {
-    var n3 = document.getElementById('naics3').value;
-    var sb = document.getElementById('sizeband').value;
-    return DATA.peers.find(function (p) { return p.naics3 === n3 && p.size_band === sb; });
-  }
-
-  var W = 700, H = 150, PAD = {l: 50, r: 40, t: 20, b: 30};
-
-  function renderBand() {
-    var cell = currentCell();
-    var wrap = document.getElementById('bandChartWrap');
-    wrap.innerHTML = '';
-    var stats = document.getElementById('cellStats');
-    var cap = document.getElementById('bandCaption');
-    var tblWrap = document.getElementById('bandTable');
-    if (!cell) {
-      stats.innerHTML = '<p>No data for this combination.</p>';
-      cap.textContent = '';
-      tblWrap.innerHTML = '';
-      return;
-    }
-    var maxV = Math.max(cell.p90, 1) * 1.15;
-    var iw = W - PAD.l - PAD.r;
-    function nx(v) { return PAD.l + (v / maxV) * iw; }
-    var svg = el('svg', {viewBox: '0 0 ' + W + ' ' + H, role: 'img',
-      'aria-label': 'Screened TRIR percentile band for NAICS ' + cell.naics3 + ', size band ' + cell.size_band +
-        ': p10 ' + fmt(cell.p10,1) + ', p25 ' + fmt(cell.p25,1) + ', p50 ' + fmt(cell.p50,1) + ', p75 ' + fmt(cell.p75,1) + ', p90 ' + fmt(cell.p90,1),
-      xmlns: 'http://www.w3.org/2000/svg', 'font-family': "'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace"});
-    el('rect', {x:0,y:0,width:W,height:H,fill:'var(--fig-paper)'}, svg);
-    var midY = 78;
-    // axis
-    var ticks = 5;
-    for (var i = 0; i <= ticks; i++) {
-      var v = maxV * i / ticks;
-      var x = nx(v);
-      el('line', {x1:x,y1:20,x2:x,y2:midY+34,stroke:'var(--fig-grid)','stroke-width':1}, svg);
-      el('text', {x:x,y:midY+52,'font-size':10,'text-anchor':'middle',fill:'var(--fig-axis)'}, svg).textContent = fmt(v,1);
-    }
-    // p10-p90 band
-    el('rect', {x:nx(cell.p10), y:midY-18, width:Math.max(nx(cell.p90)-nx(cell.p10),1), height:36, fill:'var(--s1)', opacity:0.22}, svg);
-    // p25-p75 box
-    el('rect', {x:nx(cell.p25), y:midY-12, width:Math.max(nx(cell.p75)-nx(cell.p25),1), height:24, fill:'var(--s1)', opacity:0.45}, svg);
-    // median line
-    el('line', {x1:nx(cell.p50), y1:midY-18, x2:nx(cell.p50), y2:midY+18, stroke:'var(--s1)', 'stroke-width':3}, svg);
-    // markers p10/p90
-    [['p10',cell.p10],['p25',cell.p25],['p50',cell.p50],['p75',cell.p75],['p90',cell.p90]].forEach(function(pair){
-      var x = nx(pair[1]);
-      el('circle', {cx:x, cy:midY, r:3.5, fill:'var(--fig-paper)', stroke:'var(--s1)', 'stroke-width':2}, svg);
-      el('text', {x:x, y:midY-26, 'font-size':10, 'text-anchor':'middle', fill:'var(--fig-axis)', 'font-weight':600}, svg).textContent = pair[0];
-    });
-    // your marker
-    var inputMarker = window.__markerTRIR;
-    if (inputMarker != null && isFinite(inputMarker)) {
-      var mx = nx(Math.min(inputMarker, maxV));
-      el('line', {x1:mx,y1:midY-30,x2:mx,y2:midY+30, stroke:'var(--s2)', 'stroke-width':3}, svg);
-      el('polygon', {points: (mx-6)+','+(midY-34)+' '+(mx+6)+','+(midY-34)+' '+mx+','+(midY-26), fill:'var(--s2)'}, svg);
-      el('text', {x:mx, y:midY-38, 'font-size':10, 'text-anchor':'middle', fill:'var(--s2)', 'font-weight':700}, svg).textContent = 'you';
-    }
-    el('text', {x:W/2, y:H-4, 'font-size':11, 'text-anchor':'middle', fill:'var(--fig-axis)'}, svg).textContent = 'Screened TRIR (cases per 200,000 hours)';
-    wrap.appendChild(svg);
-
-    stats.innerHTML = '';
-    var items = [
-      ['n establishments', cell.n.toLocaleString()],
-      ['publishable', cell.publishable ? 'yes' : 'no'],
-      ['median TRIR', fmt(cell.p50,2)],
-      ['p10 – p90', fmt(cell.p10,2) + ' – ' + fmt(cell.p90,2)],
-    ];
-    items.forEach(function (it) {
-      var s = h('div', {class:'stat'}, stats);
-      var v = h('div', {class:'v ' + (it[0]==='publishable' ? (cell.publishable?'pub-yes':'pub-no') : ''), text: it[1]}, s);
-      h('div', {class:'k', text: it[0]}, s);
-    });
-    cap.textContent = 'NAICS ' + cell.naics3 + (cell.title ? ' (' + cell.title + ')' : '') + ', size band ' + cell.size_band + '. ' +
-      (cell.publishable ? 'This cell meets the pipeline’s publishability threshold.' : 'This cell is below the pipeline’s publishability threshold; read the percentiles with caution.');
-
-    tblWrap.innerHTML = '';
-    var tbl = h('table', {}, tblWrap);
-    var thead = h('thead', {}, tbl);
-    var htr = h('tr', {}, thead);
-    ['Percentile','TRIR'].forEach(function(t){h('th',{text:t},htr);});
-    var tbody = h('tbody', {}, tbl);
-    [['p10',cell.p10],['p25',cell.p25],['p50',cell.p50],['p75',cell.p75],['p90',cell.p90]].forEach(function(pair){
-      var tr = h('tr', {}, tbody);
-      h('td', {text: pair[0]}, tr);
-      h('td', {text: fmt(pair[1],2)}, tr);
-    });
-    var tr2 = h('tr', {}, tbody);
-    h('td', {text:'n'}, tr2); h('td', {text: cell.n.toLocaleString()}, tr2);
-  }
-
-  function renderMark() {
-    var cases = parseFloat(document.getElementById('inCases').value);
-    var hours = parseFloat(document.getElementById('inHours').value);
-    var stats = document.getElementById('markStats');
-    var screenBox = document.getElementById('screenResult');
-    stats.innerHTML = '';
-    if (!isFinite(cases) || !isFinite(hours) || hours <= 0 || cases < 0) {
-      window.__markerTRIR = null;
-      h('div', {class:'stat'}, stats).innerHTML = '<div class="v">—</div><div class="k">enter valid cases and hours</div>';
-      screenBox.textContent = 'Enter a positive hours value to run the screen.';
-      renderBand();
-      return;
-    }
-    var trir = cases * 200000 / hours;
-    window.__markerTRIR = trir;
-    var it = h('div', {class:'stat'}, stats);
-    h('div', {class:'v', text: fmt(trir,2)}, it);
-    h('div', {class:'k', text: 'your TRIR'}, it);
-
-    var minH = DATA.screen_rule.min_hours_per_employee, maxH = DATA.screen_rule.max_hours_per_employee;
-    // Without an employee count this tool cannot compute hours-per-employee exactly;
-    // it flags on total hours falling outside a single-employee plausible range as a floor check,
-    // and states the real rule in words.
-    var flagged = hours < minH || hours > maxH * 500; // generous floor-only sanity check, real rule needs employees
-    screenBox.innerHTML = 'Pipeline rule: a filing is screened out when hours worked per average employee is below <code>' + minH +
-      '</code> or above <code>' + maxH + '</code> per year (source: <a href="https://github.com/priyatham9/ehs-osha-analysis/blob/main/src/ehs_osha/quality.py">src/ehs_osha/quality.py</a>). ' +
-      'This tool only has your total hours, not an employee count, so it cannot apply that exact per-employee test. To check it yourself, divide your hours by average headcount and compare it to that range.';
-    renderBand();
-  }
-
-  function lineChart(containerId, x, series, yFmt, aspect) {
-    var w = 780, hh = Math.round(w / (aspect || 2.4));
-    var pad = {l:50,r:20,t:18,b:34};
-    var iw = w - pad.l - pad.r, ih = hh - pad.t - pad.b;
-    var allV = [];
-    series.forEach(function(s){ s.values.forEach(function(v){ if (v!=null) allV.push(v); }); });
-    var minV = Math.min.apply(null, allV.concat([0]));
-    var maxV = Math.max.apply(null, allV) * 1.1;
-    function nx(i) { return pad.l + (x.length>1 ? iw/(x.length-1)*i : 0); }
-    function ny(v) { return pad.t + ih - (v-minV)/(maxV-minV||1)*ih; }
-    var svg = el('svg', {viewBox:'0 0 '+w+' '+hh, role:'img', 'aria-label': series.map(function(s){return s.name;}).join(' vs ') + ' by year',
-      xmlns:'http://www.w3.org/2000/svg', 'font-family':"'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace"});
-    el('rect', {x:0,y:0,width:w,height:hh,fill:'var(--fig-paper)'}, svg);
-    var ticks = 4;
-    for (var i=0;i<=ticks;i++){
-      var v = minV + (maxV-minV)*i/ticks;
-      var y = ny(v);
-      el('line', {x1:pad.l,y1:y,x2:w-pad.r,y2:y,stroke:'var(--fig-grid)','stroke-width':1}, svg);
-      el('text', {x:pad.l-8,y:y+3,'font-size':10,'text-anchor':'end',fill:'var(--fig-axis)'}, svg).textContent = yFmt ? yFmt(v) : fmt(v,1);
-    }
-    x.forEach(function(lab,i){
-      el('text', {x:nx(i), y:hh-10, 'font-size':10, 'text-anchor':'middle', fill:'var(--fig-axis)'}, svg).textContent = lab;
-    });
-    var colors = ['var(--s1)','var(--s2)','var(--s3)','var(--s4)'];
-    series.forEach(function(s, si){
-      var d = '';
-      s.values.forEach(function(v,i){ if (v==null) return; d += (d?'L':'M') + nx(i) + ',' + ny(v) + ' '; });
-      el('path', {d:d, fill:'none', stroke:colors[si%4], 'stroke-width':2.5, 'stroke-linejoin':'round'}, svg);
-      s.values.forEach(function(v,i){
-        if (v==null) return;
-        el('circle', {cx:nx(i), cy:ny(v), r:4, fill:'var(--fig-paper)', stroke:colors[si%4], 'stroke-width':2.5}, svg);
-      });
-    });
-    // 2019 annotation
-    var idx2019 = x.indexOf('2019');
-    if (idx2019 >= 0 && series.length) {
-      var annV = series[0].values[idx2019];
-      if (annV != null) {
-        el('circle', {cx:nx(idx2019), cy:ny(annV), r:8, fill:'none', stroke:'var(--warn)', 'stroke-width':2}, svg);
+  /* ---------------- where a rate sits among stored percentiles ---------------- */
+  function place(c, v) {
+    if (v === 0) return { txt: "zero, like " + pct(c.zero_share, 0) + " of these peer filings", lo: null, hi: null, zero: true };
+    var prev = null;
+    for (var i = 0; i < PKEYS.length; i++) {
+      var k = PKEYS[i];
+      if (v <= c[k]) {
+        if (!prev) return { txt: "below the 10th percentile", lo: null, hi: k };
+        return { txt: "between the " + ord(prev) + " and " + ord(k) + " percentile", lo: prev, hi: k };
       }
+      prev = k;
     }
-    var out = document.getElementById(containerId);
-    out.innerHTML = '';
-    out.appendChild(svg);
-    if (series.length > 1) {
-      var lg = h('div', {style:'display:flex;gap:16px;margin-top:8px;font-family:var(--font-mono);font-size:.75rem;color:var(--ink-2)'}, out);
-      series.forEach(function(s,i){
-        var sp = h('span', {style:'display:inline-flex;align-items:center;gap:6px'}, lg);
-        h('i', {style:'display:inline-block;width:10px;height:10px;background:'+colors[i%4]}, sp);
-        sp.appendChild(document.createTextNode(s.name));
-      });
-    }
+    return { txt: "above the 95th percentile, the worst twentieth of peers", lo: "p95", hi: null, top: true };
   }
+  function ord(k) { var n = +k.slice(1); return n === 50 ? "50th (median)" : n + "th"; }
 
-  function barChart(containerId, x, values) {
-    var w = 780, hh = 260;
-    var pad = {l:50,r:20,t:18,b:34};
-    var iw = w - pad.l - pad.r, ih = hh - pad.t - pad.b;
-    var maxV = Math.max.apply(null, values) * 1.15;
-    var bw = iw / x.length;
-    function ny(v) { return pad.t + ih - (v/maxV)*ih; }
-    var svg = el('svg', {viewBox:'0 0 '+w+' '+hh, role:'img', 'aria-label':'Share of filings flagged implausible by year',
-      xmlns:'http://www.w3.org/2000/svg', 'font-family':"'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace"});
-    el('rect', {x:0,y:0,width:w,height:hh,fill:'var(--fig-paper)'}, svg);
-    var ticks = 4;
-    for (var i=0;i<=ticks;i++){
-      var v = maxV*i/ticks, y = ny(v);
-      el('line', {x1:pad.l,y1:y,x2:w-pad.r,y2:y,stroke:'var(--fig-grid)','stroke-width':1}, svg);
-      el('text', {x:pad.l-8,y:y+3,'font-size':10,'text-anchor':'end',fill:'var(--fig-axis)'}, svg).textContent = pct(v);
+  /* ---------------- render: the tool ---------------- */
+  function render() {
+    var c = cell();
+    var emp = num(S.emp), hours0 = num(S.hours), cases = num(S.cases);
+    var hours = S.typo && isFinite(hours0) ? hours0 * 1000 : hours0;
+    var okH = isFinite(hours) && hours > 0, okC = isFinite(cases) && cases >= 0 && Math.floor(cases) === cases;
+    var okE = isFinite(emp) && emp > 0;
+    $("inHours").setAttribute("aria-invalid", S.hours !== "" && !(isFinite(hours0) && hours0 > 0) ? "true" : "false");
+    $("inCases").setAttribute("aria-invalid", S.cases !== "" && !okC ? "true" : "false");
+    $("inEmp").setAttribute("aria-invalid", S.emp !== "" && !okE ? "true" : "false");
+
+    var ex = $("example");
+    ex.setAttribute("data-mode", isExample ? "example" : "own");
+    ex.innerHTML = isExample
+      ? "<span><b>Worked example.</b> A " + EXAMPLE.emp + "-person warehouse, " + nf(EXAMPLE.hours) + " hours (2,000 each), " + EXAMPLE.cases + " recordable cases. Replace it with your own numbers.</span>"
+      : "<span><b>Your numbers.</b> Nothing is sent anywhere; the link below carries them.</span>";
+
+    /* TRIR */
+    var trir = okH && okC ? cases * 200000 / hours : NaN;
+    var trirRaw = S.typo && isFinite(hours0) && hours0 > 0 && okC ? cases * 200000 / hours0 : NaN;
+    $("trirN").innerHTML = isFinite(trir) ? rate(trir) : "-";
+    $("trirS").textContent = !isFinite(trir) ? "Enter hours above zero and a whole number of cases."
+      : S.typo ? "As typed, with three extra zeros. The real rate is " + rate(trirRaw) + ", so the typo makes this site look " + nf(1000) + " times safer."
+      : "Recordable cases per 200,000 hours, about 100 full-time workers for a year.";
+    $("vTrir").classList.toggle("is-bad", !!S.typo && isFinite(trir));
+
+    /* hours check */
+    var lo = DATA.screen_rule.min_hours_per_employee, hi = DATA.screen_rule.max_hours_per_employee;
+    var hpe = okH && okE ? hours / emp : NaN;
+    var fail = isFinite(hpe) && (hpe < lo || hpe > hi);
+    var hpeTxt;
+    if (!isFinite(hpe)) {
+      $("hpeN").innerHTML = '<span class="pill na">not checked</span>';
+      hpeTxt = okH ? "Add average employees to run the screen the pipeline uses." : "Enter hours and employees.";
+    } else {
+      $("hpeN").innerHTML = nf(hpe, 0) + "<small> h / employee</small>";
+      hpeTxt = (fail ? '<span class="pill bad">Fails the screen</span> ' : '<span class="pill ok">Passes</span> ') +
+        (hpe > hi ? "More than " + nf(hi) + " hours per person a year. There are only 8,760 hours in a year; a full-time year is about 2,000."
+          : hpe < lo ? "Fewer than " + nf(lo) + " hours per person a year: about three weeks of full-time work."
+          : "Inside " + nf(lo) + " to " + nf(hi) + " hours per person a year.");
     }
-    values.forEach(function(v,i){
-      var bx = pad.l + bw*i + bw*0.15;
-      var bwid = bw*0.7;
-      var by = ny(v);
-      var color = x[i]==='2019' ? 'var(--s2)' : 'var(--s1)';
-      el('rect', {x:bx, y:by, width:bwid, height: pad.t+ih-by, fill:color, rx:2}, svg);
-      el('text', {x:bx+bwid/2, y:hh-10, 'font-size':10, 'text-anchor':'middle', fill:'var(--fig-axis)'}, svg).textContent = x[i];
+    $("hpeS").innerHTML = hpeTxt;
+    $("vScreen").classList.toggle("is-bad", fail);
+
+    /* readout sentence */
+    var ro = $("readout");
+    if (!c) {
+      ro.innerHTML = "No screened filings exist for this industry and size band. Try a neighbouring size band.";
+    } else if (!isFinite(trir)) {
+      ro.innerHTML = "Enter hours and recordable cases to place a rate.";
+    } else {
+      var pl = place(c, trir);
+      var who = (title(c.naics3) || "NAICS " + c.naics3) + ", " + bandLabel(c.size_band);
+      var s;
+      if (fail) {
+        s = '<span class="warnw">This filing would be excluded.</span> Its hours per employee fail the screen, so the pipeline leaves it out of every rate and every peer table. As filed, its rate would read ' + pl.txt + " of " + esc(who) + ".";
+        if (S.typo) s += " That is how a keying error turns into a flattering benchmark when nobody screens.";
+      } else {
+        s = "A rate of <b>" + rate(trir) + "</b> sits <b>" + pl.txt + "</b> of " + nf(c.n) + " screened filings in " + esc(who) + ".";
+        if (!pl.zero && c.p50 > 0) s += " That is " + (trir / c.p50).toFixed(1) + " times the peer median of " + rate(c.p50) + ".";
+        if (!pl.zero && c.zero_share >= 0.25) s += " " + pct(c.zero_share, 0) + " of these peers reported zero cases, so a single injury moves a site a long way.";
+        if (pl.zero && c.zero_share >= 0.25) s += " At this size a clean year is common; one case would move this site well up the table.";
+      }
+      if (!c.publishable) s += ' <span class="warnw">Only ' + nf(c.n) + " filings in this cell, under the 30 needed to publish it.</span>";
+      ro.innerHTML = s;
+    }
+
+    var mr = $("miniRes");
+    mr.innerHTML = isFinite(trir) ? "TRIR <b>" + rate(trir) + "</b> &middot; " + (isFinite(hpe) ? (fail ? "fails the hours check" : "passes the hours check") : "hours not checked") + (c ? " &middot; " + place(c, trir).txt.replace(/,.*$/, "") : "") + " &darr;" : "Enter your numbers to see a result &darr;";
+    renderBand(c, trir, fail);
+    writeUrl();
+  }
+  function bandLabel(b) { return (b === "1000+" ? "1,000 or more" : b.replace(/^0+/, "").replace(/-0+/, " to ")) + " employees"; }
+
+  function renderBand(c, trir, fail) {
+    var wrap = $("bandChart"), cap = $("bandCaption"), tbl = $("bandTable");
+    wrap.innerHTML = ""; tbl.innerHTML = "";
+    if (!c) { cap.textContent = ""; return; }
+    var W = widthOf(wrap), narrow = W < 520;
+    var H = narrow ? 180 : 172;
+    var L = 14, R = 18, midY = narrow ? 92 : 84;
+    var hasT = isFinite(trir);
+    var maxV = Math.max(c.p95, 1) * 1.08;
+    var over = hasT && trir > maxV;
+    function X(v) { return L + Math.min(v, maxV) / maxV * (W - L - R); }
+    var s = svg("svg", { viewBox: "0 0 " + W + " " + H, width: W, height: H, role: "img",
+      "aria-label": "Screened TRIR percentiles for " + (title(c.naics3) || "NAICS " + c.naics3) + ", " + bandLabel(c.size_band) +
+        ": p10 " + rate(c.p10) + ", p25 " + rate(c.p25) + ", median " + rate(c.p50) + ", p75 " + rate(c.p75) + ", p90 " + rate(c.p90) + ", p95 " + rate(c.p95) +
+        (hasT ? ". Your rate " + rate(trir) + (fail ? ", which would fail the hours screen" : "") : "") + "." }, wrap);
+    var nt = narrow ? 3 : 5;
+    for (var i = 0; i <= nt; i++) {
+      var v = maxV * i / nt, x = X(v);
+      svg("line", { x1: x, x2: x, y1: midY - 34, y2: midY + 30, stroke: "var(--rule-soft)", "stroke-width": 1 }, s);
+      t(s, x, midY + 58, v.toFixed(v < 10 ? 1 : 0), { "text-anchor": i === 0 ? "start" : i === nt ? "end" : "middle", fill: "var(--muted)" });
+    }
+    t(s, L, H - 6, "screened TRIR, cases per 200,000 hours", { fill: "var(--muted)", "font-size": 11 });
+    svg("rect", { x: X(c.p10), y: midY - 18, width: Math.max(X(c.p90) - X(c.p10), 2), height: 36, fill: "var(--s1)", opacity: .22 }, s);
+    svg("rect", { x: X(c.p25), y: midY - 12, width: Math.max(X(c.p75) - X(c.p25), 2), height: 24, fill: "var(--s1)", opacity: .5 }, s);
+    svg("line", { x1: X(c.p50), x2: X(c.p50), y1: midY - 20, y2: midY + 20, stroke: "var(--s1)", "stroke-width": 3 }, s);
+    svg("circle", { cx: X(c.p95), cy: midY, r: 4, fill: "var(--surface)", stroke: "var(--s1)", "stroke-width": 2 }, s);
+    /* percentile labels on alternating rows so they never collide */
+    var lastX = { top: -99, bot: -99 };
+    PKEYS.forEach(function (k, i) {
+      var x = X(c[k]);
+      var row = i % 2 ? "bot" : "top";
+      if (x - lastX[row] < (narrow ? 34 : 40)) return;
+      lastX[row] = x;
+      t(s, x, row === "top" ? midY - 26 : midY + 34, k === "p50" ? "med" : k, { "text-anchor": "middle", "font-size": 11, fill: "var(--ink-2)", "font-weight": 600 });
     });
-    var out = document.getElementById(containerId);
-    out.innerHTML = '';
-    out.appendChild(svg);
+    if (hasT) {
+      var mx = X(trir), col = fail ? "var(--warn)" : "var(--s2)";
+      svg("line", { x1: mx, x2: mx, y1: midY - 40, y2: midY + 24, stroke: col, "stroke-width": 3 }, s);
+      svg("polygon", { points: (mx - 7) + "," + (midY - 50) + " " + (mx + 7) + "," + (midY - 50) + " " + mx + "," + (midY - 40), fill: col }, s);
+      var lab = (fail ? "excluded: " : "you: ") + rate(trir) + (over ? " (off scale)" : "");
+      var anchor = mx > W * 0.7 ? "end" : mx < W * 0.3 ? "start" : "middle";
+      t(s, mx + (anchor === "end" ? 8 : anchor === "start" ? -8 : 0), midY - 56, lab, { "text-anchor": anchor, fill: col, "font-weight": 700, "font-size": 13 });
+    }
+    cap.textContent = nf(c.n) + " screened establishment-year filings, 2016 to 2024. " + pct(c.zero_share, 0) + " reported zero recordable cases. " +
+      (c.publishable ? "Meets the pipeline's 30-filing publishing threshold." : "Below the pipeline's 30-filing publishing threshold: read with caution.");
+    var tb = h("table", {}, tbl), tr = h("tr", {}, h("thead", {}, tb));
+    ["Percentile", "Screened TRIR"].forEach(function (x) { h("th", { scope: "col", text: x }, tr); });
+    var body = h("tbody", {}, tb);
+    PKEYS.forEach(function (k) { var r = h("tr", {}, body); h("td", { text: k }, r); h("td", { text: c[k].toFixed(2) }, r); });
+    var r2 = h("tr", {}, body); h("td", { text: "zero-case share" }, r2); h("td", { text: pct(c.zero_share, 1) }, r2);
+    var r3 = h("tr", {}, body); h("td", { text: "filings (n)" }, r3); h("td", { text: nf(c.n) }, r3);
   }
 
+  /* ---------------- render: the year section ---------------- */
+  function renderYearChips() {
+    var box = $("yearChips");
+    DATA.quality_by_year.forEach(function (r) {
+      var b = h("button", { type: "button", class: "chip", "aria-pressed": String(r.year === selYear), text: String(r.year) }, box);
+      b.addEventListener("click", function () { selectYear(r.year); });
+    });
+    var all = h("button", { type: "button", class: "chip", "aria-pressed": "false", text: "All years" }, box);
+    all.addEventListener("click", function () { selectYear(0); });
+  }
+  function selectYear(y) {
+    selYear = y;
+    Array.prototype.forEach.call($("yearChips").children, function (b) {
+      b.setAttribute("aria-pressed", String(b.textContent === (y ? String(y) : "All years")));
+    });
+    renderYear();
+  }
   function renderYear() {
-    var qy = DATA.quality_by_year;
-    var x = qy.map(function(r){return String(r.year);});
-    barChart('shareChartWrap', x, qy.map(function(r){return r.implausible_share;}));
-    lineChart('trirChartWrap', x, [
-      {name:'Raw (unscreened)', values: qy.map(function(r){return r.trir_unscreened;})},
-      {name:'Screened', values: qy.map(function(r){return r.trir_screened;})}
-    ], function(v){return fmt(v,1);}, 2.6);
-    document.getElementById('trirCaption').textContent = 'Aggregate TRIR before and after the plausibility screen. 2019: ' +
-      pct(DATA.note_2019.hours_share_implausible) + ' of that year’s reported hours sat in implausible filings, pulling raw TRIR to ' +
-      fmt(DATA.note_2019.trir_unscreened,3) + ' against a screened value of ' + fmt(DATA.note_2019.trir_screened,2) +
-      ', a ' + fmt(DATA.note_2019.ratio_screened_to_unscreened,1) + 'x gap (circled above).';
-
-    var tblWrap = document.getElementById('yearTable');
-    tblWrap.innerHTML = '';
-    var tbl = h('table', {}, tblWrap);
-    var thead = h('thead',{}, tbl);
-    var htr = h('tr',{},thead);
-    ['Year','Filings','Implausible share','Hours implausible','TRIR raw','TRIR screened','Ratio'].forEach(function(t){h('th',{text:t},htr);});
-    var tbody = h('tbody',{},tbl);
-    qy.forEach(function(r){
-      var tr = h('tr',{},tbody);
-      h('td',{text:String(r.year)},tr);
-      h('td',{text:r.n_filings.toLocaleString()},tr);
-      h('td',{text:pct(r.implausible_share)},tr);
-      h('td',{text:pct(r.hours_share_implausible)},tr);
-      h('td',{text:fmt(r.trir_unscreened,3)},tr);
-      h('td',{text:fmt(r.trir_screened,3)},tr);
-      h('td',{text:fmt(r.ratio,2)+'x'},tr);
+    var rows = DATA.quality_by_year;
+    var r = selYear ? rows.filter(function (x) { return x.year === selYear; })[0] : DATA.pooled;
+    var lab = selYear ? String(selYear) : "2016 to 2024";
+    var nFlag = selYear ? r.n_implausible : DATA.pooled.n_implausible;
+    var rd = $("yearRead");
+    rd.innerHTML =
+      '<div><span class="v-k">Filings flagged, ' + lab + '</span><span class="v-n">' + pct(r.implausible_share, 2) + '</span><span class="v-s">' + nf(nFlag) + " of " + nf(r.n_filings) + "</span></div>" +
+      '<div class="is-bad"><span class="v-k">Hours they hold</span><span class="v-n">' + pct(r.hours_share_implausible, 2) + '</span><span class="v-s">of every hour reported</span></div>' +
+      '<div><span class="v-k">TRIR as filed / screened</span><span class="v-n">' + rate(r.trir_unscreened) + " / " + rate(r.trir_screened) + '</span><span class="v-s">same filings, screen off and on</span></div>' +
+      '<div class="is-bad"><span class="v-k">Understated by</span><span class="v-n">' + (r.ratio >= 100 ? nf(r.ratio, 0) : r.ratio.toFixed(1)) + 'x</span><span class="v-s">screened rate divided by as-filed rate</span></div>';
+    shareChart(); trirChart();
+    Array.prototype.forEach.call(document.querySelectorAll("#yearTable tbody tr"), function (tr) {
+      tr.classList.toggle("is-sel", tr.getAttribute("data-y") === String(selYear));
     });
+    var tf = DATA.top_filing;
+    $("trirCaption").textContent = "Aggregate TRIR is total recordable cases times 200,000 divided by total hours, across all filers. " +
+      "In 2019 one filing, a " + tf.annual_average_employees + "-employee site in NAICS " + tf.naics_code + ", reported " + nf(tf.total_hours_worked / 1e12, 1) +
+      " trillion hours: " + pct(tf.share_of_year_hours, 1) + " of that year's hours and " + pct(tf.share_of_all_hours, 1) + " of all nine years. " +
+      "That one row is why the as-filed line falls to " + rate(DATA.note_2019.trir_unscreened) + ".";
+  }
+  function chartFrame(node, H) {
+    node.innerHTML = "";
+    var W = widthOf(node);
+    return { W: W, H: H, narrow: W < 560 };
+  }
+  function hitColumns(s, rows, X, bw, top, bottom, describe) {
+    rows.forEach(function (r, i) {
+      var hit = svg("rect", { x: X(i) - bw / 2, y: top, width: bw, height: bottom - top, fill: "transparent", tabindex: 0, role: "button", "aria-label": describe(r), style: "cursor:pointer;outline-offset:-3px" }, s);
+      svg("title", {}, hit).textContent = describe(r);
+      hit.addEventListener("click", function () { selectYear(r.year); });
+      hit.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); selectYear(r.year); } });
+    });
+  }
+  function shareChart() {
+    var node = $("shareChart"), rows = DATA.quality_by_year;
+    var f = chartFrame(node, 240), W = f.W, H = f.H;
+    var L = 40, R = 8, T = 16, B = 30;
+    var s = svg("svg", { viewBox: "0 0 " + W + " " + H, width: W, height: H, role: "group", "aria-label": "Share of filings flagged and share of hours they hold, by year" }, node);
+    var colW = (W - L - R) / rows.length;
+    function X(i) { return L + colW * (i + .5); }
+    function Y(v) { return T + (1 - v) * (H - T - B); }
+    [0, .5, 1].forEach(function (v) {
+      svg("line", { x1: L, x2: W - R, y1: Y(v), y2: Y(v), stroke: "var(--rule-soft)" }, s);
+      t(s, L - 6, Y(v) + 4, (v * 100) + "%", { "text-anchor": "end", fill: "var(--muted)", "font-size": 11 });
+    });
+    var bw = Math.min(26, colW * .34);
+    rows.forEach(function (r, i) {
+      var on = !selYear || r.year === selYear, op = on ? 1 : .35;
+      svg("rect", { x: X(i) - bw - 1, y: Y(r.implausible_share), width: bw, height: Y(0) - Y(r.implausible_share), fill: "var(--s1)", opacity: op }, s);
+      svg("rect", { x: X(i) + 1, y: Y(r.hours_share_implausible), width: bw, height: Y(0) - Y(r.hours_share_implausible), fill: "var(--warn)", opacity: op }, s);
+      if (!f.narrow || r.year === selYear) t(s, X(i) + 1 + bw / 2, Y(r.hours_share_implausible) - 5, Math.round(r.hours_share_implausible * 100) + "%", { "text-anchor": "middle", "font-size": 11, fill: "var(--ink)", opacity: op, "font-weight": 700 });
+      t(s, X(i), H - 10, f.narrow ? "'" + String(r.year).slice(2) : String(r.year), { "text-anchor": "middle", "font-size": 11, fill: r.year === selYear ? "var(--ink)" : "var(--muted)", "font-weight": r.year === selYear ? 700 : 400 });
+    });
+    hitColumns(s, rows, X, colW, T, H - B + 20, function (r) { return r.year + ": " + pct(r.implausible_share, 2) + " of filings flagged, holding " + pct(r.hours_share_implausible, 2) + " of hours"; });
+  }
+  function trirChart() {
+    var node = $("trirChart"), rows = DATA.quality_by_year;
+    var f = chartFrame(node, 260), W = f.W, H = f.H;
+    var L = 34, R = 12, T = 18, B = 30, yMax = 5;
+    var s = svg("svg", { viewBox: "0 0 " + W + " " + H, width: W, height: H, role: "group", "aria-label": "Aggregate TRIR by year, screened and as filed" }, node);
+    function X(i) { return L + (W - L - R) * (i / (rows.length - 1)); }
+    function Y(v) { return T + (1 - v / yMax) * (H - T - B); }
+    [0, 1, 2, 3, 4, 5].forEach(function (v) {
+      if (f.narrow && v % 2) return;
+      svg("line", { x1: L, x2: W - R, y1: Y(v), y2: Y(v), stroke: "var(--rule-soft)" }, s);
+      t(s, L - 6, Y(v) + 4, String(v), { "text-anchor": "end", fill: "var(--muted)", "font-size": 11 });
+    });
+    function path(key) { return rows.map(function (r, i) { return (i ? "L" : "M") + X(i).toFixed(1) + " " + Y(r[key]).toFixed(1); }).join(" "); }
+    /* the gap between the two lines is the denominator effect */
+    var gap = path("trir_screened") + rows.slice().reverse().map(function (r, j) { var i = rows.length - 1 - j; return " L" + X(i).toFixed(1) + " " + Y(r.trir_unscreened).toFixed(1); }).join("") + " Z";
+    svg("path", { d: gap, fill: "var(--warn)", opacity: .12 }, s);
+    svg("path", { d: path("trir_screened"), fill: "none", stroke: "var(--accent)", "stroke-width": 3, "stroke-linejoin": "round" }, s);
+    svg("path", { d: path("trir_unscreened"), fill: "none", stroke: "var(--ink-2)", "stroke-width": 2.5, "stroke-dasharray": "7 5", "stroke-linejoin": "round" }, s);
+    rows.forEach(function (r, i) {
+      var sel = r.year === selYear;
+      svg("circle", { cx: X(i), cy: Y(r.trir_screened), r: sel ? 6 : 3.5, fill: "var(--accent)", stroke: "var(--surface)", "stroke-width": 2 }, s);
+      svg("circle", { cx: X(i), cy: Y(r.trir_unscreened), r: sel ? 6 : 3.5, fill: "var(--surface)", stroke: "var(--ink-2)", "stroke-width": 2 }, s);
+      t(s, X(i), H - 10, f.narrow ? "'" + String(r.year).slice(2) : String(r.year), { "text-anchor": "middle", "font-size": 11, fill: sel ? "var(--ink)" : "var(--muted)", "font-weight": sel ? 700 : 400 });
+      if (sel) {
+        svg("line", { x1: X(i), x2: X(i), y1: Y(r.trir_screened), y2: Y(r.trir_unscreened), stroke: "var(--warn)", "stroke-width": 2 }, s);
+        var right = i < rows.length / 2, tx = X(i) + (right ? 10 : -10);
+        var ty = (Y(r.trir_screened) + Y(r.trir_unscreened)) / 2;
+        t(s, tx, ty, (r.ratio >= 100 ? nf(r.ratio, 0) : r.ratio.toFixed(1)) + "x", { "text-anchor": right ? "start" : "end", fill: "var(--warn)", "font-size": 18, "font-weight": 700 });
+      }
+    });
+    hitColumns(s, rows, X, (W - L - R) / (rows.length - 1), T, H - B + 20, function (r) { return r.year + ": screened TRIR " + rate(r.trir_screened) + ", as filed " + rate(r.trir_unscreened); });
+  }
+  function yearTable() {
+    var box = $("yearTable"), tb = h("table", {}, box), tr = h("tr", {}, h("thead", {}, tb));
+    ["Year", "Filings", "Flagged", "Hours in flagged", "TRIR as filed", "TRIR screened", "Ratio"].forEach(function (x) { h("th", { scope: "col", text: x }, tr); });
+    var body = h("tbody", {}, tb);
+    DATA.quality_by_year.concat([Object.assign({ year: "Pooled" }, DATA.pooled)]).forEach(function (r) {
+      var row = h("tr", { "data-y": String(r.year) }, body);
+      [String(r.year), nf(r.n_filings), pct(r.implausible_share, 2), pct(r.hours_share_implausible, 2), r.trir_unscreened.toFixed(3), r.trir_screened.toFixed(3), r.ratio.toFixed(2) + "x"]
+        .forEach(function (v) { h("td", { text: v }, row); });
+    });
+  }
+
+  /* ---------------- wiring ---------------- */
+  function markOwn() { if (isExample) { isExample = false; } }
+  function bind() {
+    $("naics3").addEventListener("change", function () { S.naics = this.value; markOwn(); render(); });
+    $("sizeband").addEventListener("change", function () { S.band = this.value; markOwn(); render(); });
+    $("inEmp").addEventListener("input", function () {
+      S.emp = this.value.trim(); markOwn();
+      var b = bandFor(num(S.emp));
+      if (b && b !== S.band) { S.band = b; $("sizeband").value = b; }
+      render();
+    });
+    $("inHours").addEventListener("input", function () { S.hours = this.value.trim(); markOwn(); render(); });
+    $("inCases").addEventListener("input", function () { S.cases = this.value.trim(); markOwn(); render(); });
+    $("btnTypo").addEventListener("click", function () {
+      S.typo = !S.typo; this.setAttribute("aria-pressed", String(S.typo));
+      this.textContent = S.typo ? "Remove the three zeros" : "Add three zeros to the hours";
+      render();
+    });
+    $("btnReset").addEventListener("click", function () {
+      loadExample(); isExample = true; pushToForm();
+      $("btnTypo").textContent = "Add three zeros to the hours";
+      render(); $("copyStatus").textContent = "Worked example restored.";
+    });
+    $("btnCopy").addEventListener("click", function () {
+      writeUrl();
+      setTimeout(function () {
+        var url = location.href, st = $("copyStatus");
+        function done(ok) { st.textContent = ok ? "Link copied. It opens this exact view." : "Copy the address bar to share this view."; }
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(function () { done(true); }, function () { done(false); });
+        else done(false);
+      }, 170);
+    });
+    $("tool-form").addEventListener("submit", function (e) { e.preventDefault(); });
+    var rt = null, lastW = window.innerWidth;
+    window.addEventListener("resize", function () {
+      if (rt) clearTimeout(rt);
+      rt = setTimeout(function () { if (window.innerWidth === lastW) return; lastW = window.innerWidth; render(); shareChart(); trirChart(); }, 150);
+    }, { passive: true });
   }
 
   function init() {
-    fetch('./explore-data.json').then(function(r){return r.json();}).then(function(json){
+    fetch("./explore-data.json").then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); }).then(function (json) {
       DATA = json;
       populateSelects();
-      document.getElementById('naics3').addEventListener('change', renderBand);
-      document.getElementById('sizeband').addEventListener('change', renderBand);
-      document.getElementById('inCases').addEventListener('input', renderMark);
-      document.getElementById('inHours').addEventListener('input', renderMark);
-      renderMark();
-      renderBand();
+      var fromUrl = readUrl();
+      if (!fromUrl) loadExample();
+      else {
+        if (DATA.naics3_list.indexOf(S.naics) < 0) S.naics = EXAMPLE.naics;
+        if (DATA.size_bands.indexOf(S.band) < 0) S.band = bandFor(num(S.emp)) || EXAMPLE.band;
+        isExample = S.naics === EXAMPLE.naics && S.band === EXAMPLE.band && S.emp === String(EXAMPLE.emp) &&
+          S.hours === String(EXAMPLE.hours) && S.cases === String(EXAMPLE.cases) && !S.typo;
+      }
+      pushToForm();
+      if (S.typo) $("btnTypo").textContent = "Remove the three zeros";
+      bind();
+      render();
+      yearTable();
+      renderYearChips();
       renderYear();
-    }).catch(function(err){
-      document.getElementById('cellStats').innerHTML = '<p>Could not load explore-data.json: ' + err + '</p>';
+    }).catch(function (err) {
+      $("readout").textContent = "Could not load explore-data.json (" + err.message + "). If you opened this file directly, serve the docs folder over HTTP.";
     });
   }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })();
 </script>
 <script id="rs-header-js">

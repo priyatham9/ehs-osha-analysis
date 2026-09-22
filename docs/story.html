@@ -293,6 +293,99 @@ html.st-printing .stage-num .st-bignum{font-size:16pt!important;color:#000!impor
 html.st-printing .stage-num .stage-num-note{color:#000!important;font-size:8pt!important;padding:0!important;line-height:1.4!important}
 html.st-printing .st-figure figcaption{color:#000!important;font-size:8pt!important}
 html.st-printing body{padding:0 24px!important}
+
+/* ============ overture: the screen as a particle field ============ */
+:root{--ok:#17693A}
+.overture{position:relative;padding:56px 0 60px;border-bottom:var(--hair);overflow:hidden;isolation:isolate}
+.overture::before{content:"";position:absolute;inset:-20% -10% auto auto;width:70vmax;height:70vmax;background:radial-gradient(closest-side,color-mix(in srgb,var(--accent) 16%,transparent),transparent 70%);z-index:-1;pointer-events:none;transform:translate3d(0,var(--ov-par,0px),0)}
+@supports not (background:color-mix(in srgb,red 10%,transparent)){.overture::before{background:radial-gradient(closest-side,var(--accent-wash),transparent 70%)}}
+.overture::after{content:"";position:absolute;inset:0;background-image:radial-gradient(var(--grid-dot) 1px,transparent 1px);background-size:22px 22px;z-index:-2;pointer-events:none;opacity:.7}
+.ov-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:44px;align-items:center}
+@media(max-width:900px){.ov-grid{grid-template-columns:minmax(0,1fr);gap:22px}}
+.ov-stage{min-width:0}
+@media(max-width:900px){.ov-panel{display:contents}.ov-grid > .ov-stage{order:2}.ov-panel > *{order:3}.ov-panel > .label{order:0}.ov-panel > .ov-h{order:1;margin-bottom:0}}
+.ov-canvas{display:block;width:100%;aspect-ratio:16/10;border:2px solid var(--rule);border-radius:var(--r);background:var(--surface)}
+@media(max-width:900px){.ov-canvas{aspect-ratio:1/1}}
+.ov-legend{display:flex;flex-wrap:wrap;gap:6px 18px;margin:10px 0 0;font-family:var(--font-mono);font-size:.6875rem;letter-spacing:.06em;color:var(--muted)}
+.ov-legend span{display:inline-flex;align-items:center;gap:7px}
+.ov-legend b{font-weight:600;color:var(--ink-2)}
+.ov-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ink-2);opacity:.6}
+.ov-dot.warn{background:var(--warn);opacity:1;box-shadow:0 0 0 3px color-mix(in srgb,var(--warn) 25%,transparent)}
+.ov-panel{min-width:0}
+.ov-h{margin:10px 0 18px;font-stretch:125%;font-weight:900;text-transform:uppercase;font-size:clamp(1.5rem,3.2vw,2.4rem);line-height:1.04}
+.ov-em{font-style:normal;color:var(--accent);background:linear-gradient(transparent 62%,color-mix(in srgb,var(--accent) 22%,transparent) 62%) no-repeat;background-size:0% 100%;transition:background-size .9s cubic-bezier(.22,.7,.2,1) .2s}
+.overture.is-screened .ov-em{background-size:100% 100%}
+.ov-rate{padding:16px 18px;border:2px solid var(--rule);background:var(--surface);border-radius:var(--r-sm)}
+.ov-rate-k{display:block;font-family:var(--font-mono);font-size:.625rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.ov-rate-n{display:block;font-family:var(--font-mono);font-variant-numeric:tabular-nums;font-weight:700;font-size:clamp(3rem,7vw,5.2rem);line-height:1;letter-spacing:-.04em;color:var(--accent);margin:6px 0 4px;transition:color .4s}
+.overture.is-raw .ov-rate-n{color:var(--warn)}
+.ov-rate-s{display:block;font-size:.8125rem;color:var(--muted)}
+.ov-bars{margin:16px 0 0;display:grid;gap:10px}
+.ov-bar{display:grid;grid-template-columns:minmax(0,1fr) 54px;grid-template-rows:auto auto;gap:4px 10px;align-items:center}
+.ov-bar-k{grid-column:1/-1;font-family:var(--font-mono);font-size:.625rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.ov-track{height:12px;background:var(--surface-2);border:1px solid var(--rule-soft);position:relative;overflow:hidden}
+.ov-track i{position:absolute;inset:0 auto 0 0;background:var(--ink-2)}
+.ov-track i.warn{background:var(--warn)}
+.ov-bar-v{font-family:var(--font-mono);font-size:.8125rem;font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+.ov-seg,.seg{display:inline-flex;flex-wrap:wrap;margin:18px 0 0;border:2px solid var(--rule);background:var(--surface)}
+.ov-btn,.seg button{min-height:42px;padding:8px 16px;border:0;border-left:2px solid var(--rule-soft);background:transparent;color:var(--ink);font-family:var(--font-mono);font-size:.6875rem;letter-spacing:.1em;text-transform:uppercase;font-weight:700;cursor:pointer}
+.ov-btn:first-child,.seg button:first-child{border-left:0}
+.ov-btn[aria-pressed="true"],.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.ov-btn:hover:not([aria-pressed="true"]),.seg button:hover:not([aria-pressed="true"]){color:var(--accent)}
+.ov-note{margin:14px 0 0;font-size:.9375rem;color:var(--ink-2);max-width:52ch}
+.ov-src{overflow-wrap:anywhere;margin:8px 0 0;font-family:var(--font-mono);font-size:.625rem;letter-spacing:.06em;color:var(--muted)}
+
+/* ============ leader blocks ============ */
+.lead-sec{padding:44px 0;background:var(--surface-2)}
+.lead{border:2px solid var(--rule);background:var(--surface);max-width:1180px;margin:0 auto}
+.lead-top{padding:24px 26px 6px}
+.lead-k{display:block;font-family:var(--font-mono);font-size:.6875rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:10px}
+.lead-h{font-stretch:115%;font-weight:800;font-size:clamp(1.3rem,2.6vw,1.9rem);line-height:1.12;max-width:34ch}
+.lead-body{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.4fr);gap:28px;padding:18px 26px 24px;align-items:start}
+@media(max-width:860px){.lead-body{grid-template-columns:minmax(0,1fr);gap:16px}}
+.lead-n{display:block;font-family:var(--font-mono);font-variant-numeric:tabular-nums;font-weight:700;font-size:clamp(3rem,7vw,5rem);line-height:1;letter-spacing:-.04em;color:var(--accent)}
+.lead-cap{display:block;margin-top:10px;font-size:.9rem;color:var(--ink-2);line-height:1.5;max-width:40ch}
+.lead-vis{min-width:0}
+.vis-q{margin:0 0 4px;font-weight:700;font-size:.95rem}
+.vis-q label{cursor:pointer}
+.seg{margin:6px 0 14px}
+.seg-wrap{display:flex}
+.seg button{padding:8px 11px}
+.seg-wrap button{flex:1 0 auto}
+.cbar{display:grid;grid-template-columns:118px minmax(0,1fr) 88px;gap:10px;align-items:center;margin:8px 0}
+@media(max-width:480px){.cbar{grid-template-columns:minmax(0,1fr) 78px}.cbar-k{grid-column:1/-1;margin-bottom:-4px}}
+.cbar-k{font-family:var(--font-mono);font-size:.6875rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.cbar-t{height:18px;background:var(--surface-2);border:1px solid var(--rule-soft);position:relative;overflow:hidden}
+.cbar-t i{position:absolute;top:0;bottom:0;left:0;width:0;background:var(--ink-2);transition:width .7s cubic-bezier(.65,0,.35,1),left .7s cubic-bezier(.65,0,.35,1)}
+.cbar-t i.warn{background:var(--warn)}
+.cbar-t i.acc{background:var(--accent)}
+.cbar-t i.mute{background:var(--muted)}
+.cbar-v{font-family:var(--font-mono);font-weight:700;font-size:.875rem;text-align:right;font-variant-numeric:tabular-nums}
+.vis-note{margin:10px 0 0;font-size:.9rem;color:var(--ink)}
+.vis-src{overflow-wrap:anywhere;margin:6px 0 0;font-family:var(--font-mono);font-size:.625rem;letter-spacing:.04em;color:var(--muted);line-height:1.6}
+.waffle{display:grid;grid-template-columns:repeat(20,minmax(0,1fr));gap:3px;max-width:420px}
+.waffle i{aspect-ratio:1/1;background:var(--surface-2);border:1px solid var(--rule-soft);transition:background-color .35s ease,transform .35s ease;transition-delay:calc(var(--i) * 6ms)}
+.waffle i.on{background:var(--warn);border-color:var(--warn);transform:scale(1.08)}
+#cl-mu{width:100%;max-width:420px;accent-color:var(--accent);min-height:32px;margin:4px 0 6px}
+.so-what{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);border-top:2px solid var(--rule)}
+.so-what > div{padding:18px 26px}
+.so-what > div:first-child{background:var(--accent-wash)}
+.so-what > div + div{border-left:2px solid var(--rule-soft)}
+@media(max-width:760px){.so-what{grid-template-columns:minmax(0,1fr)}.so-what > div + div{border-left:0;border-top:2px solid var(--rule-soft)}}
+.so-k{display:block;font-family:var(--font-mono);font-size:.625rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:8px}
+.so-what p{margin:0;font-size:.9375rem;line-height:1.6;color:var(--ink)}
+.so-what .ask{font-stretch:105%;font-weight:600;font-size:1.0625rem;line-height:1.45}
+@media(max-width:600px){.lead-top,.lead-body{padding-left:16px;padding-right:16px}.so-what > div{padding:16px}}
+@media(max-width:860px){.mon-grid{grid-template-columns:minmax(0,1fr)!important}}
+.mon-try .btn{white-space:normal}
+.mon-list{margin:0 0 18px;padding-left:22px;display:grid;gap:12px}
+.mon-list li{font-size:.95rem;color:var(--ink-2);line-height:1.55;padding-left:4px}
+.mon-list li::marker{font-family:var(--font-mono);font-weight:700;color:var(--accent)}
+.mon-list b{color:var(--ink)}
+.mon-try{margin-top:4px}
+@media (prefers-reduced-motion: reduce){.cbar-t i,.waffle i,.ov-em{transition:none!important}}
+@media print{.overture,.lead-vis .seg,#cl-mu{display:none!important}.lead-sec{background:none!important;padding:8pt 0!important}.lead{border:1pt solid #000!important}}
+html.st-printing .overture{display:none!important}
 </style>
 <style id="story-css">/*STORY_CSS_START*/
 /* ============================================================
@@ -1032,6 +1125,35 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
   </div>
 </section>
 
+<!-- ================= overture: the screen, as a picture ================= -->
+<section class="overture" id="overture" aria-labelledby="ov-h">
+  <div class="wrap wrap-wide ov-grid">
+    <div class="ov-stage">
+      <canvas id="ov-canvas" class="ov-canvas" role="img" aria-label="A field of dots, each standing for about 1,400 filings. 41 amber dots are the filings that fail the hours screen. When the screen is applied they leave the field, the remaining dots settle into a block, and the national rate beside the field rises from 0.13 to 3.98."></canvas>
+      <p class="ov-legend"><span><i class="ov-dot"></i><b id="ov-per">1 dot = 1,400 filings</b></span><span><i class="ov-dot warn"></i>fails the hours screen</span></p>
+    </div>
+    <div class="ov-panel">
+      <span class="label">The whole argument in one move</span>
+      <h2 class="ov-h" id="ov-h">Remove 2% of filings and the national injury rate rises <em class="ov-em">29.7x</em></h2>
+      <div class="ov-rate" aria-live="polite">
+        <span class="ov-rate-k" id="ov-rate-k">National TRIR, screened</span>
+        <span class="ov-rate-n" id="ov-rate-n">3.98</span>
+        <span class="ov-rate-s">recordable cases per 200,000 hours, 2016 to 2024</span>
+      </div>
+      <div class="ov-bars" aria-hidden="true">
+        <div class="ov-bar"><span class="ov-bar-k">Cases (top of the fraction)</span><span class="ov-track"><i id="ov-cases" style="width:98.63%"></i></span><span class="ov-bar-v" id="ov-cases-v">98.6%</span></div>
+        <div class="ov-bar"><span class="ov-bar-k">Hours (bottom of the fraction)</span><span class="ov-track"><i id="ov-hours" class="warn" style="width:3.32%"></i></span><span class="ov-bar-v" id="ov-hours-v">3.3%</span></div>
+      </div>
+      <div class="ov-seg" role="group" aria-label="Show the panel as filed or screened">
+        <button type="button" class="ov-btn" id="ov-raw" aria-pressed="false">As filed</button>
+        <button type="button" class="ov-btn" id="ov-scr" aria-pressed="true">Screened</button>
+      </div>
+      <p class="ov-note" id="ov-note">57,857 filings fail the hours check and are removed. They take 96.68% of the hours with them but only 1.37% of the cases, so the rate rises from 0.134 to 3.98.</p>
+      <p class="ov-src">Source: outputs/tables/quality_overall.csv. The end states are exact; the frames in between are the animation.</p>
+    </div>
+  </div>
+</section>
+
 <!-- ================= chapter 1 ================= -->
 <section class="st-chapter" id="scene-1" data-key="96.68%" data-num="01" data-orb="searching" data-orb-label="Chapter one: reading the whole panel">
   <h2 class="display" id="h1-1">2% of filings carry 97% of the hours</h2>
@@ -1074,6 +1196,35 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
   </div>
 </section>
 
+<!-- ================= for leaders 1 ================= -->
+<section class="section lead-sec" id="lead-1" aria-labelledby="lh-1">
+  <div class="wrap wrap-wide">
+    <article class="lead" data-st-reveal>
+      <div class="lead-top">
+        <span class="lead-k">For leaders &middot; finding 1 of 4</span>
+        <h3 class="lead-h" id="lh-1">One filing held 88.8% of every hour reported in nine years</h3>
+      </div>
+      <div class="lead-body">
+        <div class="lead-stat"><span class="lead-n" data-lead-count>88.8%</span><span class="lead-cap">of all 18.95 trillion reported hours sit in one 2019 filing: a 7-employee specialty trade site that entered 16.8 trillion hours, about 2.4 trillion per employee.</span></div>
+        <div class="lead-vis"><div class="conc" id="conc">
+          <p class="vis-q" id="conc-q">How much of the hours column do the biggest filings hold?</p>
+          <div class="seg" role="group" aria-labelledby="conc-q">
+            <button type="button" data-n="1" aria-pressed="true">Top 1</button><button type="button" data-n="10" aria-pressed="false">Top 10</button><button type="button" data-n="100" aria-pressed="false">Top 100</button><button type="button" data-n="1000" aria-pressed="false">Top 1,000</button><button type="button" data-n="10000" aria-pressed="false">Top 10,000</button>
+          </div>
+          <div class="cbar"><span class="cbar-k">Share of filings</span><span class="cbar-t"><i id="conc-f"></i></span><span class="cbar-v" id="conc-fv">0.00004%</span></div>
+          <div class="cbar"><span class="cbar-k">Share of hours</span><span class="cbar-t"><i id="conc-h" class="warn" style="width:88.81%"></i></span><span class="cbar-v" id="conc-hv">88.8%</span></div>
+          <p class="vis-note" id="conc-note" aria-live="polite">1 filing of 2,801,064 holds 88.8% of all reported hours.</p>
+          <p class="vis-src">Source: outputs/tables/quality_hours_concentration.csv, quality_top50_implausible_hours.csv</p>
+        </div></div>
+      </div>
+      <div class="so-what">
+        <div><span class="so-k">What it means for a leader</span><p>A company or national rate is only as good as its worst hours field. One mistyped row can outweigh every other site combined, and because it inflates the bottom of the fraction the error always makes the rate look better, so nobody complains.</p></div>
+        <div><span class="so-k">Ask your team</span><p class="ask">&ldquo;Before our rate is calculated, who checks hours per employee on every site&rsquo;s filing, and what happens to a row that fails?&rdquo;</p></div>
+      </div>
+    </article>
+  </div>
+</section>
+
 <!-- ================= chapter 2 ================= -->
 <section class="st-chapter" id="scene-2" data-key="249x" data-num="02" data-orb="working" data-orb-label="Chapter two: what the bad rows do to the rate">
   <h2 class="display" id="h1-2">In 2019 the screen moves TRIR by a factor of 249</h2>
@@ -1091,7 +1242,7 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
         </div>
         <figure class="st-figure">
           <svg id="ch-line" class="st-chart" viewBox="0 0 880 600" role="img" aria-label="Two lines of aggregate TRIR by year. The screened line sits between 3.1 and 4.6. The unscreened line tracks it until 2019, when it collapses to 0.02, and falls again to 0.28 in 2024. The gap between them is shaded."></svg>
-          <figcaption>n = 9 years, all filers. Source: outputs/tables/quality_by_year.csv, metrics_by_year.csv, quality_sensitivity.csv</figcaption>
+          <figcaption>n = 9 years, all filers. Source: outputs/tables/quality_by_year.csv, quality_overall.csv, quality_sensitivity_grid.csv</figcaption>
         </figure>
       </div></div>
       <div class="st-steps">
@@ -1121,10 +1272,37 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
   </div>
 </section>
 
+<!-- ================= for leaders 2 ================= -->
+<section class="section lead-sec" id="lead-2" aria-labelledby="lh-2">
+  <div class="wrap wrap-wide">
+    <article class="lead" data-st-reveal>
+      <div class="lead-top">
+        <span class="lead-k">For leaders &middot; finding 2 of 4</span>
+        <h3 class="lead-h" id="lh-2">As filed, the national injury rate reads 29.7 times too low</h3>
+      </div>
+      <div class="lead-body">
+        <div class="lead-stat"><span class="lead-n" data-lead-count>29.7x</span><span class="lead-cap">screened TRIR (3.98) divided by the as-filed TRIR (0.134), pooled over 2016 to 2024. DART, lost-time and severity rates move by the same factor, 29.7x to 29.9x.</span></div>
+        <div class="lead-vis"><div class="yr" id="yr">
+          <p class="vis-q" id="yr-q">Pick a year: the same filings, screen off and on</p>
+          <div class="seg seg-wrap" role="group" aria-labelledby="yr-q" id="yr-seg"></div>
+          <div class="cbar"><span class="cbar-k">As filed</span><span class="cbar-t"><i id="yr-raw" class="mute"></i></span><span class="cbar-v" id="yr-rawv">0.134</span></div>
+          <div class="cbar"><span class="cbar-k">Screened</span><span class="cbar-t"><i id="yr-scr" class="acc"></i></span><span class="cbar-v" id="yr-scrv">3.98</span></div>
+          <p class="vis-note" id="yr-note" aria-live="polite">Pooled 2016 to 2024: screened TRIR is 29.7 times the as-filed rate.</p>
+          <p class="vis-src">Source: outputs/tables/quality_by_year.csv, quality_overall.csv, metrics_pooled.csv. Bars on one scale, 0 to 5.</p>
+        </div></div>
+      </div>
+      <div class="so-what">
+        <div><span class="so-k">What it means for a leader</span><p>Any benchmark, vendor dashboard or board slide built on the raw public file tells an average site it is world-class. The size of the error changes by year, from 1.4x in 2018 to 249x in 2019, so a trend line built on it moves for reasons that have nothing to do with safety.</p></div>
+        <div><span class="so-k">Ask your team</span><p class="ask">&ldquo;Was the benchmark on our last board slide computed before or after an hours screen, and for which years?&rdquo;</p></div>
+      </div>
+    </article>
+  </div>
+</section>
+
 <!-- ================= chapter 3 ================= -->
 <section class="st-chapter" id="scene-3" data-key="27.2%" data-num="03" data-orb="connecting" data-orb-label="Chapter three: following the same sites across years">
   <h2 class="display" id="h1-3">A flagged site is flagged again 27% of the time</h2>
-  <p>Clean sites fail at 0.95%. Bad hours belong to the filer, so an entry rule at a few hundred sites beats an annual cleanup.</p>
+  <p>Clean sites fail at 0.95%. Bad hours belong to the filer, so an entry rule at the sites that failed before beats an annual cleanup.</p>
 </section>
 
 <!-- ================= scene 3 ================= -->
@@ -1166,7 +1344,7 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
 <!-- ================= chapter 4 ================= -->
 <section class="st-chapter" id="scene-4" data-key="39.1" data-num="04" data-orb="solving" data-orb-label="Chapter four: testing the result against chance">
   <h2 class="display" id="h1-4">Chance gives an odds ratio of 1.01, the panel gives 39.1</h2>
-  <p>200 random reshuffles of the flags never came within a factor of 35 of the observed value. The clustering is real.</p>
+  <p>200 random reshuffles of the flags averaged 1.01, 95% of them fell between 0.92 and 1.09, and none reached 39.1. The clustering is real.</p>
 </section>
 
 <!-- ================= scene 4 ================= -->
@@ -1202,6 +1380,34 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ================= for leaders 3 ================= -->
+<section class="section lead-sec" id="lead-3" aria-labelledby="lh-3">
+  <div class="wrap wrap-wide">
+    <article class="lead" data-st-reveal>
+      <div class="lead-top">
+        <span class="lead-k">For leaders &middot; finding 3 of 4</span>
+        <h3 class="lead-h" id="lh-3">Bad hours come back: 27 in 100 flagged sites fail again, against 1 in 100 clean ones</h3>
+      </div>
+      <div class="lead-body">
+        <div class="lead-stat"><span class="lead-n" data-lead-count>39.1</span><span class="lead-cap">odds ratio of being flagged again next year, pooled over 1,436,479 site-year pairs. 200 reshuffles at random averaged 1.01, and none reached 39.1.</span></div>
+        <div class="lead-vis"><div class="waf" id="waf">
+          <p class="vis-q" id="waf-q">Of 100 sites, how many are flagged the next year?</p>
+          <div class="seg" role="group" aria-labelledby="waf-q">
+            <button type="button" data-w="flag" aria-pressed="true">Flagged last year</button><button type="button" data-w="clean" aria-pressed="false">Clean last year</button>
+          </div>
+          <div class="waffle" id="waf-grid" role="img" aria-label="100 squares, 27 marked: of 100 sites flagged last year, about 27 are flagged again."></div>
+          <p class="vis-note" id="waf-note" aria-live="polite">27.2%: 5,776 of 21,243 flagged site-years were flagged again the next year.</p>
+          <p class="vis-src">Source: outputs/tables/panel_transitions.csv (pooled row), panel_permutation.csv. Squares rounded to whole sites.</p>
+        </div></div>
+      </div>
+      <div class="so-what">
+        <div><span class="so-k">What it means for a leader</span><p>Implausible hours are a habit of particular filers, not random typing, so they can be fixed where they start. A validation rule at entry, pointed first at the sites that failed before, does more than a cleanup every December. Kappa is 0.28, so most flags in a year are still one-offs: the repeat filers fix the hours, not every flag.</p></div>
+        <div><span class="so-k">Ask your team</span><p class="ask">&ldquo;Which of our sites have failed an hours check before, and who owns the payroll export that feeds their filing?&rdquo;</p></div>
+      </div>
+    </article>
   </div>
 </section>
 
@@ -1247,6 +1453,33 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
   </div>
 </section>
 
+<!-- ================= for leaders 4 ================= -->
+<section class="section lead-sec" id="lead-4" aria-labelledby="lh-4">
+  <div class="wrap wrap-wide">
+    <article class="lead" data-st-reveal>
+      <div class="lead-top">
+        <span class="lead-k">For leaders &middot; finding 4 of 4</span>
+        <h3 class="lead-h" id="lh-4">Ordinary years swing far wider than a Poisson control chart allows</h3>
+      </div>
+      <div class="lead-body">
+        <div class="lead-stat"><span class="lead-n" data-lead-count>0 of 30</span><span class="lead-cap">large industries where the Poisson assumption behind most control charts fits best on AIC. Negative binomial beats it in all 30, median dispersion 0.785.</span></div>
+        <div class="lead-vis"><div class="cl" id="cl">
+          <p class="vis-q"><label for="cl-mu">A site that expects <b id="cl-mu-v">10</b> recordables a year: what range is normal?</label></p>
+          <input type="range" id="cl-mu" min="1" max="30" step="1" value="10" aria-describedby="cl-note" />
+          <div class="cbar"><span class="cbar-k">Poisson says</span><span class="cbar-t cl-t"><i id="cl-p" class="mute"></i></span><span class="cbar-v" id="cl-pv">4 to 17</span></div>
+          <div class="cbar"><span class="cbar-k">Measured spread</span><span class="cbar-t cl-t"><i id="cl-n" class="acc"></i></span><span class="cbar-v" id="cl-nv">0 to 35</span></div>
+          <p class="vis-note" id="cl-note" aria-live="polite"></p>
+          <p class="vis-src">Illustration built from one committed number: the median NB2 dispersion 0.785 across 30 industries (outputs/tables/count_model_covariates_summary.csv). Ranges are the middle 95% of each distribution. Your own sites&rsquo; spread will differ; this shows the shape of the error, not your limits.</p>
+        </div></div>
+      </div>
+      <div class="so-what">
+        <div><span class="so-k">What it means for a leader</span><p>A chart that assumes Poisson draws its limits too tight, so ordinary years get flagged as signals and sites get corrective actions for variance. Check the distribution before you act on a spike, and read a single year at a small site as a sample of one.</p></div>
+        <div><span class="so-k">Ask your team</span><p class="ask">&ldquo;What distribution are our control limits built on, and when did anyone last check it against our own data?&rdquo;</p></div>
+      </div>
+    </article>
+  </div>
+</section>
+
 <!-- ================= honesty ================= -->
 <section class="section" id="honesty" aria-labelledby="h1-6">
   <div class="wrap">
@@ -1287,14 +1520,19 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
     <div class="mon-grid">
       <div>
         <p class="mon-lede">Screen the hours before you quote the rate.</p>
-        <p>Take the establishment-year rows behind your last TRIR number. Divide hours worked by average employees. Anything outside 120 to 4,500 is not a data-quality footnote, it is a filing you cannot compute a rate from. Count how many there are, then count what share of your total hours they carry. If those two numbers disagree the way they do here, the rate you presented was about the bad rows.</p>
-        <p>Then check whether the same sites fail twice. If they do, the fix is a validation rule at entry and a conversation with whoever owns that site's payroll export, not an annual data cleanup.</p>
+        <ol class="mon-list">
+          <li><b>Run the check on your last rate.</b> Take the site-year rows behind your last TRIR. Divide hours worked by average employees. Anything outside 120 to 4,500 is not a footnote; it is a filing you cannot compute a rate from.</li>
+          <li><b>Report two shares, not one.</b> Count the failing rows, then the share of total hours they carry. Here they are 2.07% of filings and 96.68% of hours. If your two numbers disagree like that, the rate you presented was about the bad rows.</li>
+          <li><b>Put the rule at entry, starting with repeat sites.</b> A site that failed last year fails again 27.2% of the time, against 0.95% for a clean one. Give those sites a validation rule and a named owner for the payroll export.</li>
+          <li><b>Ask what your control limits assume.</b> Poisson loses to the negative binomial in all 30 of the largest industries tested. Before a site gets a corrective action for a bad quarter, check the limits allow for the real spread.</li>
+        </ol>
+        <p class="mon-try"><a class="btn btn-primary" href="explore.html">Check one site in the explorer</a></p>
       </div>
       <div class="mon-side" data-st-spotlight>
         <span class="label">Do it against this repository</span>
         <pre class="mon-pre"><code>python scripts/download_data.py
 python scripts/run_analysis.py
-python3 -m ehs_osha.panel</code></pre>
+PYTHONPATH=src python3 -m ehs_osha.panel</code></pre>
         <p class="mon-note">Writes outputs/tables/quality_*.csv and panel_*.csv. The pipeline downloads the public files itself and fails loudly rather than substituting fixtures.</p>
       </div>
     </div>
@@ -4267,7 +4505,7 @@ function tip(node, s) { el("title", {}, node).textContent = s; }
 /* ---------------- scene 1: dot density ---------------- */
 function dots(svg, ph) {
   var V = ph
-    ? { vb: "0 0 420 380", COLS: 25, ROWS: 20, x0: 14, y0: 72, w: 392, h: 190, r: 3, rf: 5.2,
+    ? { vb: "0 0 420 380", COLS: 40, ROWS: 25, x0: 14, y0: 72, w: 392, h: 190, r: 2.4, rf: 4.4,
         capY: 24, capF: 17, subY: 46, subF: 14, barY: 110, barH: 200, bigF: 46, noteF: 14 }
     : { vb: "0 0 880 600", COLS: 50, ROWS: 20, x0: 30, y0: 92, w: 820, h: 430, r: 4.2, rf: 7,
         capY: 34, capF: 18, subY: 58, subF: 14, barY: 200, barH: 232, bigF: 64, noteF: 15 };
@@ -4321,7 +4559,7 @@ function dots(svg, ph) {
   });
 
   /* callout on the flagged dots, used in step 2 */
-  var fd = flagged.slice().sort(function (a, b) { return Math.abs(a.gx - (ph ? 140 : 250)) - Math.abs(b.gx - (ph ? 140 : 250)); })[0] || dotsArr[0];
+  var fd = flagged.slice().sort(function (a, b) { return Math.abs(a.gx - (ph ? 40 : 250)) - Math.abs(b.gx - (ph ? 40 : 250)); })[0] || dotsArr[0];
   var annoY = ph ? 322 : 556;
   lead(anno, fd.gx + "," + (fd.gy + 9) + " " + fd.gx + "," + annoY + " " + (fd.gx + 14) + "," + annoY);
   el("circle", { cx: fd.gx, cy: fd.gy, r: ph ? 9 : 11, fill: "none", stroke: "var(--warn)", "stroke-width": 2 }, anno);
@@ -4757,6 +4995,316 @@ function boot() {
 
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
 else boot();
+})();
+</script>
+<script id="page-js-leaders">/* ----------------------------------------------------------------
+   Overture particle field and the leader-block interactives.
+   Every constant is transcribed from a committed artifact, named inline.
+   ---------------------------------------------------------------- */
+(function () {
+"use strict";
+var S = window.Story || null;
+var reduce = S && typeof S.reduced === "function" ? S.reduced()
+  : !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+
+/* outputs/tables/quality_overall.csv */
+var Q = { filings: 2801064, flaggedShare: 0.020655365246920455, hoursShare: 0.9668017711364894,
+  casesShare: 0.013654209137305818, casesTotal: 12703482, hoursTotal: 18951698493968, trirRaw: 0.134061672667949, trirScr: 3.983078949653959, ratio: 29.71079556436282 };
+
+function $(id) { return document.getElementById(id); }
+function ease(t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
+function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || "#888"; }
+function lcg(seed) { var s = seed; return function () { s = (s * 1103515245 + 12345) % 2147483648; return s / 2147483648; }; }
+function nf(v) { return Math.round(v).toLocaleString("en-US"); }
+
+/* ================= overture ================= */
+function overture() {
+  var sec = $("overture"), cv = $("ov-canvas");
+  if (!sec || !cv || !cv.getContext) return;
+  var ctx = cv.getContext("2d");
+  var W = 0, H = 0, dpr = 1, N = 0, parts = [], colors = {};
+  var state = reduce ? 1 : 0;           /* 0 = as filed, 1 = screened */
+  var from = state, to = state, t0 = 0, dur = 2600, prog = state;
+  var visible = false, raf = 0, played = false, lastT = 0;
+
+  function readColors() { colors = { ink: css("--ink-2"), warn: css("--warn"), accent: css("--accent"), surf: css("--surface") }; }
+  function build() {
+    var r = cv.getBoundingClientRect();
+    W = Math.max(260, Math.round(r.width)); H = Math.max(200, Math.round(r.height));
+    dpr = Math.min(2, window.devicePixelRatio || 1);
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    N = W < 600 ? 1000 : 2000;
+    $("ov-per").textContent = "1 dot = " + nf(Q.filings / N) + " filings";
+    var nFlag = Math.round(N * Q.flaggedShare);
+    var rnd = lcg(20260903), flagAt = {};
+    while (Object.keys(flagAt).length < nFlag) flagAt[Math.floor(rnd() * N)] = 1;
+    /* screened layout: the survivors settle into a compact block, one dot per cell */
+    var nClean = N - nFlag, pad = 18;
+    var cols = Math.ceil(Math.sqrt(nClean * (W - 2 * pad) / (H - 2 * pad)));
+    var rows = Math.ceil(nClean / cols);
+    var cell = Math.min((W - 2 * pad) / cols, (H - 2 * pad) / rows) * 0.62;
+    var bw = cols * cell, bh = rows * cell;
+    var bx = (W - bw) / 2, by = (H - bh) / 2;
+    var rnd2 = lcg(7771), ci = 0;
+    parts = [];
+    for (var i = 0; i < N; i++) {
+      var f = !!flagAt[i];
+      var p = { f: f, x0: pad + rnd2() * (W - 2 * pad), y0: pad + rnd2() * (H - 2 * pad), ph: rnd2() * 6.283, d: rnd2() };
+      if (f) { var a = rnd2() * 6.283; p.x1 = W / 2 + Math.cos(a) * W * .9; p.y1 = H / 2 + Math.sin(a) * H * .9; }
+      else { p.x1 = bx + (ci % cols + .5) * cell; p.y1 = by + (Math.floor(ci / cols) + .5) * cell; ci++; }
+      parts.push(p);
+    }
+    draw(performance.now());
+  }
+  function draw(now) {
+    ctx.clearRect(0, 0, W, H);
+    var tt = now / 1000, drift = reduce ? 0 : (1 - prog) * 2.2;
+    var rClean = W < 600 ? 1.7 : 1.9;
+    ctx.fillStyle = colors.ink; ctx.globalAlpha = .55;
+    ctx.beginPath();
+    for (var i = 0; i < parts.length; i++) {
+      var p = parts[i]; if (p.f) continue;
+      /* staggered settle: each dot starts at its own moment */
+      var k = ease(clamp((prog - p.d * .35) / .65, 0, 1));
+      var x = p.x0 + (p.x1 - p.x0) * k + Math.sin(tt * .8 + p.ph) * drift;
+      var y = p.y0 + (p.y1 - p.y0) * k + Math.cos(tt * .7 + p.ph) * drift;
+      ctx.moveTo(x + rClean, y); ctx.arc(x, y, rClean, 0, 6.283);
+    }
+    ctx.fill();
+    /* the flagged filings leave first: the rate is tied to their exit */
+    for (var j = 0; j < parts.length; j++) {
+      var q = parts[j]; if (!q.f) continue;
+      var kq = ease(clamp(prog / .55, 0, 1));
+      var a = 1 - kq;
+      if (a <= 0.01) continue;
+      var qx = q.x0 + (q.x1 - q.x0) * kq + Math.sin(tt + q.ph) * drift, qy = q.y0 + (q.y1 - q.y0) * kq + Math.cos(tt + q.ph) * drift;
+      ctx.globalAlpha = .18 * a; ctx.fillStyle = colors.warn;
+      ctx.beginPath(); ctx.arc(qx, qy, 11, 0, 6.283); ctx.fill();
+      ctx.globalAlpha = a;
+      ctx.beginPath(); ctx.arc(qx, qy, 4.2, 0, 6.283); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  }
+  /* the readout is computed from the fraction, not interpolated as a label:
+     cases and hours shrink by the flagged filings' shares as they leave */
+  function readout() {
+    var k = ease(clamp(prog / .55, 0, 1));
+    var cases = Q.casesTotal * (1 - Q.casesShare * k), hours = Q.hoursTotal * (1 - Q.hoursShare * k);
+    var trir = 200000 * cases / hours;
+    $("ov-rate-n").textContent = trir < 1 ? trir.toFixed(3) : trir.toFixed(2);
+    $("ov-cases").style.width = (cases / Q.casesTotal * 100).toFixed(2) + "%";
+    $("ov-hours").style.width = (hours / Q.hoursTotal * 100).toFixed(2) + "%";
+    $("ov-cases-v").textContent = (cases / Q.casesTotal * 100).toFixed(1) + "%";
+    $("ov-hours-v").textContent = (hours / Q.hoursTotal * 100).toFixed(1) + "%";
+  }
+  function label() {
+    var scr = to === 1;
+    sec.classList.toggle("is-screened", scr && prog > .99);
+    sec.classList.toggle("is-raw", !scr);
+    $("ov-rate-k").textContent = scr ? "National TRIR, screened" : "National TRIR, as filed";
+    $("ov-raw").setAttribute("aria-pressed", String(!scr));
+    $("ov-scr").setAttribute("aria-pressed", String(scr));
+    $("ov-note").textContent = scr
+      ? "57,857 filings fail the hours check and are removed. They take 96.68% of the hours with them but only 1.37% of the cases, so the rate rises from 0.134 to 3.98, 29.7 times higher."
+      : "All 2,801,064 filings, as published. The amber 2.07% carry 96.68% of every reported hour, so the bottom of the fraction is almost all theirs and the rate reads 0.134.";
+  }
+  function loop(now) {
+    raf = 0;
+    if (!visible || document.hidden) return;
+    if (from !== to) {
+      var k = clamp((now - t0) / dur, 0, 1);
+      prog = from + (to - from) * k;
+      if (k >= 1) from = to;
+      readout(); label();
+    }
+    draw(now);
+    /* keep animating while moving or drifting; the settled screened state is static */
+    if (from !== to || (prog < 1 && !reduce)) raf = requestAnimationFrame(loop);
+  }
+  function kick() { if (!raf && visible && !document.hidden) raf = requestAnimationFrame(loop); }
+  function go(target) {
+    if (target === to && from === to) return;
+    if (reduce) { from = to = prog = target; readout(); label(); draw(0); return; }
+    from = prog; to = target; t0 = performance.now();
+    dur = 2600 * Math.abs(to - from) || 1;
+    label(); kick();
+  }
+  $("ov-raw").addEventListener("click", function () { played = true; go(0); });
+  $("ov-scr").addEventListener("click", function () { played = true; go(1); });
+
+  readColors(); build(); readout(); label();
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        visible = e.isIntersecting;
+        if (visible) {
+          kick();
+          if (!played && !reduce && e.intersectionRatio > .45) {
+            played = true;
+            setTimeout(function () { if (to === 0) go(1); }, 1300);
+          }
+        }
+      });
+    }, { threshold: [0, .5] }).observe(sec);
+  } else { visible = true; if (!reduce) go(1); }
+  document.addEventListener("visibilitychange", kick);
+  var rt = 0, lastW = window.innerWidth;
+  window.addEventListener("resize", function () {
+    clearTimeout(rt);
+    rt = setTimeout(function () { if (Math.abs(window.innerWidth - lastW) < 2) return; lastW = window.innerWidth; build(); kick(); }, 160);
+  }, { passive: true });
+  function recolor() { readColors(); draw(performance.now()); }
+  new MutationObserver(recolor).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  if (window.matchMedia) { var mq = matchMedia("(prefers-color-scheme: dark)"); if (mq.addEventListener) mq.addEventListener("change", recolor); }
+  /* restrained parallax on the glow behind the field */
+  if (!reduce) {
+    var ticking = false;
+    window.addEventListener("scroll", function () {
+      if (ticking) return; ticking = true;
+      requestAnimationFrame(function () {
+        ticking = false;
+        var r = sec.getBoundingClientRect();
+        if (r.bottom > 0 && r.top < innerHeight) sec.style.setProperty("--ov-par", (r.top * -0.12).toFixed(1) + "px");
+      });
+    }, { passive: true });
+  }
+  /* start state for motion: as filed, then the screen plays once in view */
+  if (!reduce) { prog = from = to = 0; readout(); label(); draw(0); }
+}
+
+/* ================= leader blocks ================= */
+function segWire(root, attr, onPick) {
+  var bs = root.querySelectorAll("button[" + attr + "]");
+  Array.prototype.forEach.call(bs, function (b) {
+    b.addEventListener("click", function () {
+      Array.prototype.forEach.call(bs, function (o) { o.setAttribute("aria-pressed", String(o === b)); });
+      onPick(b.getAttribute(attr));
+    });
+  });
+}
+
+/* finding 1: concentration of hours in the biggest filings
+   outputs/tables/quality_hours_concentration.csv */
+function concentration() {
+  var root = $("conc"); if (!root) return;
+  var C = { "1": .8881325717869676, "10": .9454243832965579, "100": .9539303665960657, "1000": .9623369664775859, "10000": .9704037396839906 };
+  function set(n) {
+    var h = C[n], f = (+n) / Q.filings;
+    $("conc-h").style.width = (h * 100).toFixed(2) + "%";
+    $("conc-f").style.width = Math.max(f * 100, .4).toFixed(2) + "%";
+    $("conc-hv").textContent = (h * 100).toFixed(1) + "%";
+    var fp = f * 100;
+    $("conc-fv").textContent = (fp < .001 ? fp.toFixed(5) : fp < .1 ? fp.toFixed(3) : fp.toFixed(2)) + "%";
+    $("conc-note").textContent = (+n).toLocaleString("en-US") + (n === "1" ? " filing" : " filings") + " of 2,801,064 " + (n === "1" ? "holds " : "hold ") + (h * 100).toFixed(1) + "% of all reported hours.";
+  }
+  segWire(root, "data-n", set); set("1");
+}
+
+/* finding 2: as filed vs screened, by year
+   outputs/tables/quality_by_year.csv, quality_overall.csv */
+function years() {
+  var root = $("yr"); if (!root) return;
+  var Y = [
+    [2016, 2.729399762948334, 3.9212190241410427, 1.4366598390502128],
+    [2017, 2.6344918275186986, 3.9975879393169214, 1.517403811072763],
+    [2018, 2.9199580794176256, 4.068652248075582, 1.3933940616322336],
+    [2019, 0.01612015895612659, 4.018365903243359, 249.27582377940192],
+    [2020, 2.791780023915654, 4.490527197811246, 1.6084817425955316],
+    [2021, 2.385313834464473, 4.3679890051928005, 1.8312009690638709],
+    [2022, 2.660796149117842, 4.604874829925929, 1.7306379639239273],
+    [2023, 1.3800135468326917, 3.1466293096590285, 2.280143783284553],
+    [2024, 0.28042562836106183, 3.6415211177157185, 12.98569299460419]
+  ];
+  var seg = $("yr-seg");
+  var all = ["All"].concat(Y.map(function (r) { return String(r[0]); }));
+  all.forEach(function (lab) {
+    var b = document.createElement("button");
+    b.type = "button"; b.setAttribute("data-y", lab); b.setAttribute("aria-pressed", String(lab === "All"));
+    b.textContent = lab === "All" ? "Pooled" : "'" + lab.slice(2);
+    b.setAttribute("aria-label", lab === "All" ? "Pooled 2016 to 2024" : lab);
+    seg.appendChild(b);
+  });
+  function f(v) { return v < 1 ? v.toFixed(3) : v.toFixed(2); }
+  function set(lab) {
+    var raw, scr, ratio, name;
+    if (lab === "All") { raw = Q.trirRaw; scr = Q.trirScr; ratio = Q.ratio; name = "Pooled 2016 to 2024"; }
+    else { var r = Y.filter(function (x) { return String(x[0]) === lab; })[0]; raw = r[1]; scr = r[2]; ratio = r[3]; name = lab; }
+    $("yr-raw").style.width = Math.max(raw / 5 * 100, .6).toFixed(2) + "%";
+    $("yr-scr").style.width = (scr / 5 * 100).toFixed(2) + "%";
+    $("yr-rawv").textContent = f(raw); $("yr-scrv").textContent = f(scr);
+    $("yr-note").textContent = name + ": the screened rate is " + (ratio >= 100 ? Math.round(ratio) : ratio.toFixed(1)) + " times the as-filed rate" +
+      (lab === "2019" ? ". One 7-employee filing that year reported 16.8 trillion hours." : lab === "2024" ? ". The second-worst year." : ".");
+  }
+  segWire(root, "data-y", set); set("All");
+}
+
+/* finding 3: 100 sites, flagged last year vs clean last year
+   outputs/tables/panel_transitions.csv, pooled row: 27.19% and 0.946% */
+function waffle() {
+  var root = $("waf"), grid = $("waf-grid"); if (!root || !grid) return;
+  for (var i = 0; i < 100; i++) { var c = document.createElement("i"); c.style.setProperty("--i", String(i)); grid.appendChild(c); }
+  var M = {
+    flag: { n: 27, lab: "27 marked: of 100 sites flagged last year, about 27 are flagged again.", note: "27.2%: 5,776 of 21,243 flagged site-years were flagged again the next year." },
+    clean: { n: 1, lab: "1 marked: of 100 sites that were clean last year, about 1 is flagged.", note: "0.95%: 13,394 of 1,415,236 clean site-years were flagged the next year. Odds ratio 39.1." }
+  };
+  function set(w) {
+    var m = M[w];
+    Array.prototype.forEach.call(grid.children, function (c, i) { c.classList.toggle("on", i < m.n); });
+    grid.setAttribute("aria-label", "100 squares, " + m.lab);
+    $("waf-note").textContent = m.note;
+  }
+  segWire(root, "data-w", set); set("flag");
+}
+
+/* finding 4: Poisson vs negative binomial ranges for a site's yearly count.
+   Median NB2 dispersion alpha = 0.78505190106709,
+   outputs/tables/count_model_covariates_summary.csv */
+function limits() {
+  var root = $("cl"), inp = $("cl-mu"); if (!root || !inp) return;
+  var ALPHA = 0.78505190106709, MAXK = 400;
+  function range(pmf0, next) {
+    var cdf = 0, p = pmf0, lo = null, hi = null;
+    for (var k = 0; k < MAXK; k++) {
+      cdf += p;
+      if (lo === null && cdf >= .025) lo = k;
+      if (cdf >= .975) { hi = k; break; }
+      p = next(p, k);
+    }
+    return [lo, hi === null ? MAXK : hi];
+  }
+  function set() {
+    var mu = +inp.value;
+    $("cl-mu-v").textContent = String(mu);
+    var pr = range(Math.exp(-mu), function (p, k) { return p * mu / (k + 1); });
+    var r = 1 / ALPHA, q = mu / (r + mu);
+    var nr = range(Math.pow(r / (r + mu), r), function (p, k) { return p * (k + r) / (k + 1) * q; });
+    var scale = Math.max(nr[1], 10) * 1.05;
+    function bar(el, a) { el.style.left = (a[0] / scale * 100).toFixed(2) + "%"; el.style.width = Math.max((a[1] - a[0]) / scale * 100, .8).toFixed(2) + "%"; }
+    bar($("cl-p"), pr); bar($("cl-n"), nr);
+    $("cl-pv").textContent = pr[0] + " to " + pr[1];
+    $("cl-nv").textContent = nr[0] + " to " + nr[1];
+    $("cl-note").textContent = "A Poisson chart would call " + (pr[1] + 1) + " or more cases a signal. With the measured spread, years up to " + nr[1] +
+      " are ordinary " + "for a site expecting " + mu + ".";
+  }
+  inp.addEventListener("input", set); set();
+}
+
+/* kinetic type: the leader numbers count up once when they come into view */
+function counts() {
+  if (!S || typeof S.countUp !== "function" || reduce) return;
+  Array.prototype.forEach.call(document.querySelectorAll("[data-lead-count]"), function (n) {
+    if (/ of /.test(n.textContent)) return;
+    S.countUp(n, { duration: 1200 });
+  });
+}
+
+function boot() {
+  try { overture(); } catch (e) { if (window.console) console.error(e); }
+  concentration(); years(); waffle(); limits(); counts();
+}
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
 })();
 </script>
 <script id="rs-header-js">

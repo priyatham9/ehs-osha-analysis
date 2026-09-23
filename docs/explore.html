@@ -1325,7 +1325,7 @@ html:not(.m-desk) [data-m-progress]{transform:none}
     renderBand(c, trir, fail);
     writeUrl();
   }
-  function bandLabel(b) { return (b === "1000+" ? "1,000 or more" : b.replace(/^0+/, "").replace(/-0+/, " to ")) + " employees"; }
+  function bandLabel(b) { return (b === "1000+" ? "1,000 or more" : b.replace(/^0+/, "").replace(/-0*/, " to ")) + " employees"; }
 
   function renderBand(c, trir, fail) {
     var wrap = $("bandChart"), cap = $("bandCaption"), tbl = $("bandTable");
@@ -1448,7 +1448,7 @@ html:not(.m-desk) [data-m-progress]{transform:none}
       var on = !selYear || r.year === selYear, op = on ? 1 : .35;
       svg("rect", { x: X(i) - bw - 1, y: Y(r.implausible_share), width: bw, height: Y(0) - Y(r.implausible_share), fill: "var(--s1)", opacity: op }, s);
       svg("rect", { x: X(i) + 1, y: Y(r.hours_share_implausible), width: bw, height: Y(0) - Y(r.hours_share_implausible), fill: "var(--warn)", opacity: op }, s);
-      if (!f.narrow || r.year === selYear) t(s, X(i) + 1 + bw / 2, Y(r.hours_share_implausible) - 5, Math.round(r.hours_share_implausible * 100) + "%", { "text-anchor": "middle", "font-size": 11, fill: "var(--ink)", opacity: op, "font-weight": 700 });
+      if (!f.narrow || r.year === selYear) t(s, X(i) + 1 + bw / 2, Y(r.hours_share_implausible) - 5, (r.hours_share_implausible >= 0.995 ? (r.hours_share_implausible * 100).toFixed(1) : Math.round(r.hours_share_implausible * 100)) + "%", { "text-anchor": "middle", "font-size": 11, fill: "var(--ink)", opacity: op, "font-weight": 700 });
       t(s, X(i), H - 10, f.narrow ? "'" + String(r.year).slice(2) : String(r.year), { "text-anchor": "middle", "font-size": 11, fill: r.year === selYear ? "var(--ink)" : "var(--muted)", "font-weight": r.year === selYear ? 700 : 400 });
     });
     hitColumns(s, rows, X, colW, T, H - B + 20, function (r) { return r.year + ": " + pct(r.implausible_share, 2) + " of filings flagged, holding " + pct(r.hours_share_implausible, 2) + " of hours"; });

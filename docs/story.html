@@ -1179,7 +1179,7 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
 .st-chapter .ch-key span{font-size:.95rem;color:var(--ink-2);max-width:26ch;line-height:1.35}
 .st-chapter .ch-prog{position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--accent);transform-origin:0 50%;transform:scaleX(0);z-index:2;display:none}
 .m-desk .st-chapter .ch-prog{display:block}
-.st-hero h1.display,.hero h1.display{font-size:clamp(2.8rem,6vw,5.6rem);line-height:.95;letter-spacing:-.035em}
+.st-hero h1.display,.hero h1.display{font-size:clamp(2.4rem,4.8vw,5.6rem);line-height:.95;letter-spacing:-.035em}
 @media (max-width:600px){.st-chapter .ch-key b{font-size:clamp(2.6rem,15vw,3.6rem)}.st-hero h1.display,.hero h1.display{font-size:min(2.6rem,9.2vw);overflow-wrap:anywhere}}
 </style>
 </head>
@@ -1270,7 +1270,7 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
         <div class="st-step" data-step="dots-all" data-note="Everything on this page comes from the full public panel, not a sample we picked. Nine years, every filer who had to report. Hold that in mind, because the next slide is about a very small slice of it." data-orb="searching">
           <span class="label">Scene 01 / step 1</span>
           <h3>2,801,064 filings, nine years, not a sample</h3>
-          <p>2,801,064 establishment-year filings from 2016 through 2024, after 4,703 duplicate rows were dropped. Each dot stands for about 2,800 of them. This is the whole public Injury Tracking Application panel.</p>
+          <p>2,801,064 establishment-year Form 300A summaries filed through OSHA's Injury Tracking Application for 2016 through 2024, after 4,703 duplicate rows were dropped. Each dot stands for about 2,800 of them.</p>
         </div>
         <div class="st-step" data-step="dots-flag" data-note="Two percent is the kind of number most of us would wave off in a data review. Watch what happens when we ask what those rows are carrying." data-orb="solving">
           <span class="label">Scene 01 / step 2</span>
@@ -1280,7 +1280,7 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
         <div class="st-step" data-step="dots-hours" data-note="This is the whole problem in one picture. Ask your team tonight: whose payroll export is filling that box, and does anyone check it before it goes out the door?" data-orb="wrong">
           <span class="label">Scene 01 / step 3</span>
           <h3>Those 57,857 filings hold 96.68% of the hours</h3>
-          <p>One failure mode does it: 24,617 filings report more than 4,500 hours per employee and carry 96.65% of all hours. Someone put a company's payroll hours in the box meant for one site. Quote a rate off the raw panel and you are quoting those rows.</p>
+          <p>One failure mode does it: 24,617 filings report more than 4,500 hours per employee and carry 96.65% of all hours. The pattern is consistent with company-wide payroll hours entered in the box meant for one site; the filing alone cannot confirm the cause. Quote a rate off the raw panel and you are quoting those rows.</p>
         </div>
       </div>
     </div>
@@ -1431,7 +1431,7 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
         <div class="st-step" data-step="flow-both" data-note="That gap is the finding. Bad hours belong to a filer, not to a keyboard, which means a validation rule at entry beats a cleanup every December. The kappa line is there so nobody oversells it." data-orb="grounded">
           <span class="label">Scene 03 / step 3</span>
           <h3>Clean sites fail at 0.95%, an odds ratio of 39.1</h3>
-          <p>13,394 of 1,415,236 clean establishment-years were flagged the next year. That is an odds ratio of 39.1 with Cohen's kappa 0.276, and all eight year pairs land between 24.7 and 63.1. Kappa 0.28 is the honest half: most flags in a given year are still one-offs, so fixing the repeat filers fixes the hours, not every flag.</p>
+          <p>13,394 of 1,415,236 clean establishment-years were flagged the next year. That is an odds ratio of 39.1 with Cohen's kappa 0.276, and all eight year pairs land between 24.7 and 63.1. Kappa 0.28 is the honest half: most flags in a given year are still one-offs, so an entry rule at repeat filers targets the persistent share of flags, not all of them.</p>
         </div>
       </div>
     </div>
@@ -1504,7 +1504,7 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
         </div></div>
       </div>
       <div class="so-what">
-        <div><span class="so-k">What it means for a leader</span><p>Implausible hours are a habit of particular filers, not random typing, so they can be fixed where they start. A validation rule at entry, pointed first at the sites that failed before, does more than a cleanup every December. Kappa is 0.28, so most flags in a year are still one-offs: the repeat filers fix the hours, not every flag.</p></div>
+        <div><span class="so-k">What it means for a leader</span><p>Implausible hours are a habit of particular filers, not random typing, so they can be fixed where they start. A validation rule at entry, pointed first at the sites that failed before, does more than a cleanup every December. Kappa is 0.28, so most flags in a year are still one-offs: a rule at repeat filers catches the persistent share, not every flag.</p></div>
         <div><span class="so-k">Ask your team</span><p class="ask">&ldquo;Which of our sites have failed an hours check before, and who owns the payroll export that feeds their filing?&rdquo;</p></div>
       </div>
     </article>
@@ -1570,7 +1570,7 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
           <p class="vis-q"><label for="cl-mu">A site that expects <b id="cl-mu-v">10</b> recordables a year: what range is normal?</label></p>
           <input type="range" id="cl-mu" min="1" max="30" step="1" value="10" aria-describedby="cl-note" />
           <div class="cbar"><span class="cbar-k">Poisson says</span><span class="cbar-t cl-t"><i id="cl-p" class="mute"></i></span><span class="cbar-v" id="cl-pv">4 to 17</span></div>
-          <div class="cbar"><span class="cbar-k">Measured spread</span><span class="cbar-t cl-t"><i id="cl-n" class="acc"></i></span><span class="cbar-v" id="cl-nv">0 to 35</span></div>
+          <div class="cbar"><span class="cbar-k">NB2 spread, &alpha; 0.785</span><span class="cbar-t cl-t"><i id="cl-n" class="acc"></i></span><span class="cbar-v" id="cl-nv">0 to 35</span></div>
           <p class="vis-note" id="cl-note" aria-live="polite"></p>
           <p class="vis-src">Illustration built from one committed number: the median NB2 dispersion 0.785 across 30 industries (outputs/tables/count_model_covariates_summary.csv). Ranges are the middle 95% of each distribution. Your own sites&rsquo; spread will differ; this shows the shape of the error, not your limits.</p>
         </div></div>
@@ -6322,7 +6322,7 @@ function limits() {
     bar($("cl-p"), pr); bar($("cl-n"), nr);
     $("cl-pv").textContent = pr[0] + " to " + pr[1];
     $("cl-nv").textContent = nr[0] + " to " + nr[1];
-    $("cl-note").textContent = "A Poisson chart would call " + (pr[1] + 1) + " or more cases a signal. With the measured spread, years up to " + nr[1] +
+    $("cl-note").textContent = "A Poisson chart would call " + (pr[1] + 1) + " or more cases a signal. With the NB2 spread, years up to " + nr[1] +
       " are ordinary " + "for a site expecting " + mu + ".";
   }
   inp.addEventListener("input", set); set();

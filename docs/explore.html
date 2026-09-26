@@ -203,6 +203,62 @@ tr.is-sel td{background:var(--accent-wash)}
 @media (prefers-reduced-motion: reduce){.chart *{transition:none!important}}
 @media print{.btns,.chips,.hero-how{display:none!important}.tool{display:block}}
 </style>
+<style id="r8-page">
+/* ============ round 8: finish and usability ============ */
+body{font-size:17px}
+h1,h2,h3{text-wrap:balance}
+p,li,.v-s,figcaption{text-wrap:pretty}
+.label,.crumb,.sec-k,.hero-how b,.v-k,.field label,.field .fl,.pill,th,.src,details.datatbl summary{font-size:.75rem}
+.step-no{font-size:.75rem;width:24px;height:24px}
+.legend{font-size:.8125rem}
+.status-msg{font-size:.8125rem}
+.hero-lede{font-size:1.125rem;line-height:1.6}
+.hero-how div{font-size:1rem}
+.example{font-size:1rem}
+.field .hint{font-size:.9375rem}
+.v-s{font-size:1rem}
+figcaption{font-size:.9375rem}
+.rule-box{font-size:1rem}
+.plain-grid ul{font-size:1.0625rem;line-height:1.6}
+.plain-grid li{max-width:70ch}
+table{font-size:.9375rem}
+.sec-lede{font-size:1.0625rem}
+.footer{font-size:.9375rem}
+
+/* first action: rank your site */
+.hero-cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.btn{min-height:44px;font-size:.75rem;transition:background-color .15s,border-color .15s,color .15s}
+.btn:active{transform:translateY(1px)}
+.btn-lg{min-height:50px;padding:12px 20px;font-size:.8125rem}
+.field label .unit,.field .fl .unit{display:block;margin-top:3px;text-transform:none;letter-spacing:0;font-family:var(--font-sans);font-size:.9375rem;color:var(--ink-2)}
+input[type="text"]{font:inherit;font-family:var(--font-mono);font-size:1rem;padding:9px 10px;border:2px solid var(--rule);background:var(--paper);color:var(--ink);border-radius:0;min-height:44px;width:100%;max-width:100%;min-width:0;font-variant-numeric:tabular-nums;letter-spacing:.04em}
+input[aria-invalid="true"]{border-color:var(--warn);box-shadow:inset 4px 0 0 var(--warn)}
+.err{font-size:.9375rem;line-height:1.4;color:var(--warn);font-weight:600}
+.err:empty{display:none}
+.err::before{content:"! ";font-family:var(--font-mono);font-weight:700}
+.err.is-soft{color:var(--ink-2);font-weight:500}
+.err.is-soft::before{content:"Check: ";color:var(--warn);font-family:var(--font-mono);font-size:.8125rem;letter-spacing:.06em;text-transform:uppercase}
+.readout.is-error{color:var(--warn);font-weight:600}
+.tool-out[aria-busy="true"] .verdicts,.tool-out[aria-busy="true"] figure{opacity:.4}
+.chip{min-height:44px;min-width:56px;font-size:.8125rem}
+details.datatbl summary{min-height:44px;gap:10px;color:var(--ink);font-family:var(--font-sans);font-size:1rem;text-transform:none;letter-spacing:0;font-weight:600;list-style:none}
+details.datatbl summary::-webkit-details-marker{display:none}
+details.datatbl summary::before{content:"";width:8px;height:8px;border-right:2px solid var(--accent);border-bottom:2px solid var(--accent);transform:rotate(-45deg);transition:transform .2s;flex:none;margin-right:2px}
+details.datatbl[open] summary::before{transform:rotate(45deg)}
+.fd-k{font-family:var(--font-mono);font-size:.75rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.crumb a{display:inline-block;padding:12px 0;margin:-12px 0}
+@media(max-width:600px){.crumb{row-gap:14px}}
+.footer-links a{min-height:44px}
+.next-links .btn{min-height:44px}
+.pn a{min-height:44px}
+.mini-res{min-height:44px}
+section[id]{scroll-margin-top:112px}
+@media(max-width:860px){section[id]{scroll-margin-top:118px}}
+
+@media(max-width:500px){body .st-way a.st-way-btn,body .st-way button.st-way-btn{min-height:44px;min-width:44px;display:inline-flex;align-items:center;justify-content:center}}
+@media (prefers-reduced-motion:reduce){.btn{transition:none}}
+@media print{.hero-cta{display:none!important}}
+</style>
 <script id="rs-theme-init">try{var t=localStorage.getItem("pc-theme")||localStorage.getItem("ehs-ai-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t);}catch(e){}</script><style id="rs-header-css">
 .rs-header{
  --rs-paper:var(--paper,#F7F7F3);--rs-surface:var(--surface,#FFFFFF);--rs-surface-2:var(--surface-2,#EFEFE9);
@@ -1019,28 +1075,33 @@ html{overflow-x:clip}
 <nav class="crumb" aria-label="You are here"><a href="https://priyatham9.github.io/grounded/">Grounded</a><span aria-hidden="true">&rsaquo;</span><a href="index.html">ehs-osha-analysis</a><span aria-hidden="true">&rsaquo;</span><b>Explorer</b></nav>
 <h1 class="display" data-m-split="chars">Denominator explorer</h1>
 <p class="hero-lede" data-m-hero-part="text">Put one site's year next to its real peers, and check first whether its hours would survive the screen that <b>57,857</b> public OSHA filings failed. Those filings are 2.07% of the panel and hold <b>96.68%</b> of every hour reported.</p>
+<div class="hero-cta" data-m-hero-part="text"><a class="btn btn-primary btn-lg" href="#peer" id="ctaRank">Rank your site against its peers</a><a class="btn btn-lg" href="#year">See the effect year by year</a></div>
 <div class="hero-how" aria-label="How to use this page" data-m-hero-part="text">
 <div><b>1 &middot; Peer group</b>Industry and size band. Percentiles come from 2.7 million screened filings, 2016 to 2024.</div>
 <div><b>2 &middot; Your year</b>Headcount, hours, recordables. The rate and the hours check update as you type.</div>
-<div><b>3 &middot; Share it</b>The address bar keeps your inputs. Copy the link to send the exact view.</div>
+<div><b>3 &middot; Share it</b>The address bar keeps your inputs, so the back button and a copied link both return to the exact view.</div>
 </div>
 </div></div>
 
-<section class="section" id="peer" aria-labelledby="h-peer"><div class="wrap">
+<section class="section" id="peer" data-st-anchor aria-labelledby="h-peer"><div class="wrap">
 <span class="sec-k">The tool</span>
 <h2 id="h-peer" data-m-split="words">Your site against its peers</h2>
 <p class="sec-lede">A worked example is loaded so you can see what a result looks like. Change any field and the rate, the hours check and the peer placement update at once.</p>
 
 <div class="tool">
 <form class="tool-form" id="tool-form" autocomplete="off" novalidate>
-<div class="example" id="example" data-mode="example" aria-live="polite"></div>
+<div class="example" id="example" data-mode="example"></div>
 
 <fieldset>
 <legend><span class="step-no" aria-hidden="true">1</span>Peer group</legend>
-<div class="field"><label for="naics3">Industry (NAICS-3)</label>
+<div class="field"><label for="naicsCode">NAICS code <span class="unit">3 to 6 digits</span></label>
+<input type="text" id="naicsCode" inputmode="numeric" autocomplete="off" spellcheck="false" maxlength="6" aria-describedby="naicsCode-err naicsCode-hint" />
+<span class="hint" id="naicsCode-hint">Peers are matched on the first three digits. Or pick the industry by name below.</span>
+<span class="err" id="naicsCode-err"></span></div>
+<div class="field"><label for="naics3">Industry <span class="unit">NAICS-3 subsector</span></label>
 <select id="naics3" aria-describedby="naics-hint"></select>
 <span class="hint" id="naics-hint">Official 2022 subsector titles. Codes with no 2022 title are listed at the end as filed.</span></div>
-<div class="field"><label for="sizeband">Size band (average employees)</label>
+<div class="field"><label for="sizeband">Size band <span class="unit">average employees</span></label>
 <select id="sizeband" aria-describedby="band-hint"></select>
 <span class="hint" id="band-hint">Set from your headcount when you enter one.</span></div>
 </fieldset>
@@ -1048,19 +1109,23 @@ html{overflow-x:clip}
 <fieldset id="mark">
 <legend><span class="step-no" aria-hidden="true">2</span>Your site, one calendar year</legend>
 <div class="grid2">
-<div class="field"><label for="inEmp">Average employees</label>
-<input type="number" id="inEmp" min="0" step="1" inputmode="numeric" /></div>
-<div class="field"><label for="inHours">Hours worked</label>
-<input type="number" id="inHours" min="0" step="1000" inputmode="numeric" /></div>
+<div class="field"><label for="inEmp">Average employees <span class="unit">people</span></label>
+<input type="number" id="inEmp" min="1" step="1" inputmode="numeric" aria-describedby="inEmp-err" />
+<span class="err" id="inEmp-err"></span></div>
+<div class="field"><label for="inHours">Hours worked <span class="unit">hours, one year</span></label>
+<input type="number" id="inHours" min="1" step="1000" inputmode="numeric" aria-describedby="inHours-err" />
+<span class="err" id="inHours-err"></span></div>
 </div>
-<div class="field"><label for="inCases">Recordable cases</label>
-<input type="number" id="inCases" min="0" step="1" inputmode="numeric" /></div>
+<div class="field"><label for="inCases">Recordable cases <span class="unit">OSHA 300 log, count</span></label>
+<input type="number" id="inCases" min="0" step="1" inputmode="numeric" aria-describedby="inCases-err" />
+<span class="err" id="inCases-err"></span></div>
 </fieldset>
 
 <div class="btns">
 <button type="button" class="btn" id="btnTypo" aria-pressed="false" aria-describedby="typo-hint">Add three zeros to the hours</button>
 <button type="button" class="btn" id="btnCopy">Copy link to this view</button>
-<button type="button" class="btn" id="btnReset">Back to the worked example</button>
+<button type="button" class="btn" id="btnClear">Clear, enter my own</button>
+<button type="button" class="btn" id="btnReset">Reset to the worked example</button>
 </div>
 <p class="hint status-msg" id="typo-hint">The typo button shows what one keying error does to the rate, and whether the screen catches it.</p>
 <p class="status-msg" id="copyStatus" role="status" aria-live="polite"></p>
@@ -1072,8 +1137,10 @@ html{overflow-x:clip}
 <div id="vTrir"><span class="v-k">Your TRIR</span><span class="v-n" id="trirN">-</span><span class="v-s" id="trirS"></span></div>
 <div id="vScreen"><span class="v-k">Hours check</span><span class="v-n" id="hpeN">-</span><span class="v-s" id="hpeS"></span></div>
 </div>
-<p class="readout" id="readout" aria-live="polite"></p>
-<figure>
+<p class="readout" id="readout">Loading the peer table&hellip;</p>
+<p class="sr-only" id="announce" role="status" aria-live="polite"></p>
+<p class="fig-h" id="fh-band">Screened TRIR percentiles for this peer group, cases per 200,000 hours, ITA 2016 to 2024 pooled</p>
+<figure aria-labelledby="fh-band">
 <div class="chart" id="bandChart"></div>
 <div class="legend" aria-hidden="true">
 <span><i style="background:var(--s1);opacity:.25"></i>p10 to p90</span>
@@ -1083,35 +1150,35 @@ html{overflow-x:clip}
 </div>
 <figcaption id="bandCaption"></figcaption>
 </figure>
-<details class="datatbl"><summary>Peer percentiles as a table</summary><div class="tbl-scroll" id="bandTable"></div></details>
+<details class="datatbl"><summary><span class="fd-k">Data</span> Peer percentiles as a table</summary><div class="tbl-scroll" id="bandTable"></div></details>
 <div class="rule-box">The hours check is the pipeline's own rule: a filing is excluded when hours worked divided by average employees falls outside <code>120</code> to <code>4,500</code> a year, or either field is missing. Source: <a href="https://github.com/priyatham9/ehs-osha-analysis/blob/main/src/ehs_osha/quality.py">src/ehs_osha/quality.py</a>.</div>
-<span class="src">Peer percentiles: outputs/tables/peer_percentiles_pooled.csv (screened filings, pooled 2016 to 2024)</span>
+<span class="src">Source: OSHA Injury Tracking Application, Form 300A summaries, 2016 to 2024, screened filings pooled; outputs/tables/peer_percentiles_pooled.csv.</span>
 </div>
 </div>
 </div></section>
 
-<section class="section" id="year" aria-labelledby="h-year"><div class="wrap">
-<span class="sec-k">The national picture</span>
+<section class="section" id="year" data-st-anchor aria-labelledby="h-year"><div class="wrap">
+<span class="sec-k">Every ITA filer, year by year</span>
 <h2 id="h-year" data-m-split="words">A few filings, most of the hours, every year</h2>
-<p class="sec-lede">Each year a small share of filings fails the hours check, and those filings hold a far larger share of the hours. Pick a year to see what that does to the national rate.</p>
+<p class="sec-lede">Each year a small share of filings fails the hours check, and those filings hold a far larger share of the hours. Pick a year to see what that does to the aggregate rate of all filers. This is the Injury Tracking Application aggregate, not the BLS national rate.</p>
 <div class="chips" id="yearChips" role="group" aria-label="Choose a year"></div>
 <div class="year-read" id="yearRead" aria-live="polite"></div>
-<p class="fig-h" id="fh-share">Share of filings flagged, against share of hours they hold</p>
+<p class="fig-h" id="fh-share">Filings flagged and the hours they hold, % of all filings and all hours, ITA 2016 to 2024</p>
 <figure aria-labelledby="fh-share">
 <div class="chart" id="shareChart" data-m-bars="y" data-m-bar="rect"></div>
 <div class="legend" aria-hidden="true"><span><i style="background:var(--s1)"></i>filings flagged</span><span><i style="background:var(--warn)"></i>hours in flagged filings</span></div>
 </figure>
-<p class="fig-h" id="fh-trir">National TRIR, screened and as filed</p>
+<p class="fig-h" id="fh-trir">Aggregate TRIR of all ITA filers, cases per 200,000 hours, screened and as filed, 2016 to 2024</p>
 <figure aria-labelledby="fh-trir">
 <div class="chart" id="trirChart" data-m-draw></div>
 <div class="legend" aria-hidden="true"><span><i style="background:var(--accent)"></i>screened</span><span><i class="dash"></i>as filed (unscreened)</span></div>
 <figcaption id="trirCaption"></figcaption>
 </figure>
-<details class="datatbl"><summary>Year-by-year data table</summary><div class="tbl-scroll" id="yearTable"></div></details>
-<span class="src">Source: outputs/tables/quality_by_year.csv, quality_overall.csv, quality_top50_implausible_hours.csv</span>
+<details class="datatbl"><summary><span class="fd-k">Data</span> Year by year, both charts</summary><div class="tbl-scroll" id="yearTable"></div></details>
+<span class="src">Source: OSHA Injury Tracking Application, Form 300A summaries, 2016 to 2024; outputs/tables/quality_by_year.csv, quality_overall.csv, quality_top50_implausible_hours.csv.</span>
 </div></section>
 
-<section class="section" id="plain" style="border-bottom:0" aria-labelledby="h-plain"><div class="wrap">
+<section class="section" id="plain" data-st-anchor style="border-bottom:0" aria-labelledby="h-plain"><div class="wrap">
 <span class="sec-k">Read before you quote it</span>
 <h2 id="h-plain" data-m-split="words">What this can and cannot tell you</h2>
 <div class="plain-grid" data-m-reveal data-m-stagger="0.12" data-m-from="up">
@@ -1120,16 +1187,17 @@ html{overflow-x:clip}
 <ul>
 <li>Show where one site-year's TRIR sits against a public, self-reported peer distribution for a NAICS-3 industry and size band, after the hours screen.</li>
 <li>Show whether a set of hours and headcount would pass the pipeline's plausibility screen.</li>
-<li>Show how much a national aggregate rate depends on screening implausible hours first.</li>
+<li>Show how much the aggregate rate across all ITA filers depends on screening implausible hours first.</li>
 </ul>
 </div>
 <div>
 <h3>Cannot</h3>
 <ul>
-<li>Stand in for OSHA's enforcement data or a regulator's view. This is Form 300A summary data only, not inspections or citations.</li>
+<li>Stand in for the BLS national rate, OSHA's enforcement data or a regulator's view. ITA covers establishments required to file electronically, not every workplace. This is Form 300A summary data only, not inspections or citations.</li>
 <li>Prove any single filing is accurate. The screen catches implausible hours; it cannot verify case counts, classification or intent.</li>
 <li>Match peers more closely than NAICS-3 and one of seven size bands. Two sites in the same cell can differ a great deal.</li>
 <li>Give an exact percentile. The table stores p10, p25, p50, p75, p90 and p95, so a rate is placed between two of them, not interpolated.</li>
+<li>Say why a site ranks where it does. A percentile is an association with self-reported peers, not a cause.</li>
 <li>Treat a small cell as reliable. Cells under 30 filings are marked below the publishing threshold; read them with caution.</li>
 </ul>
 </div>
@@ -1182,7 +1250,7 @@ html{overflow-x:clip}
     return e;
   }
   function t(parent, x, y, s, attrs) {
-    var a = { x: x, y: y, fill: "var(--ink-2)", "font-size": 12, "font-family": "var(--font-mono)" };
+    var a = { x: x, y: y, fill: "var(--ink-2)", "font-size": 13, "font-family": "var(--font-mono)" };
     for (var k in attrs) a[k] = attrs[k];
     var n = svg("text", a, parent); n.textContent = s; return n;
   }
@@ -1209,6 +1277,9 @@ html{overflow-x:clip}
     var has = false;
     ["naics", "band", "emp", "hours", "cases"].forEach(function (k) { if (q.has(k)) { S[k] = q.get(k); has = true; } });
     if (q.get("typo") === "1") { S.typo = true; has = true; }
+    var y = q.get("y");
+    if (y === "all") selYear = 0;
+    else if (y && DATA.quality_by_year.some(function (r) { return String(r.year) === y; })) selYear = +y;
     return has;
   }
   function loadExample() {
@@ -1216,7 +1287,9 @@ html{overflow-x:clip}
     S.hours = String(EXAMPLE.hours); S.cases = String(EXAMPLE.cases); S.typo = false;
   }
   var urlTimer = null;
-  function writeUrl() {
+  var pushNext = false;
+  function writeUrl(push) {
+    if (push) pushNext = true;
     if (urlTimer) clearTimeout(urlTimer);
     urlTimer = setTimeout(function () {
       var q = new URLSearchParams();
@@ -1225,12 +1298,15 @@ html{overflow-x:clip}
       if (S.hours !== "") q.set("hours", S.hours);
       if (S.cases !== "") q.set("cases", S.cases);
       if (S.typo) q.set("typo", "1");
+      if (selYear !== 2019) q.set("y", selYear ? String(selYear) : "all");
       var url = location.pathname + "?" + q.toString() + location.hash;
-      try { history.replaceState(null, "", url); } catch (e) { /* file:// or sandboxed frame */ }
+      var same = url === location.pathname + location.search + location.hash;
+      try { if (pushNext && !same) history.pushState(null, "", url); else history.replaceState(null, "", url); } catch (e) { /* file:// or sandboxed frame */ }
+      pushNext = false;
     }, 150);
   }
   function pushToForm() {
-    $("naics3").value = S.naics; $("sizeband").value = S.band;
+    $("naics3").value = S.naics; $("sizeband").value = S.band; $("naicsCode").value = S.naics;
     $("inEmp").value = S.emp; $("inHours").value = S.hours; $("inCases").value = S.cases;
     $("btnTypo").setAttribute("aria-pressed", S.typo ? "true" : "false");
   }
@@ -1276,14 +1352,19 @@ html{overflow-x:clip}
     var hours = S.typo && isFinite(hours0) ? hours0 * 1000 : hours0;
     var okH = isFinite(hours) && hours > 0, okC = isFinite(cases) && cases >= 0 && Math.floor(cases) === cases;
     var okE = isFinite(emp) && emp > 0;
-    $("inHours").setAttribute("aria-invalid", S.hours !== "" && !(isFinite(hours0) && hours0 > 0) ? "true" : "false");
-    $("inCases").setAttribute("aria-invalid", S.cases !== "" && !okC ? "true" : "false");
-    $("inEmp").setAttribute("aria-invalid", S.emp !== "" && !okE ? "true" : "false");
+    /* inline validation: a message next to the field, never only a colour */
+    setErr("inEmp", S.emp === "" ? (touched.inEmp ? "Add average employees to run the hours check." : "")
+      : !okE || Math.floor(emp) !== emp ? "Enter a whole number of people, 1 or more." : "", S.emp === "");
+    setErr("inHours", S.hours === "" ? (touched.inHours ? "Enter the hours worked in the year to compute a rate." : "")
+      : !(isFinite(hours0) && hours0 > 0) ? "Hours must be a number above zero." : "");
+    setErr("inCases", S.cases === "" ? (touched.inCases ? "Enter the recordable cases, 0 or more." : "")
+      : !okC ? "Enter a whole number of cases, 0 or more."
+      : okE && cases > emp ? "More recordable cases than employees is unusual. Check the count; the rate below uses it as entered." : "", okC && okE && cases > emp);
 
     var ex = $("example");
     ex.setAttribute("data-mode", isExample ? "example" : "own");
     ex.innerHTML = isExample
-      ? "<span><b>Worked example.</b> A " + EXAMPLE.emp + "-person warehouse, " + nf(EXAMPLE.hours) + " hours (2,000 each), " + EXAMPLE.cases + " recordable cases. Replace it with your own numbers.</span>"
+      ? "<span><b>Worked example.</b> A " + EXAMPLE.emp + "-person warehouse, " + nf(EXAMPLE.hours) + " hours (2,000 each), " + EXAMPLE.cases + " recordable cases. Type over it, or clear it to start from blank fields.</span>"
       : "<span><b>Your numbers.</b> Nothing is sent anywhere; the link below carries them.</span>";
 
     /* TRIR */
@@ -1292,7 +1373,7 @@ html{overflow-x:clip}
     $("trirN").innerHTML = isFinite(trir) ? rate(trir) : "-";
     $("trirS").textContent = !isFinite(trir) ? "Enter hours above zero and a whole number of cases."
       : S.typo ? "As typed, with three extra zeros. The real rate is " + rate(trirRaw) + ", so the typo makes this site look " + nf(1000) + " times safer."
-      : "Recordable cases per 200,000 hours, about 100 full-time workers for a year.";
+      : "Recordable cases \u00d7 200,000 \u00f7 hours worked: cases per 100 full-time workers for a year.";
     $("vTrir").classList.toggle("is-bad", !!S.typo && isFinite(trir));
 
     /* hours check */
@@ -1335,11 +1416,24 @@ html{overflow-x:clip}
       if (!c.publishable) s += ' <span class="warnw">Only ' + nf(c.n) + " filings in this cell, under the 30 needed to publish it.</span>";
       ro.innerHTML = s;
     }
+    announce(!c ? ro.textContent : !isFinite(trir) ? "" :
+      "TRIR " + rate(trir) + ". " + (isFinite(hpe) ? (fail ? "Fails the hours check. " : "Passes the hours check. ") : "") + "Sits " + place(c, trir).txt + " of " + nf(c.n) + " screened peer filings.");
 
     var mr = $("miniRes");
     mr.innerHTML = isFinite(trir) ? "TRIR <b>" + rate(trir) + "</b> &middot; " + (isFinite(hpe) ? (fail ? "fails the hours check" : "passes the hours check") : "hours not checked") + (c ? " &middot; " + place(c, trir).txt.replace(/,.*$/, "") : "") + " &darr;" : "Enter your numbers to see a result &darr;";
     renderBand(c, trir, fail);
     writeUrl();
+  }
+  var touched = {};
+  function setErr(id, msg, soft) {
+    var e = $(id + "-err"), inp = $(id);
+    if (e) { e.textContent = msg; e.classList.toggle("is-soft", !!soft && !!msg); }
+    inp.setAttribute("aria-invalid", msg && !soft ? "true" : "false");
+  }
+  var annT = null, lastAnn = "";
+  function announce(msg) {
+    if (annT) clearTimeout(annT);
+    annT = setTimeout(function () { if (msg && msg !== lastAnn) { lastAnn = msg; $("announce").textContent = msg; } }, 900);
   }
   function bandLabel(b) { return (b === "1000+" ? "1,000 or more" : b.replace(/^0+/, "").replace(/-0*/, " to ")) + " employees"; }
 
@@ -1364,7 +1458,7 @@ html{overflow-x:clip}
       svg("line", { x1: x, x2: x, y1: midY - 34, y2: midY + 30, stroke: "var(--rule-soft)", "stroke-width": 1 }, s);
       t(s, x, midY + 58, v.toFixed(v < 10 ? 1 : 0), { "text-anchor": i === 0 ? "start" : i === nt ? "end" : "middle", fill: "var(--muted)" });
     }
-    t(s, L, H - 6, "screened TRIR, cases per 200,000 hours", { fill: "var(--muted)", "font-size": 11 });
+    t(s, L, H - 6, "screened TRIR, cases per 200,000 hours", { fill: "var(--muted)", "font-size": 13 });
     svg("rect", { x: X(c.p10), y: midY - 18, width: Math.max(X(c.p90) - X(c.p10), 2), height: 36, fill: "var(--s1)", opacity: .22 }, s);
     svg("rect", { x: X(c.p25), y: midY - 12, width: Math.max(X(c.p75) - X(c.p25), 2), height: 24, fill: "var(--s1)", opacity: .5 }, s);
     svg("line", { x1: X(c.p50), x2: X(c.p50), y1: midY - 20, y2: midY + 20, stroke: "var(--s1)", "stroke-width": 3 }, s);
@@ -1376,7 +1470,7 @@ html{overflow-x:clip}
       var row = i % 2 ? "bot" : "top";
       if (x - lastX[row] < (narrow ? 34 : 40)) return;
       lastX[row] = x;
-      t(s, x, row === "top" ? midY - 26 : midY + 34, k === "p50" ? "med" : k, { "text-anchor": "middle", "font-size": 11, fill: "var(--ink-2)", "font-weight": 600 });
+      t(s, x, row === "top" ? midY - 26 : midY + 34, k === "p50" ? "med" : k, { "text-anchor": "middle", "font-size": 13, fill: "var(--ink-2)", "font-weight": 600 });
     });
     if (hasT) {
       var mx = X(trir), col = fail ? "var(--warn)" : "var(--s2)";
@@ -1384,7 +1478,7 @@ html{overflow-x:clip}
       svg("polygon", { points: (mx - 7) + "," + (midY - 50) + " " + (mx + 7) + "," + (midY - 50) + " " + mx + "," + (midY - 40), fill: col }, s);
       var lab = (fail ? "excluded: " : "you: ") + rate(trir) + (over ? " (off scale)" : "");
       var anchor = mx > W * 0.7 ? "end" : mx < W * 0.3 ? "start" : "middle";
-      t(s, mx + (anchor === "end" ? 8 : anchor === "start" ? -8 : 0), midY - 56, lab, { "text-anchor": anchor, fill: col, "font-weight": 700, "font-size": 13 });
+      t(s, mx + (anchor === "end" ? 8 : anchor === "start" ? -8 : 0), midY - 56, lab, { "text-anchor": anchor, fill: col, "font-weight": 700, "font-size": 14 });
     }
     cap.textContent = nf(c.n) + " screened establishment-year filings, 2016 to 2024. " + pct(c.zero_share, 0) + " reported zero recordable cases. " +
       (c.publishable ? "Meets the pipeline's 30-filing publishing threshold." : "Below the pipeline's 30-filing publishing threshold: read with caution.");
@@ -1406,12 +1500,20 @@ html{overflow-x:clip}
     var all = h("button", { type: "button", class: "chip", "aria-pressed": "false", text: "All years" }, box);
     all.addEventListener("click", function () { selectYear(0); });
   }
+  function selectYearQuiet(y) {
+    selYear = y;
+    Array.prototype.forEach.call($("yearChips").children, function (b) {
+      b.setAttribute("aria-pressed", String(b.textContent === (y ? String(y) : "All years")));
+    });
+    renderYear();
+  }
   function selectYear(y) {
     selYear = y;
     Array.prototype.forEach.call($("yearChips").children, function (b) {
       b.setAttribute("aria-pressed", String(b.textContent === (y ? String(y) : "All years")));
     });
     renderYear();
+    if (DATA) writeUrl(true);
   }
   function renderYear() {
     var rows = DATA.quality_by_year;
@@ -1430,7 +1532,7 @@ html{overflow-x:clip}
     });
     var tf = DATA.top_filing;
     $("trirCaption").textContent = "Aggregate TRIR is total recordable cases times 200,000 divided by total hours, across all filers. " +
-      "In 2019 one filing, a " + tf.annual_average_employees + "-employee site in NAICS " + tf.naics_code + ", reported " + nf(tf.total_hours_worked / 1e12, 1) +
+      "This is the Injury Tracking Application aggregate, not the BLS national rate. In 2019 one filing, a " + tf.annual_average_employees + "-employee site in NAICS " + tf.naics_code + ", reported " + nf(tf.total_hours_worked / 1e12, 1) +
       " trillion hours: " + pct(tf.share_of_year_hours, 1) + " of that year's hours and " + pct(tf.share_of_all_hours, 1) + " of all nine years. " +
       "That one row is why the as-filed line falls to " + rate(DATA.note_2019.trir_unscreened) + ".";
   }
@@ -1457,17 +1559,18 @@ html{overflow-x:clip}
     function Y(v) { return T + (1 - v) * (H - T - B); }
     [0, .5, 1].forEach(function (v) {
       svg("line", { x1: L, x2: W - R, y1: Y(v), y2: Y(v), stroke: "var(--rule-soft)" }, s);
-      t(s, L - 6, Y(v) + 4, (v * 100) + "%", { "text-anchor": "end", fill: "var(--muted)", "font-size": 11 });
+      t(s, L - 6, Y(v) + 4, (v * 100) + "%", { "text-anchor": "end", fill: "var(--muted)", "font-size": 13 });
     });
     var bw = Math.min(26, colW * .34);
     rows.forEach(function (r, i) {
       var on = !selYear || r.year === selYear, op = on ? 1 : .35;
       svg("rect", { x: X(i) - bw - 1, y: Y(r.implausible_share), width: bw, height: Y(0) - Y(r.implausible_share), fill: "var(--s1)", opacity: op }, s);
       svg("rect", { x: X(i) + 1, y: Y(r.hours_share_implausible), width: bw, height: Y(0) - Y(r.hours_share_implausible), fill: "var(--warn)", opacity: op }, s);
-      if (!f.narrow || r.year === selYear) t(s, X(i) + 1 + bw / 2, Y(r.hours_share_implausible) - 5, (r.hours_share_implausible >= 0.995 ? (r.hours_share_implausible * 100).toFixed(1) : Math.round(r.hours_share_implausible * 100)) + "%", { "text-anchor": "middle", "font-size": 11, fill: "var(--ink)", opacity: op, "font-weight": 700 });
-      t(s, X(i), H - 10, f.narrow ? "'" + String(r.year).slice(2) : String(r.year), { "text-anchor": "middle", "font-size": 11, fill: r.year === selYear ? "var(--ink)" : "var(--muted)", "font-weight": r.year === selYear ? 700 : 400 });
+      if (r.year === selYear) t(s, X(i) - 1 - bw / 2, Y(r.implausible_share) - 5, (r.implausible_share * 100).toFixed(1) + "%", { "text-anchor": "middle", "font-size": 13, fill: "var(--ink)", "font-weight": 700 });
+      if (!f.narrow || r.year === selYear) t(s, X(i) + 1 + bw / 2, Y(r.hours_share_implausible) - 5, (r.hours_share_implausible >= 0.995 ? (r.hours_share_implausible * 100).toFixed(1) : Math.round(r.hours_share_implausible * 100)) + "%", { "text-anchor": "middle", "font-size": 13, fill: "var(--ink)", opacity: op, "font-weight": 700 });
+      t(s, X(i), H - 10, f.narrow ? "'" + String(r.year).slice(2) : String(r.year), { "text-anchor": "middle", "font-size": 13, fill: r.year === selYear ? "var(--ink)" : "var(--muted)", "font-weight": r.year === selYear ? 700 : 400 });
     });
-    hitColumns(s, rows, X, colW, T, H - B + 20, function (r) { return r.year + ": " + pct(r.implausible_share, 2) + " of filings flagged, holding " + pct(r.hours_share_implausible, 2) + " of hours"; });
+    if (!f.narrow) hitColumns(s, rows, X, colW, T, H - B + 20, function (r) { return r.year + ": " + pct(r.implausible_share, 2) + " of filings flagged, holding " + pct(r.hours_share_implausible, 2) + " of hours"; });
   }
   function trirChart() {
     var node = $("trirChart"), rows = DATA.quality_by_year;
@@ -1479,7 +1582,7 @@ html{overflow-x:clip}
     [0, 1, 2, 3, 4, 5].forEach(function (v) {
       if (f.narrow && v % 2) return;
       svg("line", { x1: L, x2: W - R, y1: Y(v), y2: Y(v), stroke: "var(--rule-soft)" }, s);
-      t(s, L - 6, Y(v) + 4, String(v), { "text-anchor": "end", fill: "var(--muted)", "font-size": 11 });
+      t(s, L - 6, Y(v) + 4, String(v), { "text-anchor": "end", fill: "var(--muted)", "font-size": 13 });
     });
     function path(key) { return rows.map(function (r, i) { return (i ? "L" : "M") + X(i).toFixed(1) + " " + Y(r[key]).toFixed(1); }).join(" "); }
     /* the gap between the two lines is the denominator effect */
@@ -1491,7 +1594,7 @@ html{overflow-x:clip}
       var sel = r.year === selYear;
       svg("circle", { cx: X(i), cy: Y(r.trir_screened), r: sel ? 6 : 3.5, fill: "var(--accent)", stroke: "var(--surface)", "stroke-width": 2 }, s);
       svg("circle", { cx: X(i), cy: Y(r.trir_unscreened), r: sel ? 6 : 3.5, fill: "var(--surface)", stroke: "var(--ink-2)", "stroke-width": 2 }, s);
-      t(s, X(i), H - 10, f.narrow ? "'" + String(r.year).slice(2) : String(r.year), { "text-anchor": "middle", "font-size": 11, fill: sel ? "var(--ink)" : "var(--muted)", "font-weight": sel ? 700 : 400 });
+      t(s, X(i), H - 10, f.narrow ? "'" + String(r.year).slice(2) : String(r.year), { "text-anchor": "middle", "font-size": 13, fill: sel ? "var(--ink)" : "var(--muted)", "font-weight": sel ? 700 : 400 });
       if (sel) {
         svg("line", { x1: X(i), x2: X(i), y1: Y(r.trir_screened), y2: Y(r.trir_unscreened), stroke: "var(--warn)", "stroke-width": 2 }, s);
         var right = i < rows.length / 2, tx = X(i) + (right ? 10 : -10);
@@ -1499,7 +1602,10 @@ html{overflow-x:clip}
         t(s, tx, ty, (r.ratio >= 100 ? nf(r.ratio, 0) : r.ratio.toFixed(1)) + "x", { "text-anchor": right ? "start" : "end", fill: "var(--warn)", "font-size": 18, "font-weight": 700 });
       }
     });
-    hitColumns(s, rows, X, (W - L - R) / (rows.length - 1), T, H - B + 20, function (r) { return r.year + ": screened TRIR " + rate(r.trir_screened) + ", as filed " + rate(r.trir_unscreened); });
+    var last = rows[rows.length - 1], li = rows.length - 1;
+    t(s, X(li) - 4, Y(last.trir_screened) - 12, "screened", { "text-anchor": "end", fill: "var(--accent)", "font-size": 13, "font-weight": 700 });
+    t(s, X(li) - 4, Y(last.trir_unscreened) + (Y(last.trir_unscreened) > H - B - 24 ? -12 : 20), "as filed", { "text-anchor": "end", fill: "var(--ink)", "font-size": 13, "font-weight": 700 });
+    if (!f.narrow) hitColumns(s, rows, X, (W - L - R) / (rows.length - 1), T, H - B + 20, function (r) { return r.year + ": screened TRIR " + rate(r.trir_screened) + ", as filed " + rate(r.trir_unscreened); });
   }
   function yearTable() {
     var box = $("yearTable"), tb = h("table", {}, box), tr = h("tr", {}, h("thead", {}, tb));
@@ -1515,8 +1621,39 @@ html{overflow-x:clip}
   /* ---------------- wiring ---------------- */
   function markOwn() { if (isExample) { isExample = false; } }
   function bind() {
-    $("naics3").addEventListener("change", function () { S.naics = this.value; markOwn(); render(); });
-    $("sizeband").addEventListener("change", function () { S.band = this.value; markOwn(); render(); });
+    $("naics3").addEventListener("change", function () { S.naics = this.value; $("naicsCode").value = S.naics; setErr("naicsCode", ""); markOwn(); render(); writeUrl(true); });
+    $("sizeband").addEventListener("change", function () { S.band = this.value; markOwn(); render(); writeUrl(true); });
+    $("naicsCode").addEventListener("input", function () {
+      var v = this.value.trim();
+      if (v === "") { setErr("naicsCode", ""); return; }
+      if (!/^\d+$/.test(v)) { setErr("naicsCode", "Use digits only, like 493 or 493110."); return; }
+      if (v.length < 3) { setErr("naicsCode", "Keep typing: at least 3 digits."); return; }
+      var c3 = v.slice(0, 3);
+      if (DATA.naics3_list.indexOf(c3) < 0) { setErr("naicsCode", "No screened filings for NAICS " + c3 + ". Check the code, or pick an industry below."); return; }
+      setErr("naicsCode", "");
+      if (c3 !== S.naics) { S.naics = c3; $("naics3").value = c3; markOwn(); render(); writeUrl(true); }
+    });
+    ["inEmp", "inHours", "inCases"].forEach(function (id) {
+      $(id).addEventListener("blur", function () { touched[id] = true; render(); });
+      $(id).addEventListener("change", function () { writeUrl(true); });
+    });
+    $("btnClear").addEventListener("click", function () {
+      S.emp = ""; S.hours = ""; S.cases = ""; S.typo = false; isExample = false; touched = {};
+      pushToForm(); $("btnTypo").textContent = "Add three zeros to the hours";
+      render(); writeUrl(true); $("copyStatus").textContent = "Fields cleared. Start with average employees.";
+      $("inEmp").focus();
+    });
+    window.addEventListener("popstate", function () {
+      if (location.search) { S.emp = ""; S.hours = ""; S.cases = ""; S.typo = false; } else loadExample();
+      selYear = 2019; readUrl();
+      if (DATA.naics3_list.indexOf(S.naics) < 0) S.naics = EXAMPLE.naics;
+      if (DATA.size_bands.indexOf(S.band) < 0) S.band = bandFor(num(S.emp)) || EXAMPLE.band;
+      isExample = S.naics === EXAMPLE.naics && S.band === EXAMPLE.band && S.emp === String(EXAMPLE.emp) && S.hours === String(EXAMPLE.hours) && S.cases === String(EXAMPLE.cases) && !S.typo;
+      pushToForm(); $("btnTypo").textContent = S.typo ? "Remove the three zeros" : "Add three zeros to the hours";
+      render(); selectYearQuiet(selYear);
+    });
+    var cta = $("ctaRank");
+    if (cta) cta.addEventListener("click", function () { setTimeout(function () { try { $("naicsCode").focus({ preventScroll: true }); } catch (e) { $("naicsCode").focus(); } }, 450); });
     $("inEmp").addEventListener("input", function () {
       S.emp = this.value.trim(); markOwn();
       var b = bandFor(num(S.emp));
@@ -1528,12 +1665,12 @@ html{overflow-x:clip}
     $("btnTypo").addEventListener("click", function () {
       S.typo = !S.typo; this.setAttribute("aria-pressed", String(S.typo));
       this.textContent = S.typo ? "Remove the three zeros" : "Add three zeros to the hours";
-      render();
+      render(); writeUrl(true);
     });
     $("btnReset").addEventListener("click", function () {
-      loadExample(); isExample = true; pushToForm();
+      loadExample(); isExample = true; touched = {}; selYear = 2019; pushToForm(); setErr("naicsCode", "");
       $("btnTypo").textContent = "Add three zeros to the hours";
-      render(); $("copyStatus").textContent = "Worked example restored.";
+      render(); selectYearQuiet(2019); writeUrl(true); $("copyStatus").textContent = "Worked example restored.";
     });
     $("btnCopy").addEventListener("click", function () {
       writeUrl();
@@ -1553,6 +1690,7 @@ html{overflow-x:clip}
   }
 
   function init() {
+    $("result").setAttribute("aria-busy", "true");
     fetch("./explore-data.json").then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); }).then(function (json) {
       DATA = json;
       populateSelects();
@@ -1570,9 +1708,12 @@ html{overflow-x:clip}
       render();
       yearTable();
       renderYearChips();
-      renderYear();
+      selectYearQuiet(selYear);
+      $("result").removeAttribute("aria-busy");
     }).catch(function (err) {
-      $("readout").textContent = "Could not load explore-data.json (" + err.message + "). If you opened this file directly, serve the docs folder over HTTP.";
+      $("result").removeAttribute("aria-busy");
+      var ro = $("readout"); ro.classList.add("is-error");
+      ro.textContent = "The peer table did not load (" + err.message + "). Reload the page to try again. If you opened this file directly, serve the docs folder over HTTP.";
     });
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();

@@ -73,12 +73,12 @@
 <text x="78" y="40" font-size="11" fill="#666">OSHA ITA Form 300A, reporting year 2024, screened panel, NAICS 238 only; n=20,000 establishments in the fit</text>
 <text x="437.0" y="448" font-size="12" text-anchor="middle" fill="#333">Recordable cases in the reporting year</text>
 <text x="16" y="216.0" font-size="12" text-anchor="middle" fill="#333" transform="rotate(-90 16 216.0)">Number of establishments</text>
-<rect x="554.0" y="31.0" width="10" height="10" fill="#0072B2" />
-<text x="568.0" y="40.0" font-size="11" fill="#333">observed</text>
-<rect x="627.2" y="31.0" width="10" height="10" fill="#D55E00" />
-<text x="641.2" y="40.0" font-size="11" fill="#333">poisson</text>
-<rect x="694.0" y="31.0" width="10" height="10" fill="#009E73" />
-<text x="708.0" y="40.0" font-size="11" fill="#333">nb2</text>
-<rect x="735.2" y="31.0" width="10" height="10" fill="#CC79A7" />
-<text x="749.2" y="40.0" font-size="11" fill="#333">zinb</text>
+<circle cx="800.0" cy="53.5" r="3.5" fill="#0072B2" />
+<text x="792.0" y="57.0" font-size="11" text-anchor="end" fill="#333">observed</text>
+<circle cx="800.0" cy="67.5" r="3.5" fill="#D55E00" />
+<text x="792.0" y="71.0" font-size="11" text-anchor="end" fill="#333">poisson</text>
+<circle cx="800.0" cy="81.5" r="3.5" fill="#009E73" />
+<text x="792.0" y="85.0" font-size="11" text-anchor="end" fill="#333">nb2</text>
+<circle cx="800.0" cy="95.5" r="3.5" fill="#CC79A7" />
+<text x="792.0" y="99.0" font-size="11" text-anchor="end" fill="#333">zinb</text>
 </svg>

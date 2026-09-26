@@ -31,7 +31,7 @@ runner beyond stdlib `unittest`.
 |---|---|
 | Status | tests passing (see badge above) |
 | Data | real (public OSHA ITA filings, 2016-2024); synthetic fixture available for offline test runs only, never used for headline numbers |
-| Tests | 175 tests, stdlib `unittest` |
+| Tests | 178 tests, stdlib `unittest` |
 | Quickstart | `make data && make analysis && make test` |
 | Licence | MIT |
 
@@ -518,7 +518,7 @@ scripts/
   run_analysis.py
 synthetic/
   generate_fixture.py   SYNTHETIC data generator, for tests only
-tests/                  175 tests, stdlib unittest
+tests/                  178 tests, stdlib unittest
 outputs/
   tables/               15 CSVs, all script-generated
   figures/              6 SVGs, all script-generated

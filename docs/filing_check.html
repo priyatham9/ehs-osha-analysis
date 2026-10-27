@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Form 300A filing checker</title>
+<meta name="description" content="Check one OSHA Form 300A filing against the plausibility screen used in the ehs-osha-analysis pipeline. Runs entirely in your browser.">
+<style>
+:root{--bg:#fff;--fg:#1a1a1a;--mut:#555;--line:#ccd;--bad:#b00020;--ok:#1b6e3c;--acc:#0b57d0}
+@media (prefers-color-scheme:dark){:root{--bg:#14161a;--fg:#eceff4;--mut:#a9b0bb;--line:#363b45;--bad:#ff6b81;--ok:#5fd18a;--acc:#8ab4ff}}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 system-ui,sans-serif}
+main{max-width:46rem;margin:0 auto;padding:1.5rem 1rem 3rem}
+h1{font-size:1.6rem;margin:0 0 .5rem}
+label{display:block;margin:.8rem 0 .2rem;font-weight:600}
+input,select{font:inherit;padding:.4rem;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--fg);width:100%;box-sizing:border-box}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:0 1rem}
+@media (max-width:34rem){.row{grid-template-columns:1fr}}
+button{margin-top:1rem;font:inherit;padding:.5rem 1.2rem;border:0;border-radius:4px;background:var(--acc);color:var(--bg);cursor:pointer}
+#result{margin-top:1.5rem;border-top:1px solid var(--line);padding-top:1rem}
+.bad{color:var(--bad)}.ok{color:var(--ok)}.note{color:var(--mut);font-size:.9rem}
+a{color:var(--acc)}
+</style>
+</head>
+<body>
+<main>
+<h1>Form 300A filing checker</h1>
+<p>Enter the figures from one OSHA Form 300A. The check runs in your browser; nothing is sent anywhere. It applies the same rules as the plausibility screen in
+<a href="https://github.com/priyatham9/ehs-osha-analysis">ehs-osha-analysis</a>, read from the shared file <a href="plausibility_rules.json">plausibility_rules.json</a>.</p>
+<form id="f" autocomplete="off">
+<div class="row">
+<div><label for="total_hours_worked">Total hours worked (box K)</label><input id="total_hours_worked" inputmode="decimal"></div>
+<div><label for="annual_average_employees">Annual average employees (box J)</label><input id="annual_average_employees" inputmode="decimal"></div>
+<div><label for="total_deaths">Deaths (G)</label><input id="total_deaths" inputmode="decimal"></div>
+<div><label for="total_dafw_cases">Days away from work cases (H)</label><input id="total_dafw_cases" inputmode="decimal"></div>
+<div><label for="total_djtr_cases">Job transfer or restriction cases (I)</label><input id="total_djtr_cases" inputmode="decimal"></div>
+<div><label for="total_other_cases">Other recordable cases (J)</label><input id="total_other_cases" inputmode="decimal"></div>
+</div>
+<label for="no_injuries_illnesses">No-injuries checkbox (ITA coding)</label>
+<select id="no_injuries_illnesses"><option value="">Not provided</option><option value="1">1 - cases occurred</option><option value="2">2 - no cases occurred</option></select>
+<button type="submit">Check filing</button>
+</form>
+<div id="result" aria-live="polite"></div>
+<p class="note">This is a screen, not an audit. It flags filings whose numerator and denominator cannot both be right; it does not say which field is wrong. Bounds and their rationale are in the repository README and <code>src/ehs_osha/quality.py</code>. Column letters follow the ITA field names in the repository; confirm against your form.</p>
+</main>
+<script src="filing_check.js"></script>
+<script>
+(function(){
+  var rules=null, out=document.getElementById("result");
+  fetch("plausibility_rules.json").then(function(r){return r.json();}).then(function(j){rules=j;})
+    .catch(function(){out.textContent="Could not load plausibility_rules.json. Serve this folder over HTTP.";});
+  document.getElementById("f").addEventListener("submit",function(e){
+    e.preventDefault();
+    if(!rules){return;}
+    var rec={};
+    ["total_hours_worked","annual_average_employees","total_deaths","total_dafw_cases","total_djtr_cases","total_other_cases","no_injuries_illnesses"].forEach(function(id){
+      var v=document.getElementById(id).value.replace(/,/g,"").trim();
+      rec[id]=v===""?null:Number(v);
+    });
+    var r=FilingCheck.checkFiling(rec,rules);
+    out.textContent="";
+    var h=document.createElement("h2");
+    h.textContent=r.implausible?"Implausible":"No plausibility flag raised";
+    h.className=r.implausible?"bad":"ok";
+    out.appendChild(h);
+    var ul=document.createElement("ul");
+    (r.messages.length?r.messages:["No rule fired."]).forEach(function(m){var li=document.createElement("li");li.textContent=m;ul.appendChild(li);});
+    out.appendChild(ul);
+    var p=document.createElement("p");p.className="note";
+    p.textContent="Rules fired: "+(Object.keys(r.flags).filter(function(k){return r.flags[k];}).join(", ")||"none")+". Bounds: "+rules.params.min_hours_per_employee+" to "+rules.params.max_hours_per_employee+" hours per average employee.";
+    out.appendChild(p);
+  });
+})();
+</script>
+</body>
+</html>

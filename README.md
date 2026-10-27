@@ -572,6 +572,16 @@ concept mapping and usage are in [docs/ontology.md](docs/ontology.md):
 PYTHONPATH=src python3 -m ehs_osha.ontology --out /tmp/ontology
 ```
 
+## Filing checker
+
+`docs/filing_check.html` checks one Form 300A filing against the plausibility
+screen in the browser; nothing is uploaded. The rules are a shared JSON spec
+(`src/ehs_osha/plausibility_rules.json`, copied to `docs/`) that is evaluated by
+`src/ehs_osha/filing_check.py` and `docs/filing_check.js`.
+`tests/test_filing_check_parity.py` checks that Python, JavaScript (when Node is
+installed) and the vectorised `quality.apply_screen` return the same flags on the
+same filings, including edge cases at each bound.
+
 ## Data provenance and licensing
 
 Source: US Department of Labor, Occupational Safety and Health Administration,

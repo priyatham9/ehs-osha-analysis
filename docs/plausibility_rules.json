@@ -1,0 +1,67 @@
+{
+  "spec_version": 1,
+  "description": "Shared Form 300A plausibility rules. Evaluated by ehs_osha.filing_check (Python) and docs/filing_check.js (browser). Mirrors ehs_osha.quality.apply_screen; tests/test_filing_check_parity.py enforces agreement.",
+  "params": {
+    "min_hours_per_employee": 120,
+    "max_hours_per_employee": 4500,
+    "hours_in_year": 8760,
+    "treat_contradiction_as_implausible": false
+  },
+  "case_fields": ["total_deaths", "total_dafw_cases", "total_djtr_cases", "total_other_cases"],
+  "flags": [
+    {
+      "id": "flag_hours_missing",
+      "kind": "missing_or_at_most",
+      "field": "total_hours_worked",
+      "value": 0,
+      "counts_toward_implausible": true,
+      "message": "Total hours worked is missing or not positive."
+    },
+    {
+      "id": "flag_employees_missing",
+      "kind": "missing_or_below",
+      "field": "annual_average_employees",
+      "value": 1,
+      "counts_toward_implausible": true,
+      "message": "Annual average employees is missing or below 1."
+    },
+    {
+      "id": "flag_negative_counts",
+      "kind": "negative_or_incomplete_cases",
+      "fields": ["total_deaths", "total_dafw_cases", "total_djtr_cases", "total_other_cases"],
+      "counts_toward_implausible": true,
+      "message": "A case count is negative, or the four case counts do not all have a value."
+    },
+    {
+      "id": "flag_hours_per_employee_high",
+      "kind": "ratio_above",
+      "numerator": "total_hours_worked",
+      "denominator": "annual_average_employees",
+      "denominator_must_exceed": 0,
+      "param": "max_hours_per_employee",
+      "counts_toward_implausible": true,
+      "message": "Hours per average employee exceed the upper bound."
+    },
+    {
+      "id": "flag_hours_per_employee_low",
+      "kind": "ratio_below",
+      "numerator": "total_hours_worked",
+      "denominator": "annual_average_employees",
+      "denominator_must_exceed": 0,
+      "param": "min_hours_per_employee",
+      "counts_toward_implausible": true,
+      "message": "Hours per average employee are below the lower bound."
+    },
+    {
+      "id": "flag_no_injury_contradiction",
+      "kind": "checkbox_contradiction",
+      "field": "no_injuries_illnesses",
+      "contradictions": [
+        {"value": 2, "when": "cases_positive"},
+        {"value": 1, "when": "cases_zero"}
+      ],
+      "counts_toward_implausible": "param:treat_contradiction_as_implausible",
+      "message": "The no-injuries checkbox contradicts the case counts."
+    }
+  ]
+}

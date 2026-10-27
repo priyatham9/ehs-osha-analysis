@@ -164,6 +164,13 @@
         "docs/DATA_HEALTH.md",
         "docs/LINEAGE.md"
       ]
+    },
+    "detectability_table": {
+      "label": "Rate detectability table",
+      "kind": "file",
+      "paths": [
+        "outputs/tables/detectability_by_size_band.csv"
+      ]
     }
   },
   "stages": [
@@ -401,6 +408,18 @@
       ],
       "outputs": [
         "health_docs"
+      ]
+    },
+    {
+      "id": "detectability",
+      "title": "Rate detectability planner",
+      "script": "scripts/run_detectability.py",
+      "function": "main",
+      "inputs": [
+        "peer_tables"
+      ],
+      "outputs": [
+        "detectability_table"
       ]
     }
   ]

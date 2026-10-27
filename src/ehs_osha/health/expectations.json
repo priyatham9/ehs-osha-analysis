@@ -3391,6 +3391,64 @@
    "path": "quality.pooled.aggregate_trir_screened",
    "min": 0,
    "max": 1000
+  },
+  {
+   "id": "detectability_by_size_band.columns_present",
+   "severity": "error",
+   "scope": "structural",
+   "check": "columns",
+   "target": "detectability_by_size_band",
+   "rationale": "Downstream code and docs read these columns by name.",
+   "columns": [
+    "size_band",
+    "n_filings",
+    "aggregate_trir",
+    "mean_hours_per_filing",
+    "mean_cases_per_filing",
+    "trir_upper_bound_if_zero_cases",
+    "cases_for_upper_over_lower_le_2",
+    "hours_for_upper_over_lower_le_2",
+    "site_years_for_upper_over_lower_le_2",
+    "power_one_site_year_each_ratio_1_25",
+    "site_years_per_arm_80pct_ratio_1_25",
+    "power_one_site_year_each_ratio_1_5",
+    "site_years_per_arm_80pct_ratio_1_5",
+    "power_one_site_year_each_ratio_2",
+    "site_years_per_arm_80pct_ratio_2"
+   ]
+  },
+  {
+   "id": "detectability_by_size_band.row_count",
+   "severity": "error",
+   "scope": "committed",
+   "check": "rows",
+   "target": "detectability_by_size_band",
+   "rationale": "One row per size band, matching size_band_effects (committed outputs).",
+   "equals": 7
+  },
+  {
+   "id": "detectability_by_size_band.key_columns_not_null",
+   "severity": "error",
+   "scope": "structural",
+   "check": "not_null",
+   "target": "detectability_by_size_band",
+   "rationale": "Key and count columns identify the row and feed every aggregate; nulls break joins and sums.",
+   "columns": [
+    "size_band",
+    "n_filings",
+    "aggregate_trir"
+   ]
+  },
+  {
+   "id": "detectability_by_size_band.key_unique",
+   "severity": "error",
+   "scope": "structural",
+   "check": "unique",
+   "target": "detectability_by_size_band",
+   "rationale": "Duplicate keys would double count in any aggregate over this table.",
+   "columns": [
+    "size_band"
+   ]
   }
  ]
 }

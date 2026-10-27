@@ -68,7 +68,7 @@ Equivalent to:
 cd tests && python3 -m unittest discover -s . -p "test_*.py"
 ```
 
-Includes real-data regression tests that skip silently if `data/raw/` is empty. Test count: 294 tests total across 23 test modules (`python3 -m unittest discover -s tests`: 294 run, 18 skipped when `data/raw/` is empty). Real-data tests account for the majority of runtime. Measured runtime on this machine when `data/raw/` is populated: **165 seconds**.
+Includes real-data regression tests that skip silently if `data/raw/` is empty. Test count: 323 tests total across 25 test modules (`python3 -m unittest discover -s tests`: 323 run, 18 skipped when `data/raw/` is empty). Real-data tests account for the majority of runtime. Measured runtime on this machine when `data/raw/` is populated: **165 seconds**.
 
 When `data/raw/` is empty, run the synthetic-fixture-only tests:
 

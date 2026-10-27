@@ -28,9 +28,10 @@ runner beyond stdlib `unittest`.
 [docs/INDUSTRY_QUALITY.md](docs/INDUSTRY_QUALITY.md) ranks NAICS sectors and years by filing-quality problem rate and screening effect, generated from the committed tables.
 
 [docs/PANEL_AUDIT.md](docs/PANEL_AUDIT.md) audits establishment linkage from the committed tables: how many years each `establishment_id` appears, attribute drift under a fixed id, and what can and cannot be said about where the 29.7x correction sits (`outputs/tables/panel_linkage_audit.csv`).
+[docs/THRESHOLD_ROBUSTNESS.md](docs/THRESHOLD_ROBUSTNESS.md) is a specification-curve view of the screen: across all 25 pairs of bounds in the committed sensitivity grid the screened aggregate TRIR stays within 3.963-3.993 while the flagged share runs from 1.79% to 4.49%, with the filings that move between cells priced by their own hours and cases, a threshold-free top-N-by-hours cross-check, and the limits (`outputs/tables/threshold_robustness_cells.csv`, `outputs/tables/threshold_robustness_summary.csv`).
 [docs/PREREGISTRATION_2025.md](docs/PREREGISTRATION_2025.md) is a dated pre-registration (made 2026-10-27, before any 2025 data exist here) of falsifiable predictions for the 2025 ITA release, with a fixed decision rule, the deterministic code that produced them (`scripts/preregister_2025.py`) and a scorer (`scripts/evaluate_preregistration.py`) to run when 2025 outputs are added.
 
-[docs/DATA_HEALTH.md](docs/DATA_HEALTH.md) and [docs/LINEAGE.md](docs/LINEAGE.md) are the portable analogue of Foundry data health checks and lineage: 260 data expectations over the committed outputs plus a validated pipeline graph, run with `make health`.
+[docs/DATA_HEALTH.md](docs/DATA_HEALTH.md) and [docs/LINEAGE.md](docs/LINEAGE.md) are the portable analogue of Foundry data health checks and lineage: 268 data expectations over the committed outputs plus a validated pipeline graph, run with `make health`.
 
 **At a glance**
 
@@ -38,7 +39,7 @@ runner beyond stdlib `unittest`.
 |---|---|
 | Status | tests passing (see badge above) |
 | Data | real (public OSHA ITA filings, 2016-2024); synthetic fixture available for offline test runs only, never used for headline numbers |
-| Tests | 294 tests, stdlib `unittest` (18 skip without `data/raw/`) |
+| Tests | 308 tests, stdlib `unittest` (18 skip without `data/raw/`) |
 | Quickstart | `make data && make analysis && make test` |
 | Licence | MIT |
 
@@ -540,7 +541,7 @@ scripts/
   run_panel_audit.py
 synthetic/
   generate_fixture.py   SYNTHETIC data generator, for tests only
-tests/                  294 tests, stdlib unittest
+tests/                  308 tests, stdlib unittest
 outputs/
   tables/               15 CSVs, all script-generated
   figures/              6 SVGs, all script-generated

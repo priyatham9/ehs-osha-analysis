@@ -179,6 +179,15 @@
         "outputs/tables/panel_linkage_audit.csv",
         "docs/PANEL_AUDIT.md"
       ]
+    },
+    "threshold_robustness_outputs": {
+      "label": "Threshold robustness tables and page",
+      "kind": "file",
+      "paths": [
+        "outputs/tables/threshold_robustness_cells.csv",
+        "outputs/tables/threshold_robustness_summary.csv",
+        "docs/THRESHOLD_ROBUSTNESS.md"
+      ]
     }
   },
   "stages": [
@@ -442,6 +451,18 @@
       ],
       "outputs": [
         "panel_audit_outputs"
+      ]
+    },
+    {
+      "id": "threshold_robustness",
+      "title": "Threshold robustness of the implausibility screen",
+      "script": "scripts/run_threshold_robustness.py",
+      "function": "main",
+      "inputs": [
+        "quality_tables"
+      ],
+      "outputs": [
+        "threshold_robustness_outputs"
       ]
     }
   ]

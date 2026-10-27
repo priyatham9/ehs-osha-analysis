@@ -31,7 +31,7 @@ runner beyond stdlib `unittest`.
 |---|---|
 | Status | tests passing (see badge above) |
 | Data | real (public OSHA ITA filings, 2016-2024); synthetic fixture available for offline test runs only, never used for headline numbers |
-| Tests | 178 tests, stdlib `unittest` |
+| Tests | 213 tests, stdlib `unittest` |
 | Quickstart | `make data && make analysis && make test` |
 | Licence | MIT |
 
@@ -513,12 +513,13 @@ src/ehs_osha/
   stability.py     Spearman rho, year-pair band stability, cell persistence
   svgplot.py       minimal SVG figure writer (no matplotlib)
   pipeline.py      orchestration; writes every table and figure
+  ontology/        Foundry-style ontology over the outputs (docs/ontology.md)
 scripts/
   download_data.py
   run_analysis.py
 synthetic/
   generate_fixture.py   SYNTHETIC data generator, for tests only
-tests/                  178 tests, stdlib unittest
+tests/                  213 tests, stdlib unittest
 outputs/
   tables/               15 CSVs, all script-generated
   figures/              6 SVGs, all script-generated
@@ -551,6 +552,25 @@ synthetic, and `GROUND_TRUTH.json` records the parameters. See
 
 **No number produced from the fixture appears anywhere in this README, and none
 should be cited.** Fixture runs write to a separate output directory.
+
+## Ontology layer
+
+`src/ehs_osha/ontology/` puts a Foundry-style ontology on top of the pipeline.
+It is an independent design on public data, not affiliated with Palantir, and
+it uses no employer data. A JSON spec declares the object types (Establishment,
+Filing, ReportingYear, Sector, Industry, PeerGroup, QualityFlag), the link
+types between them, actions with submission criteria (flag a filing as
+implausible, exclude it from a benchmark or restore it), and functions. The
+functions call `quality`, `metrics`, `load` and `peers` directly, so no rate is
+computed a second time. A small runtime loads the spec and checks it, builds
+the objects, follows links, applies actions with an audit log, and exports to
+SQLite and JSON. By default the Establishment and Filing objects come from the
+synthetic fixture, so numbers computed from them are not findings. Design,
+concept mapping and usage are in [docs/ontology.md](docs/ontology.md):
+
+```bash
+PYTHONPATH=src python3 -m ehs_osha.ontology --out /tmp/ontology
+```
 
 ## Data provenance and licensing
 

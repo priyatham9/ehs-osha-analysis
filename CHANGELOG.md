@@ -3,6 +3,11 @@
 All notable changes to this project are documented here. The format follows
 Keep a Changelog and this project uses semantic versioning.
 
+## [Unreleased]
+
+### Added
+- `src/ehs_osha/ontology/`: Foundry-style ontology (JSON spec of object, link and action types and functions; validating runtime with link traversal, actions and an action log; SQLite/JSON export) on public data, documented in `docs/ontology.md`
+
 ## [0.1.0] - 2026-09-09
 
 ### Added

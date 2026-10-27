@@ -7,6 +7,8 @@ Keep a Changelog and this project uses semantic versioning.
 
 ### Added
 - `src/ehs_osha/health/`: data expectations as code (252 checks with id, severity, scope and rationale over `outputs/tables/*.csv` and `outputs/summary.json`) and a validated pipeline lineage spec; `make health` regenerates `docs/DATA_HEALTH.md` and `docs/LINEAGE.md` (Mermaid graph), exits nonzero on error-severity failures; `tests/test_health.py` checks the docs are current and that corrupted table copies fail
+- Typed ontology client generated from `spec.json` (`ontology/codegen.py`, `ontology/client.py`, `scripts/generate_ontology_client.py`) with a drift check in CI and tests
+- Rate detectability planner (`detectability.py`, `scripts/run_detectability.py`, `outputs/tables/detectability_by_size_band.csv`): exact Poisson intervals and site-years needed to distinguish two TRIRs per size band, with methods note `docs/DETECTABILITY.md`
 - Browser Form 300A filing checker (`docs/filing_check.html`) driven by a shared JSON rule spec (`src/ehs_osha/plausibility_rules.json`) evaluated by Python (`filing_check.py`) and JavaScript, with a parity test against `quality.apply_screen`
 - `src/ehs_osha/ontology/`: Foundry-style ontology (JSON spec of object, link and action types and functions; validating runtime with link traversal, actions and an action log; SQLite/JSON export) on public data, documented in `docs/ontology.md`
 

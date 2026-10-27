@@ -119,3 +119,28 @@ store.action_log[-1].to_json()
   raw files are not in the repository.
 - Actions are checked against the spec. There is no user or permission model:
   `actor` is whatever string the caller passes.
+
+## Typed client generated from the spec
+
+`src/ehs_osha/ontology/client.py` is generated from `spec.json` by
+`scripts/generate_ontology_client.py` (code in `ontology/codegen.py`), in the
+pattern of an ontology SDK. Object types become frozen dataclasses with typed
+fields, links become methods returning typed object sets, and action types
+become methods whose arguments are the action parameters, with `Literal` types
+where the spec lists `allowed_values`.
+
+```python
+from ehs_osha.ontology.materialise import build_store
+from ehs_osha.ontology.client import OntologyClient
+
+client = OntologyClient(build_store())
+bad = client.filings.where(screen_implausible=True)
+sites = bad.establishment()          # EstablishmentSet
+client.flag_filing_implausible(filing, "employee_count_mistyped", actor="analyst@example.org")
+```
+
+The generated file is committed. `python3 scripts/generate_ontology_client.py
+--check` exits 1 when it no longer matches the spec; it runs in CI and in
+`tests/test_ontology_client.py`, so a spec change that is not followed by
+regeneration fails the build. Functions are not generated: they stay in
+`functions.py`.

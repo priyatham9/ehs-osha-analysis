@@ -27,7 +27,8 @@ runner beyond stdlib `unittest`.
 
 [docs/INDUSTRY_QUALITY.md](docs/INDUSTRY_QUALITY.md) ranks NAICS sectors and years by filing-quality problem rate and screening effect, generated from the committed tables.
 
-[docs/DATA_HEALTH.md](docs/DATA_HEALTH.md) and [docs/LINEAGE.md](docs/LINEAGE.md) are the portable analogue of Foundry data health checks and lineage: 252 data expectations over the committed outputs plus a validated pipeline graph, run with `make health`.
+[docs/PANEL_AUDIT.md](docs/PANEL_AUDIT.md) audits establishment linkage from the committed tables: how many years each `establishment_id` appears, attribute drift under a fixed id, and what can and cannot be said about where the 29.7x correction sits (`outputs/tables/panel_linkage_audit.csv`).
+[docs/DATA_HEALTH.md](docs/DATA_HEALTH.md) and [docs/LINEAGE.md](docs/LINEAGE.md) are the portable analogue of Foundry data health checks and lineage: 260 data expectations over the committed outputs plus a validated pipeline graph, run with `make health`.
 
 **At a glance**
 
@@ -35,7 +36,7 @@ runner beyond stdlib `unittest`.
 |---|---|
 | Status | tests passing (see badge above) |
 | Data | real (public OSHA ITA filings, 2016-2024); synthetic fixture available for offline test runs only, never used for headline numbers |
-| Tests | 268 tests, stdlib `unittest` (18 skip without `data/raw/`) |
+| Tests | 279 tests, stdlib `unittest` (18 skip without `data/raw/`) |
 | Quickstart | `make data && make analysis && make test` |
 | Licence | MIT |
 
@@ -528,14 +529,16 @@ src/ehs_osha/
   svgplot.py       minimal SVG figure writer (no matplotlib)
   pipeline.py      orchestration; writes every table and figure
   industry_quality.py  sector / size / year quality view (docs/INDUSTRY_QUALITY.md)
+  panel_audit.py   establishment linkage audit from committed tables (docs/PANEL_AUDIT.md)
   ontology/        Foundry-style ontology over the outputs (docs/ontology.md)
   health/          lineage spec and data expectations (docs/LINEAGE.md, docs/DATA_HEALTH.md)
 scripts/
   download_data.py
   run_analysis.py
+  run_panel_audit.py
 synthetic/
   generate_fixture.py   SYNTHETIC data generator, for tests only
-tests/                  268 tests, stdlib unittest
+tests/                  279 tests, stdlib unittest
 outputs/
   tables/               15 CSVs, all script-generated
   figures/              6 SVGs, all script-generated

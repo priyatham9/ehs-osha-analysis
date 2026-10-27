@@ -171,6 +171,14 @@
       "paths": [
         "outputs/tables/detectability_by_size_band.csv"
       ]
+    },
+    "panel_audit_outputs": {
+      "label": "Establishment linkage audit table and page",
+      "kind": "file",
+      "paths": [
+        "outputs/tables/panel_linkage_audit.csv",
+        "docs/PANEL_AUDIT.md"
+      ]
     }
   },
   "stages": [
@@ -420,6 +428,20 @@
       ],
       "outputs": [
         "detectability_table"
+      ]
+    },
+    {
+      "id": "panel_audit",
+      "title": "Establishment linkage and panel-quality audit",
+      "script": "scripts/run_panel_audit.py",
+      "function": "main",
+      "inputs": [
+        "quality_tables",
+        "panel_tables",
+        "stability_tables"
+      ],
+      "outputs": [
+        "panel_audit_outputs"
       ]
     }
   ]

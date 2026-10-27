@@ -3449,6 +3449,64 @@
    "columns": [
     "size_band"
    ]
+  },
+  {
+   "id": "panel_linkage_audit.columns_present",
+   "severity": "error",
+   "scope": "structural",
+   "check": "columns",
+   "target": "panel_linkage_audit",
+   "rationale": "Downstream code and docs read these columns by name.",
+   "columns": [
+    "section",
+    "metric",
+    "value",
+    "share",
+    "share_basis",
+    "source_tables",
+    "status"
+   ]
+  },
+  {
+   "id": "panel_linkage_audit.key_columns_not_null",
+   "severity": "error",
+   "scope": "structural",
+   "check": "not_null",
+   "target": "panel_linkage_audit",
+   "rationale": "Section, metric and status identify and qualify each audited quantity.",
+   "columns": [
+    "section",
+    "metric",
+    "source_tables",
+    "status"
+   ]
+  },
+  {
+   "id": "panel_linkage_audit.status_values",
+   "severity": "error",
+   "scope": "structural",
+   "check": "value_set",
+   "target": "panel_linkage_audit",
+   "rationale": "Status must say whether the committed tables answer the question, is a bound, or cannot answer it.",
+   "column": "status",
+   "values": [
+    "answered",
+    "partial_bound",
+    "not_answerable_from_committed_tables"
+   ]
+  },
+  {
+   "id": "panel_linkage_audit.share_in_unit_interval",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "panel_linkage_audit",
+   "rationale": "Shares are proportions of a stated basis.",
+   "columns": [
+    "share"
+   ],
+   "min": 0,
+   "max": 1.0000001
   }
  ]
 }

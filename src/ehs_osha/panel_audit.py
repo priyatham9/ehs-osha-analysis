@@ -36,11 +36,12 @@ COLUMNS = ["section", "metric", "value", "share", "share_basis", "source_tables"
 
 
 def _row(section, metric, value, share=None, basis="", source="", status=ANSWERED):
+    # Rounded so the committed CSV is byte-stable across platforms and libm builds.
     return {
         "section": section,
         "metric": metric,
         "value": value,
-        "share": share,
+        "share": None if share is None else round(float(share), 9),
         "share_basis": basis,
         "source_tables": source,
         "status": status,

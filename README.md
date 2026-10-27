@@ -23,7 +23,7 @@ stability table omits no percentile the pipeline computes.
 Runs on Python 3.9 with pandas and numpy. No SciPy, no matplotlib, no test
 runner beyond stdlib `unittest`.
 
-**Documentation:** [REPRODUCIBILITY.md](REPRODUCIBILITY.md) records the source data, exact commands, measured runtimes, and verifiable outputs. [DATASHEET.md](DATASHEET.md) documents the dataset following Gebru et al.
+**Documentation:** [REPRODUCIBILITY.md](REPRODUCIBILITY.md) records the source data, exact commands, measured runtimes, and verifiable outputs. [DATASHEET.md](DATASHEET.md) documents the dataset following Gebru et al., with a machine-readable column-level companion, [docs/data_dictionary.csv](docs/data_dictionary.csv) (type, units, source, derivation and known issues for every column of every committed table and of the in-memory analytic frame), kept complete by `tests/test_data_dictionary.py`.
 
 [docs/INDUSTRY_QUALITY.md](docs/INDUSTRY_QUALITY.md) ranks NAICS sectors and years by filing-quality problem rate and screening effect, generated from the committed tables.
 

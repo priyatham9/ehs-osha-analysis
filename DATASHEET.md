@@ -1,132 +1,119 @@
-# Datasheet for ehs-osha-analysis
+# Datasheet for the ehs-osha-analysis analytic panel
 
-This datasheet documents the screened dataset derived from the OSHA Injury Tracking Application Form 300A filings, following the structure of Gebru et al. (2021).
+Structure follows Gebru et al., "Datasheets for Datasets" (2021). Every statement below is checked against a file in this repository; the source file is named in brackets. Where the repository does not record an answer the entry says **unknown**. The column-level companion is [docs/data_dictionary.csv](docs/data_dictionary.csv) (table, column, type, units, source, derivation, known issues), and `tests/test_data_dictionary.py` fails if a committed table gains a column that the dictionary does not document or if the counts quoted here drift from the committed tables.
+
+## What "the dataset" is
+
+Two layers, and only the second is committed:
+
+1. **The analytic frame** (not committed): the 2016-2024 OSHA Injury Tracking Application (ITA) Form 300A establishment filings, harmonised across years, deduplicated, with derived fields and plausibility flags. It is rebuilt in memory by `make data && make analysis` and is gitignored with the raw files [`.gitignore`; README.md "Data provenance and licensing"].
+2. **The committed tables** (30 CSV files in `outputs/tables/`, plus `outputs/summary.json`): aggregates computed from the frame. No row of the committed tables is a single filing except `quality_top50_implausible_hours.csv` (50 filings, identified by `establishment_id` only) [docs/LINEAGE.md].
+
+The data dictionary documents both layers: rows with table `analytic_frame` describe the in-memory frame, all other rows describe a committed CSV.
 
 ## Motivation
 
-**For what purpose was the dataset created?** To quantify the effect of implausible hours-per-employee values on aggregate injury rates computed from the public OSHA ITA Form 300A establishment filings, 2016-2024. The analysis screens filings for internal plausibility (hours between 120 and 4,500 per employee per year), isolates the filings that fail the screen, and measures what the aggregate TRIR would be if those filings were excluded. [README.md]
+**For what purpose was the dataset created?** To measure how much implausible hours-worked values distort aggregate injury rates computed from the public Form 300A filings, and to provide a screened basis for peer benchmarks and count-model comparisons [README.md].
 
-**Who created the dataset and on behalf of which entity?** The dataset was created by processing publicly available OSHA filings downloaded from https://www.osha.gov/itadata. No dataset has been created independent of OSHA; this work only screens, partitions, and re-aggregates OSHA's own published files. [data/raw/manifest.json; README.md]
+**Who created the dataset, and on behalf of whom?** Priyatham Chimmani, as an independent project; the repository does not record an employer or sponsoring institution [CITATION.cff].
 
-**Who funded the creation of the dataset?** Not recorded. [README.md, docs/PANEL.md, synthetic/README.md, outputs/summary.json]
+**Who funded it?** Unknown. The repository records no funding source.
 
 ## Composition
 
-**What do the instances in this dataset represent?** Establishment-years: a single OSHA ITA Form 300A filing from one establishment in one calendar year. Each row carries establishment identifiers (establishment_id, state, EIN), company name, NAICS industry code, the number of employees on average during the year, total hours worked, recordable injury counts by type (OSHA 300 line e, h, j, k), days of lost work, and derived fields (hours per employee, recordable-case totals, injury rate). [README.md; src/ehs_osha/schema.py]
+**What do the instances represent?** In the frame, one instance is one establishment-year filing (one Form 300A for one `establishment_id` and one reporting year). In the committed tables, an instance is a stratum (year, NAICS group, size band, model fit, and so on); each table's grain is given in the dictionary.
 
-**How many instances are there in total?** 2,801,064 filings after deduplication (2,805,767 rows raw, 4,703 duplicates dropped). [outputs/summary.json: quality.pooled.rows_after_dedup]
+**How many instances are there?** After deduplication, 2,801,064 filings; the raw files hold 2,805,767 rows, so 4,703 were dropped [outputs/summary.json: `load_report`]. The default plausibility screen flags 57,857 filings (2.07%) and leaves 2,743,207 screened-in filings [outputs/tables/quality_overall.csv; metrics_pooled.csv]. They cover 1,238,236 distinct `establishment_id` values [outputs/tables/panel_coverage.csv].
 
-**Does the dataset contain all possible instances, or a sample?** All deduplicated rows from nine published years (CY 2016-2024) of Form 300A filings available at the time of analysis. The universe of establishments that filed in those years is not known, so it cannot be said whether non-filers are excluded; only that every file published by OSHA at https://www.osha.gov/itadata was included. [README.md]
+| Year | Filings | Flagged |
+|---|---:|---:|
+| 2016 | 214,977 | 4,946 |
+| 2017 | 259,757 | 4,323 |
+| 2018 | 286,884 | 4,467 |
+| 2019 | 290,475 | 4,650 |
+| 2020 | 293,385 | 5,593 |
+| 2021 | 315,936 | 8,217 |
+| 2022 | 346,799 | 6,993 |
+| 2023 | 394,231 | 9,235 |
+| 2024 | 398,620 | 9,433 |
 
-**What data does each instance consist of?** For each establishment-year:
+[outputs/tables/quality_by_year.csv]
 
-- Identifiers: establishment_id, state, EIN, company name, 6-digit industry description
-- Exposure: average number of employees, total hours worked, hours per employee
-- Outcomes: total recordable cases, deaths, days-away-from-work cases, job-transfer cases, other recordable cases, days of lost work
-- Derived: recordable-case rate per 200,000 hours (TRIR), DART (days-away + job-transfer cases), LTIR (lost-time cases), severity (days per 200,000 hours)
+**Is it a sample or the full set?** It uses every row of the nine published files that the repository's catalog lists for 2016-2024; no sampling is applied except the capped random subsample inside the count-model fits (`n` in the model tables). Whether the published files contain every establishment that was required to file is **unknown** from the repository. The 2024 reporting year comes from a file named `ITA_300A_Summary_Data_2024_through_12-31-2025_v2`; whether it is final for 2024 is **unknown** here [src/ehs_osha/catalog.py].
 
-Additional field: implausible flag (Boolean), indicating whether the filing fails any of six internal-consistency checks described in the Preprocessing section below. [src/ehs_osha/schema.py; README.md]
+**What data does each instance consist of?** Frame columns are listed one by one in the dictionary: identifiers (`id`, `establishment_id`, `ein`, names, city, state, ZIP), industry (`naics_code`, `naics_year`, `industry_description`), size (`annual_average_employees`, OSHA `size` code), exposure (`total_hours_worked`), Form 300A case and day counts (columns G to L plus injury and illness type counts), and derived fields (`recordable_cases`, `hours_per_employee`, `trir`, NAICS prefixes, six flags, `implausible`, `size_band`, `peer_group`) [src/ehs_osha/schema.py; load.py; quality.py; peers.py].
 
-**Is there a label or target associated with each instance?** Yes. The binary `implausible` flag marks filings that fail a plausibility screen. The flag is deterministic, not assigned by human annotators, and reflects whether the filing violates one or more of six threshold or consistency rules. [README.md; ehs_osha.quality]
+**Is there a label or target?** The `implausible` flag is a deterministic output of the screen, not a human label. By default it is the OR of five flags: missing hours, missing employees, negative counts, hours per employee above 4,500, and hours per employee below 120. A sixth flag (the `no_injuries_illnesses` checkbox contradicting the case counts) is computed and reported but does not feed `implausible` unless `treat_contradiction_as_implausible` is set [src/ehs_osha/quality.py].
 
-**Is any information missing from individual instances?** All required columns are present in every row (no missing establishment_id, no missing hours_worked when employees>0). Missing values do occur in optional columns (e.g., some filings carry no information in fields that are not part of the 300A). These are not dropped. The `implausible` flag explicitly flags rows where required fields are missing (e.g., employees=0 or missing). [outputs/summary.json: load_report.files_read; tests/test_schema_and_load.py]
+**Is any information missing?** Yes. `naics_year` exists only in the 2023 and later files. Counts and hours can be unparsable; the loader turns these into missing values and the screen counts them (9,897 filings with missing or non-positive hours, 10,322 with employees below 1) [src/ehs_osha/load.py; outputs/tables/quality_flag_prevalence.csv]. The `street_address` column is dropped on load [outputs/summary.json: `load_report.columns_dropped`].
 
-**Are there any known errors, sources of noise, or redundancies in the dataset?** Yes, several:
+**Are there errors, noise or redundancies?** Yes, documented and measured:
 
-1. establishment_id is not stable across years. 313,527 of 1,238,236 IDs (25.3%) appear with more than one distinct EIN across years, and 108,855 (8.8%) with more than one company name. The ID is keyed to a physical facility rather than a fixed legal entity. [docs/PANEL.md: Limitations]
+- Hours are free text. One 2019 filing reports about 1.68e13 hours for 7 employees, and the single largest filing holds 88.8% of all reported hours; flagged filings hold 96.7% of hours but 1.4% of cases [outputs/tables/quality_top50_implausible_hours.csv; quality_hours_concentration.csv; quality_overall.csv].
+- `establishment_id` is not a stable entity key: 313,527 ids (25.3%) carry more than one EIN across years, 108,855 (8.8%) more than one company name, 4,010 more than one state [outputs/tables/panel_coverage.csv; docs/PANEL_AUDIT.md].
+- The OSHA `size` code is not comparable across years (code 2 was split into 21 and 22 with the 2023 collection), so size bands are built from `annual_average_employees` [src/ehs_osha/schema.py].
+- 301 filings have a `no_injuries_illnesses` checkbox that contradicts their case counts [outputs/tables/quality_flag_prevalence.csv].
+- NAICS vintage (2012, 2017 or 2022) varies by file and is not harmonised [src/ehs_osha/naics.py].
 
-2. The `size_field` is not comparable across years; the employee-band definitions changed between publication sets. Comparisons across the 2016-2022 vs. 2023+ splits should use the derived hours_per_employee rather than the size_field. [test_regression_real_data.py: test_size_field_is_not_comparable_across_years]
+**Does it rely on external resources?** Yes: OSHA's published files at https://www.osha.gov/itadata, which can change or disappear. Archival copies are not kept in this repository; the nine SHA256 digests are recorded so a re-download can be checked [REPRODUCIBILITY.md].
 
-3. The `no_injury` checkbox on some filings contradicts the recorded injury counts (e.g., checkbox says no injuries but counts > 0). This is recorded as a flag but not used to drop the row. [README.md; ehs_osha.quality.flag_no_injury_contradiction]
-
-4. Five of the nine years (CY2019, CY2024, and the 2023+ bundle) hold a disproportionate share of hours in a small number of implausible filings. Whether these represent data-entry errors, non-standard reporting practices, or genuine reporting artifacts is not determined by this analysis. [README.md; docs/PANEL.md]
+**Confidential or sensitive data? Individuals?** The frame holds company names, establishment names, cities, states and ZIP codes of employers, plus employer identification numbers; there are no worker-level records, only per-establishment counts. The committed tables contain no names, only `establishment_id` in one 50-row table. Whether any employer-identifying field is sensitive under a given policy is **unknown** here; the raw files are public OSHA releases.
 
 ## Collection process
 
-**How was the data associated with each instance acquired?** The nine datasets were downloaded from the OSHA public data portal (https://www.osha.gov/itadata) between 2026-09-04T04:42:25 and 2026-09-04T04:42:29 UTC. All nine files match OSHA's published cryptographic digests. OSHA itself collects the data via mandatory reporting (29 CFR 1904) from establishments with 10+ employees (or 5+ in specified high-hazard industries) in specified industry groups. [data/raw/manifest.json]
+**How was the data acquired?** Downloaded from OSHA by `scripts/download_data.py` using the catalog in `src/ehs_osha/catalog.py`; REPRODUCIBILITY.md records file names, byte sizes and SHA256 digests for the nine archives. The download manifest (`data/raw/manifest.json`) is created locally and is not committed, so retrieval timestamps cannot be re-verified from the repository. The committed `outputs/summary.json` was generated at 2026-09-04T05:31:12+00:00.
 
-**Was the data directly observable (as opposed to derived, computed, or estimated)?** Mostly yes, with caveats. The days-away and days-of-lost-work figures are derived by OSHA from the Form 300 at submission time; the Form 300A itself (and the ITA dataset) carry the OSHA-computed totals, not the raw case-by-case line items. The hours_per_employee field used in the screen is derived from total hours and average employees in this analysis, not carried as a direct field in the OSHA data. [README.md; src/ehs_osha/schema.py]
+**Who collected the original data and how?** OSHA collected the filings through its Injury Tracking Application; the details of the reporting obligation and OSHA's own validation are **unknown** from the repository beyond the field definitions linked from `src/ehs_osha/catalog.py` (OSHA's summary data dictionary and ITA data users guide).
 
-**What mechanisms or procedures were used to collect the data from the source?** Direct HTTP download of ZIP files from osha.gov URLs. Each file is downloaded, its SHA256 digest is verified against OSHA's published digest, and the CSV inside is extracted and loaded. No data transformation is applied during collection. [scripts/download_data.py; data/raw/manifest.json]
+**Over what time frame?** Reporting years 2016 to 2024 [outputs/summary.json: `years_present`].
 
-**If the data is a sample, what is the sampling procedure?** Not a sample. All nine published annual datasets are included. Within each dataset, no sampling was applied; all rows are retained (subject only to deduplication on a canonical row key). [README.md]
-
-**Who was involved in the data collection process, and how were they compensated?** Not recorded. The data originates from OSHA's mandatory reporting system; compensation of individual filers is not recorded in the published dataset. [README.md]
-
-**Over what time period(s) was the data collected?** OSHA Form 300A filings for calendar years 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, and 2024. The data files themselves were published on osha.gov and downloaded on 2026-09-04. [data/raw/manifest.json]
-
-**Were there any conflicts of interest in the data collection process?** Not recorded. [README.md; docs/PANEL.md; synthetic/README.md]
+**Ethical review?** None recorded.
 
 ## Preprocessing/cleaning/labeling
 
-**Was any preprocessing applied to the data?** Yes, minimal but explicit:
-
-1. Deduplication: 4,703 exact-row duplicates (2,805,767 raw - 2,801,064 after dedup) were dropped, keeping the latest occurrence when a row appears multiple times. [outputs/summary.json: load_report.duplicate_rows_dropped]
-
-2. Column selection: The `street_address` column is dropped from all nine years to reduce size. [outputs/summary.json: load_report.columns_dropped]
-
-3. Encoding: Most years use UTF-8; CY 2018 requires cp1252 decoding. The loader detects and applies the appropriate encoding. [outputs/summary.json: load_report.encodings_used]
-
-4. Derived fields: hours_per_employee, total_recordables (sum of deaths, DAFW, JTR, other), and injury rates (TRIR, DART, LTIR, severity per 200,000 hours) are computed from the source columns. [src/ehs_osha/schema.py]
-
-**Was the "raw" data saved in addition to the processed data?** Yes. The raw ZIP files are preserved in data/raw/; the loader can re-extract and re-process them. However, only the processed CSV tables and derived metrics are committed to the repository. [.gitignore; README.md]
-
-**Is the software that generated the cleaned data available?** Yes. The loader is in src/ehs_osha/load.py; the screening logic is in src/ehs_osha/quality.py. Both are Python 3.9 standard library only (no external build requirements). [src/ehs_osha/]
-
-**Any other preprocessing, cleaning, or labeling of the data?** The `implausible` flag is computed deterministically from six rules (not by hand-labeling). These rules are configurable via a PlausibilityConfig object; the default config applies min/max thresholds on hours_per_employee (120-4,500) plus five boolean checks. See README.md for the prevalence of each flag. [ehs_osha.quality.PlausibilityConfig; README.md]
+- **Column handling:** names are lowercased and stripped, columns are selected by name (order differs between 2016-2022 and 2023+ files), `street_address` is dropped, numeric columns are coerced with failures becoming missing values [src/ehs_osha/schema.py; load.py].
+- **Encoding:** the 2018 file is read as cp1252, the others as UTF-8 [outputs/summary.json: `load_report.encodings_used`].
+- **Deduplication:** one row is kept per (`establishment_id`, `year_filing_for`), the one with the largest `id`; amended submissions are the intended case. This removed 4,703 rows. It is a key-based rule, not an exact-row match [src/ehs_osha/load.py `deduplicate`].
+- **Derived fields:** `recordable_cases` = deaths + days-away + job-transfer/restriction + other recordable cases; `hours_per_employee`; per-filing `trir` and `dart_rate`; NAICS 2-, 3- and 4-digit prefixes; `size_band` from employee count [src/ehs_osha/load.py; peers.py].
+- **Screen:** thresholds 120 and 4,500 hours per employee are configuration, not truth. The 25-cell sensitivity grid moves the flagged share from 1.79% to 4.49% while the screened aggregate TRIR stays between 3.963 and 3.993 [outputs/tables/threshold_robustness_summary.csv].
+- **Raw data saved?** Not in the repository (gitignored). Digests are recorded for re-download checks.
+- **Software available?** Yes, `src/ehs_osha/`, runs on Python 3.9 and 3.12 with numpy and pandas [README.md; .github/workflows/tests.yml].
 
 ## Uses
 
-**Has the dataset been used for any tasks already? If so, which tasks and by whom?** Yes. The screened dataset (filings flagged as plausible, n=2,743,207) is used to compute aggregate injury rates (TRIR, DART, LTIR, severity) by year and by NAICS 3-digit industry group. Count models (Poisson, negative binomial, zero-inflated Poisson, zero-inflated NB) are fitted to recordable-case distributions within each of the 30 largest industries. Year-over-year stability of establishment percentile ranks within peer groups (same size band and industry) is computed to show whether the ranking changes when implausible filings are excluded. [README.md; outputs/summary.json: metrics, count_models, stability]
+**Existing uses:** aggregate TRIR, DART, LTIR and severity with and without the screen (29.7x pooled correction, 0.134 to 3.983); peer percentile tables by NAICS 3-digit and size band; intercept-only and covariate-adjusted count-model comparison across 30 industries; flag-persistence panel (pooled odds ratio 39.1); detectability and threshold-robustness views; a dated pre-registration of 2025 predictions [README.md; docs/].
 
-**What tasks would the dataset be appropriate for?** 
+**Appropriate uses:** studying the sensitivity of reported injury rates to the hours denominator; methodological work on count models for establishment-level injury counts; benchmarking cells that meet the 30-filing floor, with the caveats in the dictionary.
 
-- Epidemiologic questions about the prevalence and types of recordable injuries in the US occupational workforce, stratified by industry, establishment size, and year (conditional on the caveats under Limitations).
-- Investigations of establishment-level or industry-level safety performance and trends (conditional on robust handling of hours-denominator implausibilities).
-- Methodological studies of count-model selection and zero-inflation in overdispersed outcomes.
+**Uses to avoid:**
 
-**What tasks would the dataset NOT be appropriate for?** 
-
-- Any analysis that treats the unscreened dataset (including implausible filings) as valid. The unscreened aggregate TRIR can swing by an order of magnitude depending on whether that year's data happen to contain one or two extreme outliers. Any usage of unscreened rates must acknowledge this sensitivity.
-- Cross-establishment comparisons or rankings of safety performance based on raw TRIR, without adjustment for hours-denominator implausibilities, because a single establishment's filing error can dominate that establishment's apparent rate.
-- Inferences about incident causation or prevention, because the dataset records injury counts only, not incident types, root causes, circumstances, or outcomes beyond days of lost work.
-- Applications that require consistent establishment identifiers or company relationships across years, because establishment_id is not legally stable (25% carry more than one EIN across years).
-- Analyses assuming zero-inflation as the dominant feature of the outcome distribution; the evidence (from fitting 30 industries) shows overdispersion is universal but structural zero-inflation is optional and small where present. [README.md; outputs/summary.json: count_models.selection_by_aic]
+- Treating unscreened aggregates as population rates (the unscreened pooled TRIR is 0.134 against 3.983 screened).
+- Ranking individual establishments by raw TRIR; small sites report zero cases in most filings (75.1% in the 001-019 band) [outputs/tables/size_band_effects.csv].
+- Following a company over time through `establishment_id` (see the EIN drift above).
+- Causal claims: the data hold counts and days, not circumstances.
+- Inferring the national workforce: coverage of non-filers is **unknown**.
+- Reading the screen as a fraud detector or as ground truth about which entry is wrong [src/ehs_osha/quality.py].
 
 ## Distribution
 
-**Will the dataset be distributed to third parties outside of the entity on behalf of which the dataset was created?** Yes. The repository is public on GitHub (https://github.com/priyatham9/ehs-osha-analysis); the screened tables are committed and available in outputs/tables/*.csv. [README.md; .github/]
+**Distributed to third parties?** The repository is public on GitHub (https://github.com/priyatham9/ehs-osha-analysis) and the committed tables are readable there [CITATION.cff]. The raw OSHA files and the filing-level frame are not redistributed.
 
-**How will the dataset be distributed?** Via GitHub repository, committed CSV files, and committed summary.json. All outputs are regenerable from the source files via make analysis. [Makefile; README.md]
+**Licence and restrictions:** the code and committed tables are under the MIT licence [LICENSE]. The source is a US federal agency release; the README notes that works of the US government are generally not subject to US copyright (17 U.S.C. 105) while agency marks and any third-party material may be restricted [README.md "Data provenance and licensing"]. Whether any further terms apply to OSHA's files is **unknown** beyond that note.
 
-**When will/did the dataset be distributed?** The analysis is complete and the repository is public as of 2026-09-09 (per SITEMAP.md). [.git history]
-
-**Will the dataset be distributed under a license? If so, which?** Yes, under the MIT License. [LICENSE]
-
-**Have any third parties imposed IP-based or other restrictions on the data associated with instances?** No. The underlying OSHA data are in the public domain (federal government work). No restrictions beyond the license apply. [LICENSE; README.md]
-
-**Do any institutional review boards or similar ethics review bodies need to be consulted?** Not recorded. The data are public filings without personal identifiers (no names of injured workers, no personal health information beyond aggregate case counts and days of lost work). No IRB approval was sought or is believed necessary. [README.md; data schema]
+**DOI or archive:** none yet. `.zenodo.json` and `codemeta.json` are prepared for archiving, and no release or DOI exists [CHANGELOG.md; CITATION.cff].
 
 ## Maintenance
 
-**Who is responsible for the continued maintenance and update of the dataset?** The owner of the repository (priyatham9) is responsible for maintenance. Updates depend on OSHA's continued publication of the Form 300A filings. [README.md; GitHub repository]
+**Who maintains it?** The repository owner, priyatham9 [CITATION.cff]. Issues and pull requests on GitHub are the stated route for corrections; a contact address is in `CITATION.cff` and `SECURITY.md`.
 
-**How will updates and corrections be managed?** Updates will be pulled via make data (which downloads the latest published files from osha.gov and updates the manifest) and re-run via make analysis (which regenerates all outputs). Corrections to the analysis logic (e.g., to the screening rules or model fits) will be made to the source code in src/ehs_osha/ and propagated to outputs via make analysis. Both are tracked in git. [Makefile; src/; scripts/]
+**Updates:** a new OSHA release is added by updating the catalog, rerunning `make data && make analysis`, and committing regenerated tables; tests and the data-health checks (`make health`, 268 expectations per README.md) fail on drift [README.md; Makefile]. A pre-registration fixes predictions for the 2025 release before it is loaded [docs/PREREGISTRATION_2025.md]. Whether OSHA will keep the files at their current URLs is **unknown**.
 
-**If others want to extend, augment, or build on this dataset, how should they communicate with you?** GitHub issues or pull requests on the repository. Contact via email (priyatham9@gmail.com) is an alternative for work not suited to a public pull request. [README.md; repository]
+**Versioning:** git history; the package version in `CITATION.cff` is 0.1.0. Older table versions are recoverable from git, not shipped separately.
 
-**How long will the dataset be maintained?** Not formally specified. OSHA's ITA portal has been stable since at least 2016; barring removal by OSHA, new years will be added as published. The repository will be maintained at minimum through publication of the associated paper. [README.md; SITEMAP.md]
+**Obsolescence plan:** none recorded; no end-of-support date is stated.
 
-**Will older versions of the dataset continue to be supported and hosted?** Yes. Git history is preserved; all prior commits are available. Outputs committed at each analysis run (tables, figures, summary.json) are stored in the repository and are not deleted when regenerated. [.git history; outputs/]
+## Known limitations of this datasheet
 
-**Are there any known limitations, risks, or biases that should be considered by users?** Yes:
-
-1. **Scope:** The dataset covers only establishments filing with OSHA (roughly 130,000 per year nationally, per OSHA's public counts). Establishments below the reporting threshold (typically <10 employees), non-covered industries, and non-compliant filers are absent. [README.md; docs/PANEL.md]
-
-2. **Denominator stability:** Approximately 50% of establishment_id values appear in only one year; only 1.3% appear in all nine years. Year-to-year comparisons must account for entry and exit. [docs/PANEL.md: Coverage]
-
-3. **Assignment ambiguity:** The plausibility screen cannot distinguish a genuine but unusual reporting practice (e.g., a very low-hours summer-employment employer) from a data-entry error. Both look the same in aggregate statistics. The screen is a threshold rule, not a ground-truth label. [docs/PANEL.md: Limitations]
-
-4. **Cause-and-effect inferences are not supported.** The dataset records injury counts only, not circumstances. No causal claim about what leads to injury can be made from this dataset alone. [README.md]
-
-5. **The paper's main result (39.1x odds of persistence in flags across years) comes from the screened panel (docs/PANEL.md), not from aggregate rates. It concerns the identity of flagged establishments, not the validity of the screen itself.** [docs/PANEL.md]
+- Retrieval timestamps and file digests beyond those in REPRODUCIBILITY.md cannot be checked from the repository because the manifest is not committed.
+- Meanings of OSHA codes such as `establishment_type` are not documented in the repository and are marked unknown in the dictionary; the injury and illness type counts (`total_injuries` and the five illness columns) are carried but unused, and their definitions are not verified here.
+- The dictionary describes columns as they are written to the committed files; most integer-valued columns are stored with a `.0` suffix, which the dictionary notes.

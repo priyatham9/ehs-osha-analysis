@@ -11,3 +11,11 @@ url: "https://priyatham9.github.io/ehs-osha-analysis/"
 license: MIT
 date-released: "2026-09-07"
 version: 0.1.0
+keywords:
+  - OSHA
+  - Form 300A
+  - injury rates
+  - data quality
+  - occupational safety
+  - EHS
+  - reproducible research

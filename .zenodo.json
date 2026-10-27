@@ -1,0 +1,76 @@
+{
+  "title": "ehs-osha-analysis: a reproducible pipeline over the OSHA Injury Tracking Application 300A filings",
+  "upload_type": "software",
+  "description": "A reproducible pipeline over the public OSHA Injury Tracking Application Form 300A establishment filings, 2016-2024. It screens filings for internal plausibility and quantifies the bias they introduce to aggregate injury rates. It does not identify which specific numbers on forms are wrong, nor does it address causes of injury, nor does it represent the broader US workforce.",
+  "creators": [
+    {
+      "name": "Chimmani, Priyatham"
+    }
+  ],
+  "license": "mit",
+  "keywords": [
+    "OSHA",
+    "Form 300A",
+    "injury rates",
+    "data quality",
+    "occupational safety",
+    "EHS",
+    "reproducible research"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://priyatham9.github.io/grounded/",
+      "relation": "isPartOf",
+      "scheme": "url",
+      "resource_type": "other"
+    },
+    {
+      "identifier": "https://github.com/priyatham9/grounded",
+      "relation": "isPartOf",
+      "scheme": "url",
+      "resource_type": "software"
+    },
+    {
+      "identifier": "https://priyatham9.github.io/ehs-osha-analysis/",
+      "relation": "isDocumentedBy",
+      "scheme": "url",
+      "resource_type": "other"
+    },
+    {
+      "identifier": "https://github.com/priyatham9/ehs-chemical-peers",
+      "relation": "references",
+      "scheme": "url",
+      "resource_type": "software"
+    },
+    {
+      "identifier": "https://github.com/priyatham9/ehs-ai-grounding-eval",
+      "relation": "references",
+      "scheme": "url",
+      "resource_type": "software"
+    },
+    {
+      "identifier": "https://github.com/priyatham9/ehs-human-factors-ontology",
+      "relation": "references",
+      "scheme": "url",
+      "resource_type": "software"
+    },
+    {
+      "identifier": "https://github.com/priyatham9/ehs-risk-sem",
+      "relation": "references",
+      "scheme": "url",
+      "resource_type": "software"
+    },
+    {
+      "identifier": "https://github.com/priyatham9/ehs-capitals-calculator",
+      "relation": "references",
+      "scheme": "url",
+      "resource_type": "software"
+    },
+    {
+      "identifier": "https://github.com/priyatham9/ehs-benchmarks",
+      "relation": "obsoletes",
+      "scheme": "url",
+      "resource_type": "software"
+    }
+  ]
+}

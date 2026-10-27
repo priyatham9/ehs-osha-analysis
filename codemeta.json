@@ -1,0 +1,30 @@
+{
+  "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
+  "@type": "SoftwareSourceCode",
+  "name": "ehs-osha-analysis: a reproducible pipeline over the OSHA Injury Tracking Application 300A filings",
+  "description": "A reproducible pipeline over the public OSHA Injury Tracking Application Form 300A establishment filings, 2016-2024. It screens filings for internal plausibility and quantifies the bias they introduce to aggregate injury rates. It does not identify which specific numbers on forms are wrong, nor does it address causes of injury, nor does it represent the broader US workforce.",
+  "author": [
+    {
+      "@type": "Person",
+      "givenName": "Priyatham",
+      "familyName": "Chimmani"
+    }
+  ],
+  "license": "https://spdx.org/licenses/MIT",
+  "codeRepository": "https://github.com/priyatham9/ehs-osha-analysis",
+  "url": "https://priyatham9.github.io/ehs-osha-analysis/",
+  "version": "0.1.0",
+  "programmingLanguage": [
+    "Python"
+  ],
+  "keywords": [
+    "OSHA",
+    "Form 300A",
+    "injury rates",
+    "data quality",
+    "occupational safety",
+    "EHS",
+    "reproducible research"
+  ],
+  "isPartOf": "https://priyatham9.github.io/grounded/"
+}

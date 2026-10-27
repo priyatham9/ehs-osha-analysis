@@ -27,6 +27,8 @@ runner beyond stdlib `unittest`.
 
 [docs/INDUSTRY_QUALITY.md](docs/INDUSTRY_QUALITY.md) ranks NAICS sectors and years by filing-quality problem rate and screening effect, generated from the committed tables.
 
+[docs/PANEL_AUDIT.md](docs/PANEL_AUDIT.md) audits establishment linkage from the committed tables: how many years each `establishment_id` appears, attribute drift under a fixed id, and what can and cannot be said about where the 29.7x correction sits (`outputs/tables/panel_linkage_audit.csv`).
+
 **At a glance**
 
 | Field | Value |
@@ -526,10 +528,12 @@ src/ehs_osha/
   svgplot.py       minimal SVG figure writer (no matplotlib)
   pipeline.py      orchestration; writes every table and figure
   industry_quality.py  sector / size / year quality view (docs/INDUSTRY_QUALITY.md)
+  panel_audit.py   establishment linkage audit from committed tables (docs/PANEL_AUDIT.md)
   ontology/        Foundry-style ontology over the outputs (docs/ontology.md)
 scripts/
   download_data.py
   run_analysis.py
+  run_panel_audit.py
 synthetic/
   generate_fixture.py   SYNTHETIC data generator, for tests only
 tests/                  249 tests, stdlib unittest

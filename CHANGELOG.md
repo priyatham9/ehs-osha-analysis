@@ -6,6 +6,7 @@ Keep a Changelog and this project uses semantic versioning.
 ## [Unreleased]
 
 ### Added
+- Establishment linkage and panel-quality audit (`panel_audit.py`, `scripts/run_panel_audit.py`, `outputs/tables/panel_linkage_audit.csv`, `docs/PANEL_AUDIT.md`): years-present distribution, adjacent-year linkage, id attribute drift, and bounds on where the 29.7x correction sits, built from committed tables only, with the unanswerable questions marked as such
 - Typed ontology client generated from `spec.json` (`ontology/codegen.py`, `ontology/client.py`, `scripts/generate_ontology_client.py`) with a drift check in CI and tests
 - Rate detectability planner (`detectability.py`, `scripts/run_detectability.py`, `outputs/tables/detectability_by_size_band.csv`): exact Poisson intervals and site-years needed to distinguish two TRIRs per size band, with methods note `docs/DETECTABILITY.md`
 - Browser Form 300A filing checker (`docs/filing_check.html`) driven by a shared JSON rule spec (`src/ehs_osha/plausibility_rules.json`) evaluated by Python (`filing_check.py`) and JavaScript, with a parity test against `quality.apply_screen`

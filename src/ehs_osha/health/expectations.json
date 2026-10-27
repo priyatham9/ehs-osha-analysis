@@ -3507,6 +3507,121 @@
    ],
    "min": 0,
    "max": 1.0000001
+  },
+  {
+   "id": "threshold_robustness_cells.columns_present",
+   "severity": "error",
+   "scope": "structural",
+   "check": "columns",
+   "target": "threshold_robustness_cells",
+   "rationale": "Downstream code and docs read these columns by name.",
+   "columns": [
+    "label",
+    "min_hours_per_employee",
+    "max_hours_per_employee",
+    "is_default",
+    "n_implausible",
+    "implausible_share",
+    "flagged_hours",
+    "flagged_cases",
+    "screened_hours",
+    "screened_cases",
+    "aggregate_trir_unscreened",
+    "aggregate_trir_screened",
+    "ratio_screened_to_unscreened",
+    "trir_screened_minus_default",
+    "trir_screened_pct_from_default",
+    "implausible_share_over_default",
+    "trir_rank_desc"
+   ]
+  },
+  {
+   "id": "threshold_robustness_cells.row_count",
+   "severity": "error",
+   "scope": "committed",
+   "check": "rows",
+   "target": "threshold_robustness_cells",
+   "rationale": "One row per cell of the committed sensitivity grid.",
+   "equals": 25
+  },
+  {
+   "id": "threshold_robustness_cells.key_unique",
+   "severity": "error",
+   "scope": "structural",
+   "check": "unique",
+   "target": "threshold_robustness_cells",
+   "rationale": "Duplicate specifications would double count.",
+   "columns": [
+    "label"
+   ]
+  },
+  {
+   "id": "threshold_robustness_cells.key_columns_not_null",
+   "severity": "error",
+   "scope": "structural",
+   "check": "not_null",
+   "target": "threshold_robustness_cells",
+   "rationale": "Bounds and rates identify and define each specification.",
+   "columns": [
+    "label",
+    "min_hours_per_employee",
+    "max_hours_per_employee",
+    "n_implausible",
+    "aggregate_trir_screened"
+   ]
+  },
+  {
+   "id": "threshold_robustness_cells.shares_in_unit_interval",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "threshold_robustness_cells",
+   "rationale": "Shares are proportions.",
+   "columns": [
+    "implausible_share"
+   ],
+   "min": 0,
+   "max": 1
+  },
+  {
+   "id": "threshold_robustness_summary.columns_present",
+   "severity": "error",
+   "scope": "structural",
+   "check": "columns",
+   "target": "threshold_robustness_summary",
+   "rationale": "Downstream code and docs read these columns by name.",
+   "columns": [
+    "section",
+    "metric",
+    "value",
+    "unit",
+    "source_tables"
+   ]
+  },
+  {
+   "id": "threshold_robustness_summary.key_unique",
+   "severity": "error",
+   "scope": "structural",
+   "check": "unique",
+   "target": "threshold_robustness_summary",
+   "rationale": "Each derived quantity appears once.",
+   "columns": [
+    "metric"
+   ]
+  },
+  {
+   "id": "threshold_robustness_summary.key_columns_not_null",
+   "severity": "error",
+   "scope": "structural",
+   "check": "not_null",
+   "target": "threshold_robustness_summary",
+   "rationale": "Every derived quantity needs a section, metric, value and source.",
+   "columns": [
+    "section",
+    "metric",
+    "value",
+    "source_tables"
+   ]
   }
  ]
 }

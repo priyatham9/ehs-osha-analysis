@@ -8,6 +8,11 @@ and it uses no employer data.
 Code: `src/ehs_osha/ontology/`. Spec: `src/ehs_osha/ontology/spec.json`.
 Tests: `tests/test_ontology.py`.
 
+Static explorer: [ontology_explorer.html](ontology_explorer.html), a single-file page that
+browses object types, follows links and shows function outputs over the committed
+aggregate tables only (no establishment-level data). Rebuild with
+`python scripts/build_ontology_explorer.py`; `tests/test_ontology_explorer.py` checks it is current.
+
 ## Why an ontology on top of a pipeline
 
 The pipeline answers one question: how much do implausible filings bias the

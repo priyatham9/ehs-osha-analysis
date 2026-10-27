@@ -32,6 +32,8 @@ runner beyond stdlib `unittest`.
 [docs/YEAR_STABILITY.md](docs/YEAR_STABILITY.md) leaves each of the nine years out in turn and tracks year-over-year change: the screened aggregate TRIR stays within 3.901-4.137 and the flagged share within 2.00%-2.12% across the leave-one-out pools, the unscreened TRIR does not (one year, 2019, drives it), and peer-group rank correlation stays between 0.840 and 0.946 (`outputs/tables/year_stability_loyo.csv`, `year_stability_yoy.csv`, `year_stability_summary.csv`).
 [docs/PREREGISTRATION_2025.md](docs/PREREGISTRATION_2025.md) is a dated pre-registration (made 2026-10-27, before any 2025 data exist here) of falsifiable predictions for the 2025 ITA release, with a fixed decision rule, the deterministic code that produced them (`scripts/preregister_2025.py`) and a scorer (`scripts/evaluate_preregistration.py`) to run when 2025 outputs are added.
 
+[docs/manuscript/MANUSCRIPT.md](docs/manuscript/MANUSCRIPT.md) is an unsubmitted manuscript draft (IMRaD) integrating the screen, count models, peer stability, linkage audit, threshold and year robustness, pre-registration and datasheet; every number in it is mapped to a committed source file in its Appendix A and re-checked by `tests/test_manuscript.py`. Unverified references are listed in [docs/manuscript/OPEN_ITEMS.md](docs/manuscript/OPEN_ITEMS.md) and left out.
+
 [docs/DATA_HEALTH.md](docs/DATA_HEALTH.md) and [docs/LINEAGE.md](docs/LINEAGE.md) are the portable analogue of Foundry data health checks and lineage: 280 data expectations over the committed outputs plus a validated pipeline graph, run with `make health`.
 
 **At a glance**

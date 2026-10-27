@@ -229,6 +229,16 @@ compares a site against an industry median without conditioning on size is
 comparing against a number driven by how big the other sites are. This is the
 argument for the NAICS x size-band peer grouping rather than NAICS alone.
 
+### Rate detectability
+
+`docs/DETECTABILITY.md` and `outputs/tables/detectability_by_size_band.csv`
+give, for each size band above, exact Poisson (Garwood) intervals and the
+site-years needed to tell two TRIRs apart, computed from this table by
+`python3 scripts/run_detectability.py`. In the six bands below 1000 employees
+(98.4% of filings) a site of mean size needs more than one year of data to pin
+its TRIR to within a factor of 2. Poisson is a best case here because these
+counts are overdispersed.
+
 ### Percentile bands move on their own
 
 `outputs/tables/percentile_band_stability.csv`. Across eight adjacent year pairs

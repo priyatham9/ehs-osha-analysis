@@ -93,8 +93,13 @@ def forecast(values: "list[float]", transform: str) -> dict:
     }
 
 
+def _g(v: float) -> str:
+    """Format to 12 significant digits so last-bit platform differences cannot matter."""
+    return "%.12g" % v
+
+
 def _series_hash(values: "list[float]") -> str:
-    return hashlib.sha256(";".join(repr(float(v)) for v in values).encode()).hexdigest()
+    return hashlib.sha256(";".join(_g(float(v)) for v in values).encode()).hexdigest()
 
 
 def yearly_quantities(tables: Path, max_year: int = LAST_OBSERVED_YEAR) -> "list[dict]":
@@ -166,10 +171,10 @@ def build_predictions(tables: Path = TABLES) -> "list[dict]":
             "id": spec["id"], "quantity": spec["quantity"], "group": spec["group"],
             "source_table": spec["source_table"], "transform": spec["transform"],
             "n_history": len(spec["values"]),
-            "history": ";".join(repr(float(v)) for v in spec["values"]),
-            "window_mean": repr(f["window_mean"]),
-            "rmse_transformed": repr(f["rmse_transformed"]),
-            "pred": repr(f["pred"]), "lo95": repr(f["lo95"]), "hi95": repr(f["hi95"]),
+            "history": ";".join(_g(float(v)) for v in spec["values"]),
+            "window_mean": _g(f["window_mean"]),
+            "rmse_transformed": _g(f["rmse_transformed"]),
+            "pred": _g(f["pred"]), "lo95": _g(f["lo95"]), "hi95": _g(f["hi95"]),
             "history_sha256": _series_hash(spec["values"]),
         })
     return rows

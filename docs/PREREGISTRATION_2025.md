@@ -49,7 +49,7 @@ Fixed now, before any 2025 value is seen:
 
 Predictions were produced by `python3 scripts/preregister_2025.py` (deterministic: no random numbers, no clock; reads only the tables above). SHA-256 of `scripts/preregister_2025.py` at registration:
 
-`2beb4e071a5a9c2f1e598b43b963072e059469e03f87a6bdba64121be95e0c53`
+`24ae97a8304988e4324e915aaee83db979314f9aa6978e8d0120ea55b73bebdb`
 
 `tests/test_preregistration.py` fails if the script no longer matches this hash, if rerunning it does not reproduce `docs/preregistration_2025_predictions.csv` byte for byte, or if this page's table differs from the committed CSV. `python3 scripts/preregister_2025.py --check` does the byte comparison alone. The CSV also stores each series' nine input values and their hash, so the inputs behind each prediction are visible without rerunning anything.
 

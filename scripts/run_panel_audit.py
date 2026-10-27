@@ -11,7 +11,13 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from ehs_osha.panel_audit import main  # noqa: E402
+from ehs_osha import panel_audit  # noqa: E402
+
+
+def main() -> None:
+    """Write the audit table and docs page."""
+    panel_audit.main()
+
 
 if __name__ == "__main__":
     main()

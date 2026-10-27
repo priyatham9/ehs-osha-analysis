@@ -1,0 +1,448 @@
+{
+  "version": 1,
+  "description": "Declared lineage of the OSHA ITA pipeline: which stage reads which artifact and writes which. Validated by ehs_osha.health.lineage against the repository, and rendered to docs/LINEAGE.md.",
+  "artifacts": {
+    "raw_ita": {
+      "label": "Raw ITA 300A files (osha.gov)",
+      "kind": "external",
+      "paths": [
+        "data/raw"
+      ],
+      "note": "Downloaded by make data. Not committed, so the validator does not require it to exist."
+    },
+    "fixture": {
+      "label": "Synthetic fixture (tests only)",
+      "kind": "file",
+      "paths": [
+        "synthetic/fixture/GROUND_TRUTH.json",
+        "synthetic/fixture/SYNTHETIC_ITA_300A_2021.csv"
+      ]
+    },
+    "harmonised": {
+      "label": "Harmonised, deduplicated frame",
+      "kind": "memory",
+      "paths": []
+    },
+    "screened": {
+      "label": "Screened frame (plausibility flags)",
+      "kind": "memory",
+      "paths": []
+    },
+    "quality_tables": {
+      "label": "Quality tables (7)",
+      "kind": "file",
+      "paths": [
+        "outputs/tables/quality_overall.csv",
+        "outputs/tables/quality_by_year.csv",
+        "outputs/tables/quality_by_naics2.csv",
+        "outputs/tables/quality_flag_prevalence.csv",
+        "outputs/tables/quality_sensitivity_grid.csv",
+        "outputs/tables/quality_hours_concentration.csv",
+        "outputs/tables/quality_top50_implausible_hours.csv"
+      ]
+    },
+    "peer_tables": {
+      "label": "Peer percentile and size-band tables (3)",
+      "kind": "file",
+      "paths": [
+        "outputs/tables/peer_percentiles_by_year.csv",
+        "outputs/tables/peer_percentiles_pooled.csv",
+        "outputs/tables/size_band_effects.csv"
+      ]
+    },
+    "count_model_tables": {
+      "label": "Count model tables (3)",
+      "kind": "file",
+      "paths": [
+        "outputs/tables/count_model_comparison.csv",
+        "outputs/tables/count_model_fit_detail.csv",
+        "outputs/tables/count_model_selection_summary.csv"
+      ]
+    },
+    "stability_tables": {
+      "label": "Percentile stability tables (2)",
+      "kind": "file",
+      "paths": [
+        "outputs/tables/percentile_band_stability.csv",
+        "outputs/tables/peer_group_persistence.csv"
+      ]
+    },
+    "metrics_tables": {
+      "label": "Rate metric tables (2)",
+      "kind": "file",
+      "paths": [
+        "outputs/tables/metrics_by_year.csv",
+        "outputs/tables/metrics_pooled.csv"
+      ]
+    },
+    "covariate_tables": {
+      "label": "Covariate-adjusted count model tables (4)",
+      "kind": "file",
+      "paths": [
+        "outputs/tables/count_model_covariates.csv",
+        "outputs/tables/count_model_covariates_summary.csv",
+        "outputs/tables/count_model_covariates_fit_detail.csv",
+        "outputs/tables/count_model_covariates_coverage.csv"
+      ]
+    },
+    "reconciliation_table": {
+      "label": "Reconciliation against published figures",
+      "kind": "file",
+      "paths": [
+        "outputs/tables/reconciliation_panels.csv"
+      ]
+    },
+    "panel_tables": {
+      "label": "Establishment panel tables (4)",
+      "kind": "file",
+      "paths": [
+        "outputs/tables/panel_coverage.csv",
+        "outputs/tables/panel_transitions.csv",
+        "outputs/tables/panel_permutation.csv",
+        "outputs/tables/panel_2019.csv"
+      ]
+    },
+    "figures": {
+      "label": "SVG figures (7)",
+      "kind": "file",
+      "paths": [
+        "outputs/figures/fig01_aggregate_trir_by_year.svg",
+        "outputs/figures/fig02_hours_share_implausible.svg",
+        "outputs/figures/fig03_hours_per_employee.svg",
+        "outputs/figures/fig04_count_model_fit.svg",
+        "outputs/figures/fig05_zero_share_by_size.svg",
+        "outputs/figures/fig06_percentile_stability.svg",
+        "outputs/figures/fig08_panel_persistence.svg"
+      ]
+    },
+    "summary_json": {
+      "label": "outputs/summary.json",
+      "kind": "file",
+      "paths": [
+        "outputs/summary.json"
+      ]
+    },
+    "rules_spec": {
+      "label": "Plausibility rule spec",
+      "kind": "file",
+      "paths": [
+        "src/ehs_osha/plausibility_rules.json"
+      ]
+    },
+    "industry_quality_doc": {
+      "label": "docs/INDUSTRY_QUALITY.md",
+      "kind": "file",
+      "paths": [
+        "docs/INDUSTRY_QUALITY.md"
+      ]
+    },
+    "explore_data": {
+      "label": "docs/explore-data.json",
+      "kind": "file",
+      "paths": [
+        "docs/explore-data.json"
+      ]
+    },
+    "ontology_spec": {
+      "label": "Ontology spec",
+      "kind": "file",
+      "paths": [
+        "src/ehs_osha/ontology/spec.json",
+        "docs/ontology.md"
+      ]
+    },
+    "ontology_export": {
+      "label": "Ontology store (SQLite/JSON export)",
+      "kind": "memory",
+      "paths": []
+    },
+    "health_docs": {
+      "label": "Data health and lineage docs",
+      "kind": "file",
+      "generated_here": true,
+      "paths": [
+        "docs/DATA_HEALTH.md",
+        "docs/LINEAGE.md"
+      ]
+    },
+    "detectability_table": {
+      "label": "Rate detectability table",
+      "kind": "file",
+      "paths": [
+        "outputs/tables/detectability_by_size_band.csv"
+      ]
+    },
+    "panel_audit_outputs": {
+      "label": "Establishment linkage audit table and page",
+      "kind": "file",
+      "paths": [
+        "outputs/tables/panel_linkage_audit.csv",
+        "docs/PANEL_AUDIT.md"
+      ]
+    }
+  },
+  "stages": [
+    {
+      "id": "download",
+      "title": "Download raw ITA files",
+      "module": "ehs_osha.download",
+      "function": "download_all",
+      "inputs": [],
+      "outputs": [
+        "raw_ita"
+      ]
+    },
+    {
+      "id": "fixture_generate",
+      "title": "Generate synthetic fixture",
+      "script": "synthetic/generate_fixture.py",
+      "function": "main",
+      "inputs": [],
+      "outputs": [
+        "fixture"
+      ]
+    },
+    {
+      "id": "load",
+      "title": "Harmonise schema, derive fields, deduplicate",
+      "module": "ehs_osha.load",
+      "function": "load_ita_300a",
+      "inputs": [
+        "raw_ita"
+      ],
+      "outputs": [
+        "harmonised"
+      ]
+    },
+    {
+      "id": "screen",
+      "title": "Plausibility screen",
+      "module": "ehs_osha.quality",
+      "function": "apply_screen",
+      "inputs": [
+        "harmonised",
+        "rules_spec"
+      ],
+      "outputs": [
+        "screened"
+      ]
+    },
+    {
+      "id": "quality",
+      "title": "Quality aggregates",
+      "module": "ehs_osha.pipeline",
+      "function": "stage_quality",
+      "inputs": [
+        "screened"
+      ],
+      "outputs": [
+        "quality_tables"
+      ]
+    },
+    {
+      "id": "peers",
+      "title": "Peer groups and percentiles",
+      "module": "ehs_osha.pipeline",
+      "function": "stage_peers",
+      "inputs": [
+        "screened"
+      ],
+      "outputs": [
+        "peer_tables"
+      ]
+    },
+    {
+      "id": "count_models",
+      "title": "Count model comparison",
+      "module": "ehs_osha.pipeline",
+      "function": "stage_count_models",
+      "inputs": [
+        "screened",
+        "peer_tables"
+      ],
+      "outputs": [
+        "count_model_tables"
+      ]
+    },
+    {
+      "id": "stability",
+      "title": "Percentile band stability",
+      "module": "ehs_osha.pipeline",
+      "function": "stage_stability",
+      "inputs": [
+        "peer_tables"
+      ],
+      "outputs": [
+        "stability_tables"
+      ]
+    },
+    {
+      "id": "metrics",
+      "title": "TRIR, DART, LTIR, severity",
+      "module": "ehs_osha.pipeline",
+      "function": "stage_metrics",
+      "inputs": [
+        "screened"
+      ],
+      "outputs": [
+        "metrics_tables"
+      ]
+    },
+    {
+      "id": "covariate_models",
+      "title": "Covariate-adjusted count models",
+      "module": "ehs_osha.pipeline",
+      "function": "stage_count_models_covariates",
+      "inputs": [
+        "raw_ita"
+      ],
+      "outputs": [
+        "covariate_tables"
+      ]
+    },
+    {
+      "id": "reconcile",
+      "title": "Reconcile against published figures",
+      "module": "ehs_osha.pipeline",
+      "function": "stage_reconcile",
+      "inputs": [
+        "harmonised"
+      ],
+      "outputs": [
+        "reconciliation_table"
+      ]
+    },
+    {
+      "id": "panel",
+      "title": "Establishment flag panel",
+      "module": "ehs_osha.panel",
+      "function": "run",
+      "inputs": [
+        "raw_ita"
+      ],
+      "outputs": [
+        "panel_tables"
+      ]
+    },
+    {
+      "id": "figures",
+      "title": "SVG figures",
+      "module": "ehs_osha.pipeline",
+      "function": "make_figures",
+      "inputs": [
+        "screened",
+        "quality_tables",
+        "peer_tables",
+        "count_model_tables"
+      ],
+      "outputs": [
+        "figures"
+      ]
+    },
+    {
+      "id": "summary",
+      "title": "Assemble summary.json",
+      "module": "ehs_osha.pipeline",
+      "function": "run_pipeline",
+      "inputs": [
+        "quality_tables",
+        "peer_tables",
+        "count_model_tables",
+        "stability_tables",
+        "metrics_tables",
+        "covariate_tables",
+        "reconciliation_table"
+      ],
+      "outputs": [
+        "summary_json"
+      ]
+    },
+    {
+      "id": "industry_quality",
+      "title": "Sector, size and year quality view",
+      "module": "ehs_osha.industry_quality",
+      "function": "main",
+      "inputs": [
+        "quality_tables",
+        "peer_tables"
+      ],
+      "outputs": [
+        "industry_quality_doc"
+      ]
+    },
+    {
+      "id": "explore_data",
+      "title": "Denominator explorer data",
+      "script": "scripts/build_explore_data.py",
+      "function": "main",
+      "inputs": [
+        "quality_tables",
+        "peer_tables"
+      ],
+      "outputs": [
+        "explore_data"
+      ]
+    },
+    {
+      "id": "ontology",
+      "title": "Ontology materialisation",
+      "module": "ehs_osha.ontology.materialise",
+      "function": "build_store",
+      "inputs": [
+        "fixture",
+        "quality_tables",
+        "peer_tables",
+        "ontology_spec"
+      ],
+      "outputs": [
+        "ontology_export"
+      ]
+    },
+    {
+      "id": "health",
+      "title": "Data expectations and lineage check",
+      "module": "ehs_osha.health.expectations",
+      "function": "run_expectations",
+      "inputs": [
+        "quality_tables",
+        "peer_tables",
+        "count_model_tables",
+        "stability_tables",
+        "metrics_tables",
+        "covariate_tables",
+        "reconciliation_table",
+        "panel_tables",
+        "summary_json"
+      ],
+      "outputs": [
+        "health_docs"
+      ]
+    },
+    {
+      "id": "detectability",
+      "title": "Rate detectability planner",
+      "script": "scripts/run_detectability.py",
+      "function": "main",
+      "inputs": [
+        "peer_tables"
+      ],
+      "outputs": [
+        "detectability_table"
+      ]
+    },
+    {
+      "id": "panel_audit",
+      "title": "Establishment linkage and panel-quality audit",
+      "script": "scripts/run_panel_audit.py",
+      "function": "main",
+      "inputs": [
+        "quality_tables",
+        "panel_tables",
+        "stability_tables"
+      ],
+      "outputs": [
+        "panel_audit_outputs"
+      ]
+    }
+  ]
+}

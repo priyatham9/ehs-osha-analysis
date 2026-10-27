@@ -1,0 +1,3512 @@
+{
+ "version": 1,
+ "description": "Data expectations over outputs/tables/*.csv and outputs/summary.json. Run by ehs_osha.health.expectations; rendered to docs/DATA_HEALTH.md.",
+ "expectations": [
+  {
+   "id": "quality_overall.columns_present",
+   "severity": "error",
+   "scope": "structural",
+   "check": "columns",
+   "target": "quality_overall",
+   "rationale": "Downstream code and docs read these columns by name.",
+   "columns": [
+    "label",
+    "n_filings",
+    "n_implausible",
+    "implausible_share",
+    "hours_total",
+    "hours_share_implausible",
+    "cases_total",
+    "cases_share_implausible",
+    "aggregate_trir_unscreened",
+    "aggregate_trir_screened",
+    "ratio_screened_to_unscreened"
+   ]
+  },
+  {
+   "id": "quality_overall.row_count",
+   "severity": "error",
+   "scope": "committed",
+   "check": "rows",
+   "target": "quality_overall",
+   "rationale": "Row count is fixed by the design of the table (committed outputs).",
+   "equals": 1
+  },
+  {
+   "id": "quality_overall.key_columns_not_null",
+   "severity": "error",
+   "scope": "structural",
+   "check": "not_null",
+   "target": "quality_overall",
+   "rationale": "Key and count columns identify the row and feed every aggregate; nulls break joins and sums.",
+   "columns": [
+    "n_filings",
+    "n_implausible",
+    "implausible_share",
+    "hours_total",
+    "cases_total",
+    "aggregate_trir_unscreened",
+    "aggregate_trir_screened"
+   ]
+  },
+  {
+   "id": "quality_overall.shares_in_unit_interval",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "quality_overall",
+   "rationale": "A share is a part divided by a whole, so it must lie in [0, 1].",
+   "columns": [
+    "implausible_share",
+    "hours_share_implausible",
+    "cases_share_implausible"
+   ],
+   "min": 0,
+   "max": 1
+  },
+  {
+   "id": "quality_overall.counts_non_negative",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "quality_overall",
+   "rationale": "A count of filings, hours or cases cannot be negative.",
+   "columns": [
+    "n_filings",
+    "n_implausible",
+    "hours_total",
+    "cases_total"
+   ],
+   "min": 0,
+   "max": null
+  },
+  {
+   "id": "quality_overall.rates_physical",
+   "severity": "warn",
+   "scope": "structural",
+   "check": "range",
+   "target": "quality_overall",
+   "rationale": "A rate per 100 full-time workers above 1,000 would mean ten recordable cases per worker-year; it indicates an unscreened denominator or a broken join.",
+   "columns": [
+    "aggregate_trir_unscreened",
+    "aggregate_trir_screened"
+   ],
+   "min": 0,
+   "max": 1000
+  },
+  {
+   "id": "quality_overall.implausible_le_filings",
+   "severity": "error",
+   "scope": "structural",
+   "check": "col_le",
+   "target": "quality_overall",
+   "rationale": "Flagged filings are a subset of all filings.",
+   "left": "n_implausible",
+   "right": "n_filings"
+  },
+  {
+   "id": "quality_overall.share_matches_counts",
+   "severity": "error",
+   "scope": "structural",
+   "check": "ratio",
+   "target": "quality_overall",
+   "rationale": "implausible_share must equal n_implausible / n_filings.",
+   "num": "n_implausible",
+   "den": "n_filings",
+   "equals": "implausible_share"
+  },
+  {
+   "id": "quality_overall.filings_match_summary",
+   "severity": "error",
+   "scope": "structural",
+   "check": "lookup",
+   "target": "quality_overall",
+   "rationale": "The table and summary.json are written by the same stage and must agree.",
+   "column": "n_filings",
+   "ref": {
+    "summary": "quality.pooled.n_filings"
+   }
+  },
+  {
+   "id": "quality_overall.implausible_match_summary",
+   "severity": "error",
+   "scope": "structural",
+   "check": "lookup",
+   "target": "quality_overall",
+   "rationale": "The table and summary.json are written by the same stage and must agree.",
+   "column": "n_implausible",
+   "ref": {
+    "summary": "quality.pooled.n_implausible"
+   }
+  },
+  {
+   "id": "quality_overall.filings_match_load_report",
+   "severity": "error",
+   "scope": "structural",
+   "check": "lookup",
+   "target": "quality_overall",
+   "rationale": "Filings after screening must equal rows after deduplication; the screen drops nothing.",
+   "column": "n_filings",
+   "ref": {
+    "summary": "load_report.rows_after_dedup"
+   }
+  },
+  {
+   "id": "quality_overall.screened_trir_exceeds_unscreened",
+   "severity": "warn",
+   "scope": "structural",
+   "check": "range",
+   "target": "quality_overall",
+   "rationale": "Pooled screening removes implausibly huge denominators, so the screened rate is not below the unscreened rate (the ratio is at least 1).",
+   "columns": [
+    "ratio_screened_to_unscreened"
+   ],
+   "min": 1
+  },
+  {
+   "id": "quality_by_year.columns_present",
+   "severity": "error",
+   "scope": "structural",
+   "check": "columns",
+   "target": "quality_by_year",
+   "rationale": "Downstream code and docs read these columns by name.",
+   "columns": [
+    "label",
+    "n_filings",
+    "n_implausible",
+    "implausible_share",
+    "hours_total",
+    "hours_share_implausible",
+    "cases_total",
+    "cases_share_implausible",
+    "aggregate_trir_unscreened",
+    "aggregate_trir_screened",
+    "ratio_screened_to_unscreened"
+   ]
+  },
+  {
+   "id": "quality_by_year.row_count",
+   "severity": "error",
+   "scope": "committed",
+   "check": "rows",
+   "target": "quality_by_year",
+   "rationale": "Row count is fixed by the design of the table (committed outputs).",
+   "equals": 9
+  },
+  {
+   "id": "quality_by_year.key_columns_not_null",
+   "severity": "error",
+   "scope": "structural",
+   "check": "not_null",
+   "target": "quality_by_year",
+   "rationale": "Key and count columns identify the row and feed every aggregate; nulls break joins and sums.",
+   "columns": [
+    "label",
+    "n_filings",
+    "n_implausible",
+    "implausible_share",
+    "hours_total",
+    "cases_total"
+   ]
+  },
+  {
+   "id": "quality_by_year.key_unique",
+   "severity": "error",
+   "scope": "structural",
+   "check": "unique",
+   "target": "quality_by_year",
+   "rationale": "Duplicate keys would double count in any aggregate over this table.",
+   "columns": [
+    "label"
+   ]
+  },
+  {
+   "id": "quality_by_year.years_in_range",
+   "severity": "error",
+   "scope": "structural",
+   "check": "years",
+   "target": "quality_by_year",
+   "rationale": "ITA reporting years covered by the pipeline are 2016 to 2024.",
+   "column": "label",
+   "min": 2016,
+   "max": 2024
+  },
+  {
+   "id": "quality_by_year.years_complete",
+   "severity": "error",
+   "scope": "committed",
+   "check": "value_set",
+   "target": "quality_by_year",
+   "rationale": "Every reporting year 2016 to 2024 must be present exactly once.",
+   "column": "label",
+   "values": [
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "id": "quality_by_year.shares_in_unit_interval",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "quality_by_year",
+   "rationale": "A share is a part divided by a whole, so it must lie in [0, 1].",
+   "columns": [
+    "implausible_share",
+    "hours_share_implausible",
+    "cases_share_implausible"
+   ],
+   "min": 0,
+   "max": 1
+  },
+  {
+   "id": "quality_by_year.counts_non_negative",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "quality_by_year",
+   "rationale": "A count of filings, hours or cases cannot be negative.",
+   "columns": [
+    "n_filings",
+    "n_implausible",
+    "hours_total",
+    "cases_total"
+   ],
+   "min": 0,
+   "max": null
+  },
+  {
+   "id": "quality_by_year.rates_physical",
+   "severity": "warn",
+   "scope": "structural",
+   "check": "range",
+   "target": "quality_by_year",
+   "rationale": "A rate per 100 full-time workers above 1,000 would mean ten recordable cases per worker-year; it indicates an unscreened denominator or a broken join.",
+   "columns": [
+    "aggregate_trir_unscreened",
+    "aggregate_trir_screened"
+   ],
+   "min": 0,
+   "max": 1000
+  },
+  {
+   "id": "quality_by_year.implausible_le_filings",
+   "severity": "error",
+   "scope": "structural",
+   "check": "col_le",
+   "target": "quality_by_year",
+   "rationale": "Flagged filings are a subset of all filings.",
+   "left": "n_implausible",
+   "right": "n_filings"
+  },
+  {
+   "id": "quality_by_year.share_matches_counts",
+   "severity": "error",
+   "scope": "structural",
+   "check": "ratio",
+   "target": "quality_by_year",
+   "rationale": "implausible_share must equal n_implausible / n_filings.",
+   "num": "n_implausible",
+   "den": "n_filings",
+   "equals": "implausible_share"
+  },
+  {
+   "id": "quality_by_year.n_filings_sums_to_pooled",
+   "severity": "error",
+   "scope": "structural",
+   "check": "sum_ref",
+   "target": "quality_by_year",
+   "rationale": "Years partition the pooled data, so n_filings summed over years equals the pooled value.",
+   "column": "n_filings",
+   "ref": {
+    "table": "quality_overall",
+    "column": "n_filings",
+    "agg": "first"
+   }
+  },
+  {
+   "id": "quality_by_year.n_implausible_sums_to_pooled",
+   "severity": "error",
+   "scope": "structural",
+   "check": "sum_ref",
+   "target": "quality_by_year",
+   "rationale": "Years partition the pooled data, so n_implausible summed over years equals the pooled value.",
+   "column": "n_implausible",
+   "ref": {
+    "table": "quality_overall",
+    "column": "n_implausible",
+    "agg": "first"
+   }
+  },
+  {
+   "id": "quality_by_year.hours_total_sums_to_pooled",
+   "severity": "error",
+   "scope": "structural",
+   "check": "sum_ref",
+   "target": "quality_by_year",
+   "rationale": "Years partition the pooled data, so hours_total summed over years equals the pooled value.",
+   "column": "hours_total",
+   "ref": {
+    "table": "quality_overall",
+    "column": "hours_total",
+    "agg": "first"
+   }
+  },
+  {
+   "id": "quality_by_year.cases_total_sums_to_pooled",
+   "severity": "error",
+   "scope": "structural",
+   "check": "sum_ref",
+   "target": "quality_by_year",
+   "rationale": "Years partition the pooled data, so cases_total summed over years equals the pooled value.",
+   "column": "cases_total",
+   "ref": {
+    "table": "quality_overall",
+    "column": "cases_total",
+    "agg": "first"
+   }
+  },
+  {
+   "id": "quality_by_naics2.columns_present",
+   "severity": "error",
+   "scope": "structural",
+   "check": "columns",
+   "target": "quality_by_naics2",
+   "rationale": "Downstream code and docs read these columns by name.",
+   "columns": [
+    "label",
+    "n_filings",
+    "n_implausible",
+    "implausible_share",
+    "hours_total",
+    "hours_share_implausible",
+    "cases_total",
+    "aggregate_trir_unscreened",
+    "aggregate_trir_screened"
+   ]
+  },
+  {
+   "id": "quality_by_naics2.row_count_min",
+   "severity": "error",
+   "scope": "committed",
+   "check": "rows",
+   "target": "quality_by_naics2",
+   "rationale": "An empty or truncated table means a stage failed silently.",
+   "min": 20
+  },
+  {
+   "id": "quality_by_naics2.key_columns_not_null",
+   "severity": "error",
+   "scope": "structural",
+   "check": "not_null",
+   "target": "quality_by_naics2",
+   "rationale": "Key and count columns identify the row and feed every aggregate; nulls break joins and sums.",
+   "columns": [
+    "label",
+    "n_filings",
+    "n_implausible",
+    "implausible_share",
+    "hours_total",
+    "cases_total"
+   ]
+  },
+  {
+   "id": "quality_by_naics2.key_unique",
+   "severity": "error",
+   "scope": "structural",
+   "check": "unique",
+   "target": "quality_by_naics2",
+   "rationale": "Duplicate keys would double count in any aggregate over this table.",
+   "columns": [
+    "label"
+   ]
+  },
+  {
+   "id": "quality_by_naics2.sector_codes_two_digit",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "quality_by_naics2",
+   "rationale": "NAICS sector codes are two-digit numbers.",
+   "columns": [
+    "label"
+   ],
+   "min": 10,
+   "max": 99
+  },
+  {
+   "id": "quality_by_naics2.shares_in_unit_interval",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "quality_by_naics2",
+   "rationale": "A share is a part divided by a whole, so it must lie in [0, 1].",
+   "columns": [
+    "implausible_share",
+    "hours_share_implausible",
+    "cases_share_implausible"
+   ],
+   "min": 0,
+   "max": 1
+  },
+  {
+   "id": "quality_by_naics2.counts_non_negative",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "quality_by_naics2",
+   "rationale": "A count of filings, hours or cases cannot be negative.",
+   "columns": [
+    "n_filings",
+    "n_implausible",
+    "hours_total",
+    "cases_total"
+   ],
+   "min": 0,
+   "max": null
+  },
+  {
+   "id": "quality_by_naics2.rates_physical",
+   "severity": "warn",
+   "scope": "structural",
+   "check": "range",
+   "target": "quality_by_naics2",
+   "rationale": "A rate per 100 full-time workers above 1,000 would mean ten recordable cases per worker-year; it indicates an unscreened denominator or a broken join.",
+   "columns": [
+    "aggregate_trir_unscreened",
+    "aggregate_trir_screened",
+    "median_establishment_trir_screened"
+   ],
+   "min": 0,
+   "max": 1000
+  },
+  {
+   "id": "quality_by_naics2.implausible_le_filings",
+   "severity": "error",
+   "scope": "structural",
+   "check": "col_le",
+   "target": "quality_by_naics2",
+   "rationale": "Flagged filings are a subset of all filings.",
+   "left": "n_implausible",
+   "right": "n_filings"
+  },
+  {
+   "id": "quality_by_naics2.share_matches_counts",
+   "severity": "error",
+   "scope": "structural",
+   "check": "ratio",
+   "target": "quality_by_naics2",
+   "rationale": "implausible_share must equal n_implausible / n_filings.",
+   "num": "n_implausible",
+   "den": "n_filings",
+   "equals": "implausible_share"
+  },
+  {
+   "id": "quality_by_naics2.sector_filings_sum_to_pooled",
+   "severity": "error",
+   "scope": "structural",
+   "check": "sum_ref",
+   "target": "quality_by_naics2",
+   "rationale": "Sector filing counts must sum to the pooled filings count in summary.json.",
+   "column": "n_filings",
+   "ref": {
+    "summary": "quality.pooled.n_filings"
+   }
+  },
+  {
+   "id": "quality_by_naics2.sector_implausible_sum_to_pooled",
+   "severity": "error",
+   "scope": "structural",
+   "check": "sum_ref",
+   "target": "quality_by_naics2",
+   "rationale": "Sector flagged counts must sum to the pooled flagged count in summary.json.",
+   "column": "n_implausible",
+   "ref": {
+    "summary": "quality.pooled.n_implausible"
+   }
+  },
+  {
+   "id": "quality_by_naics2.sector_hours_sum_to_pooled",
+   "severity": "error",
+   "scope": "structural",
+   "check": "sum_ref",
+   "target": "quality_by_naics2",
+   "rationale": "Sector hours must sum to pooled hours.",
+   "column": "hours_total",
+   "ref": {
+    "table": "quality_overall",
+    "column": "hours_total"
+   }
+  },
+  {
+   "id": "quality_by_naics2.sector_cases_sum_to_pooled",
+   "severity": "error",
+   "scope": "structural",
+   "check": "sum_ref",
+   "target": "quality_by_naics2",
+   "rationale": "Sector cases must sum to pooled cases.",
+   "column": "cases_total",
+   "ref": {
+    "table": "quality_overall",
+    "column": "cases_total"
+   }
+  },
+  {
+   "id": "quality_flag_prevalence.columns_present",
+   "severity": "error",
+   "scope": "structural",
+   "check": "columns",
+   "target": "quality_flag_prevalence",
+   "rationale": "Downstream code and docs read these columns by name.",
+   "columns": [
+    "flag",
+    "n",
+    "share",
+    "hours",
+    "hours_share"
+   ]
+  },
+  {
+   "id": "quality_flag_prevalence.row_count",
+   "severity": "error",
+   "scope": "committed",
+   "check": "rows",
+   "target": "quality_flag_prevalence",
+   "rationale": "Row count is fixed by the design of the table (committed outputs).",
+   "equals": 6
+  },
+  {
+   "id": "quality_flag_prevalence.key_columns_not_null",
+   "severity": "error",
+   "scope": "structural",
+   "check": "not_null",
+   "target": "quality_flag_prevalence",
+   "rationale": "Key and count columns identify the row and feed every aggregate; nulls break joins and sums.",
+   "columns": [
+    "flag",
+    "n",
+    "share"
+   ]
+  },
+  {
+   "id": "quality_flag_prevalence.key_unique",
+   "severity": "error",
+   "scope": "structural",
+   "check": "unique",
+   "target": "quality_flag_prevalence",
+   "rationale": "Duplicate keys would double count in any aggregate over this table.",
+   "columns": [
+    "flag"
+   ]
+  },
+  {
+   "id": "quality_flag_prevalence.counts_non_negative",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "quality_flag_prevalence",
+   "rationale": "A count of filings, hours or cases cannot be negative.",
+   "columns": [
+    "n"
+   ],
+   "min": 0,
+   "max": null
+  },
+  {
+   "id": "quality_flag_prevalence.count_le_filings",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "quality_flag_prevalence",
+   "rationale": "A rule cannot flag more filings than exist.",
+   "columns": [
+    "n"
+   ],
+   "min": 0,
+   "max": null,
+   "max_ref": {
+    "summary": "quality.pooled.n_filings"
+   }
+  },
+  {
+   "id": "quality_flag_prevalence.share_in_unit_interval",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "quality_flag_prevalence",
+   "rationale": "A share is a part divided by a whole, so it must lie in [0, 1].",
+   "columns": [
+    "share"
+   ],
+   "min": 0,
+   "max": 1
+  },
+  {
+   "id": "quality_flag_prevalence.hours_share_at_most_one",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "quality_flag_prevalence",
+   "rationale": "Hours share is at most 1; the tiny negative floor allows for filings that report negative hours.",
+   "columns": [
+    "hours_share"
+   ],
+   "min": -1e-06,
+   "max": 1
+  },
+  {
+   "id": "quality_sensitivity_grid.columns_present",
+   "severity": "error",
+   "scope": "structural",
+   "check": "columns",
+   "target": "quality_sensitivity_grid",
+   "rationale": "Downstream code and docs read these columns by name.",
+   "columns": [
+    "label",
+    "n_filings",
+    "n_implausible",
+    "implausible_share",
+    "aggregate_trir_screened",
+    "min_hours_per_employee",
+    "max_hours_per_employee"
+   ]
+  },
+  {
+   "id": "quality_sensitivity_grid.row_count",
+   "severity": "error",
+   "scope": "committed",
+   "check": "rows",
+   "target": "quality_sensitivity_grid",
+   "rationale": "Row count is fixed by the design of the table (committed outputs).",
+   "equals": 25
+  },
+  {
+   "id": "quality_sensitivity_grid.key_columns_not_null",
+   "severity": "error",
+   "scope": "structural",
+   "check": "not_null",
+   "target": "quality_sensitivity_grid",
+   "rationale": "Key and count columns identify the row and feed every aggregate; nulls break joins and sums.",
+   "columns": [
+    "label",
+    "n_filings",
+    "n_implausible",
+    "min_hours_per_employee",
+    "max_hours_per_employee"
+   ]
+  },
+  {
+   "id": "quality_sensitivity_grid.key_unique",
+   "severity": "error",
+   "scope": "structural",
+   "check": "unique",
+   "target": "quality_sensitivity_grid",
+   "rationale": "Duplicate keys would double count in any aggregate over this table.",
+   "columns": [
+    "label"
+   ]
+  },
+  {
+   "id": "quality_sensitivity_grid.filings_constant_across_grid",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "quality_sensitivity_grid",
+   "rationale": "Changing thresholds must not change the population screened.",
+   "columns": [
+    "n_filings"
+   ],
+   "min": null,
+   "max": null,
+   "min_ref": {
+    "summary": "quality.pooled.n_filings"
+   },
+   "max_ref": {
+    "summary": "quality.pooled.n_filings"
+   }
+  },
+  {
+   "id": "quality_sensitivity_grid.hours_thresholds_physical",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "quality_sensitivity_grid",
+   "rationale": "A year has 8,760 hours, so no threshold above that is meaningful.",
+   "columns": [
+    "min_hours_per_employee",
+    "max_hours_per_employee"
+   ],
+   "min": 0,
+   "max": 8760
+  },
+  {
+   "id": "quality_sensitivity_grid.min_below_max",
+   "severity": "error",
+   "scope": "structural",
+   "check": "col_le",
+   "target": "quality_sensitivity_grid",
+   "rationale": "The lower threshold must not exceed the upper one.",
+   "left": "min_hours_per_employee",
+   "right": "max_hours_per_employee"
+  },
+  {
+   "id": "quality_sensitivity_grid.implausible_le_filings",
+   "severity": "error",
+   "scope": "structural",
+   "check": "col_le",
+   "target": "quality_sensitivity_grid",
+   "rationale": "Flagged filings are a subset of all filings.",
+   "left": "n_implausible",
+   "right": "n_filings"
+  },
+  {
+   "id": "quality_sensitivity_grid.shares_in_unit_interval",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "quality_sensitivity_grid",
+   "rationale": "A share is a part divided by a whole, so it must lie in [0, 1].",
+   "columns": [
+    "implausible_share",
+    "hours_share_implausible",
+    "cases_share_implausible"
+   ],
+   "min": 0,
+   "max": 1
+  },
+  {
+   "id": "quality_sensitivity_grid.default_screen_row_matches_pooled",
+   "severity": "error",
+   "scope": "committed",
+   "check": "lookup",
+   "target": "quality_sensitivity_grid",
+   "rationale": "The 120-4,500 grid cell is the default screen and must reproduce the pooled flagged count.",
+   "column": "n_implausible",
+   "where": {
+    "label": "120-4500"
+   },
+   "ref": {
+    "summary": "quality.pooled.n_implausible"
+   }
+  },
+  {
+   "id": "quality_hours_concentration.columns_present",
+   "severity": "error",
+   "scope": "structural",
+   "check": "columns",
+   "target": "quality_hours_concentration",
+   "rationale": "Downstream code and docs read these columns by name.",
+   "columns": [
+    "top_n_filings_by_hours",
+    "hours_share",
+    "cases_share"
+   ]
+  },
+  {
+   "id": "quality_hours_concentration.row_count",
+   "severity": "error",
+   "scope": "committed",
+   "check": "rows",
+   "target": "quality_hours_concentration",
+   "rationale": "Row count is fixed by the design of the table (committed outputs).",
+   "equals": 5
+  },
+  {
+   "id": "quality_hours_concentration.key_columns_not_null",
+   "severity": "error",
+   "scope": "structural",
+   "check": "not_null",
+   "target": "quality_hours_concentration",
+   "rationale": "Key and count columns identify the row and feed every aggregate; nulls break joins and sums.",
+   "columns": [
+    "top_n_filings_by_hours",
+    "hours_share",
+    "cases_share"
+   ]
+  },
+  {
+   "id": "quality_hours_concentration.key_unique",
+   "severity": "error",
+   "scope": "structural",
+   "check": "unique",
+   "target": "quality_hours_concentration",
+   "rationale": "Duplicate keys would double count in any aggregate over this table.",
+   "columns": [
+    "top_n_filings_by_hours"
+   ]
+  },
+  {
+   "id": "quality_hours_concentration.shares_in_unit_interval",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "quality_hours_concentration",
+   "rationale": "A share is a part divided by a whole, so it must lie in [0, 1].",
+   "columns": [
+    "hours_share",
+    "cases_share"
+   ],
+   "min": 0,
+   "max": 1
+  },
+  {
+   "id": "quality_hours_concentration.hours_share_cumulative",
+   "severity": "error",
+   "scope": "structural",
+   "check": "monotone_col",
+   "target": "quality_hours_concentration",
+   "rationale": "The top-N shares are cumulative, so they cannot fall as N grows.",
+   "column": "hours_share",
+   "by": "top_n_filings_by_hours"
+  },
+  {
+   "id": "quality_hours_concentration.cases_share_cumulative",
+   "severity": "error",
+   "scope": "structural",
+   "check": "monotone_col",
+   "target": "quality_hours_concentration",
+   "rationale": "The top-N shares are cumulative, so they cannot fall as N grows.",
+   "column": "cases_share",
+   "by": "top_n_filings_by_hours"
+  },
+  {
+   "id": "quality_top50_implausible_hours.columns_present",
+   "severity": "error",
+   "scope": "structural",
+   "check": "columns",
+   "target": "quality_top50_implausible_hours",
+   "rationale": "Downstream code and docs read these columns by name.",
+   "columns": [
+    "year_filing_for",
+    "establishment_id",
+    "naics_code",
+    "annual_average_employees",
+    "total_hours_worked",
+    "hours_per_employee",
+    "recordable_cases"
+   ]
+  },
+  {
+   "id": "quality_top50_implausible_hours.row_count",
+   "severity": "error",
+   "scope": "committed",
+   "check": "rows",
+   "target": "quality_top50_implausible_hours",
+   "rationale": "Row count is fixed by the design of the table (committed outputs).",
+   "equals": 50
+  },
+  {
+   "id": "quality_top50_implausible_hours.key_columns_not_null",
+   "severity": "error",
+   "scope": "structural",
+   "check": "not_null",
+   "target": "quality_top50_implausible_hours",
+   "rationale": "Key and count columns identify the row and feed every aggregate; nulls break joins and sums.",
+   "columns": [
+    "year_filing_for",
+    "establishment_id",
+    "total_hours_worked",
+    "hours_per_employee"
+   ]
+  },
+  {
+   "id": "quality_top50_implausible_hours.years_in_range",
+   "severity": "error",
+   "scope": "structural",
+   "check": "years",
+   "target": "quality_top50_implausible_hours",
+   "rationale": "ITA reporting years covered by the pipeline are 2016 to 2024.",
+   "column": "year_filing_for",
+   "min": 2016,
+   "max": 2024
+  },
+  {
+   "id": "quality_top50_implausible_hours.hours_per_employee_impossible",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "quality_top50_implausible_hours",
+   "rationale": "Every listed filing exceeds the 8,760 hours in a year per employee, which is physically impossible.",
+   "columns": [
+    "hours_per_employee"
+   ],
+   "min": 8760,
+   "max": null
+  },
+  {
+   "id": "quality_top50_implausible_hours.counts_non_negative",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "quality_top50_implausible_hours",
+   "rationale": "A count of filings, hours or cases cannot be negative.",
+   "columns": [
+    "total_hours_worked",
+    "recordable_cases",
+    "annual_average_employees"
+   ],
+   "min": 0,
+   "max": null
+  },
+  {
+   "id": "quality_top50_implausible_hours.hours_per_employee_consistent",
+   "severity": "error",
+   "scope": "structural",
+   "check": "ratio",
+   "target": "quality_top50_implausible_hours",
+   "rationale": "hours_per_employee must equal total hours / average employees.",
+   "num": "total_hours_worked",
+   "den": "annual_average_employees",
+   "equals": "hours_per_employee"
+  },
+  {
+   "id": "peer_percentiles_by_year.columns_present",
+   "severity": "error",
+   "scope": "structural",
+   "check": "columns",
+   "target": "peer_percentiles_by_year",
+   "rationale": "Downstream code and docs read these columns by name.",
+   "columns": [
+    "naics3",
+    "size_band",
+    "n",
+    "n_with_metric",
+    "zero_share",
+    "hours_total",
+    "aggregate_trir",
+    "p10",
+    "p25",
+    "p50",
+    "p75",
+    "p90",
+    "p95",
+    "publishable",
+    "year_filing_for"
+   ]
+  },
+  {
+   "id": "peer_percentiles_by_year.row_count_min",
+   "severity": "error",
+   "scope": "committed",
+   "check": "rows",
+   "target": "peer_percentiles_by_year",
+   "rationale": "An empty or truncated table means a stage failed silently.",
+   "min": 500
+  },
+  {
+   "id": "peer_percentiles_by_year.key_columns_not_null",
+   "severity": "error",
+   "scope": "structural",
+   "check": "not_null",
+   "target": "peer_percentiles_by_year",
+   "rationale": "Key and count columns identify the row and feed every aggregate; nulls break joins and sums.",
+   "columns": [
+    "year_filing_for",
+    "naics3",
+    "size_band",
+    "n",
+    "hours_total",
+    "aggregate_trir",
+    "p50",
+    "publishable"
+   ]
+  },
+  {
+   "id": "peer_percentiles_by_year.key_unique",
+   "severity": "error",
+   "scope": "structural",
+   "check": "unique",
+   "target": "peer_percentiles_by_year",
+   "rationale": "Duplicate keys would double count in any aggregate over this table.",
+   "columns": [
+    "year_filing_for",
+    "naics3",
+    "size_band"
+   ]
+  },
+  {
+   "id": "peer_percentiles_by_year.zero_share_in_unit_interval",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "peer_percentiles_by_year",
+   "rationale": "A share is a part divided by a whole, so it must lie in [0, 1].",
+   "columns": [
+    "zero_share"
+   ],
+   "min": 0,
+   "max": 1
+  },
+  {
+   "id": "peer_percentiles_by_year.counts_non_negative",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "peer_percentiles_by_year",
+   "rationale": "A count of filings, hours or cases cannot be negative.",
+   "columns": [
+    "n",
+    "n_with_metric",
+    "hours_total"
+   ],
+   "min": 0,
+   "max": null
+  },
+  {
+   "id": "peer_percentiles_by_year.groups_non_empty",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "peer_percentiles_by_year",
+   "rationale": "A peer group exists only if it has at least one establishment.",
+   "columns": [
+    "n"
+   ],
+   "min": 1,
+   "max": null
+  },
+  {
+   "id": "peer_percentiles_by_year.rates_physical",
+   "severity": "warn",
+   "scope": "structural",
+   "check": "range",
+   "target": "peer_percentiles_by_year",
+   "rationale": "A rate per 100 full-time workers above 1,000 would mean ten recordable cases per worker-year; it indicates an unscreened denominator or a broken join.",
+   "columns": [
+    "aggregate_trir",
+    "p10",
+    "p25",
+    "p50",
+    "p75",
+    "p90",
+    "p95"
+   ],
+   "min": 0,
+   "max": 1000
+  },
+  {
+   "id": "peer_percentiles_by_year.metric_le_n",
+   "severity": "error",
+   "scope": "structural",
+   "check": "col_le",
+   "target": "peer_percentiles_by_year",
+   "rationale": "Establishments with a metric are a subset of the group.",
+   "left": "n_with_metric",
+   "right": "n"
+  },
+  {
+   "id": "peer_percentiles_by_year.percentiles_ordered",
+   "severity": "error",
+   "scope": "structural",
+   "check": "monotone_row",
+   "target": "peer_percentiles_by_year",
+   "rationale": "Percentiles of one distribution must be non-decreasing from p10 to p95.",
+   "columns": [
+    "p10",
+    "p25",
+    "p50",
+    "p75",
+    "p90",
+    "p95"
+   ]
+  },
+  {
+   "id": "peer_percentiles_by_year.size_band_allowed",
+   "severity": "error",
+   "scope": "structural",
+   "check": "value_in",
+   "target": "peer_percentiles_by_year",
+   "rationale": "Size bands are the seven defined in peers.py.",
+   "column": "size_band",
+   "values": [
+    "001-019",
+    "020-049",
+    "050-099",
+    "100-249",
+    "250-499",
+    "500-999",
+    "1000+"
+   ]
+  },
+  {
+   "id": "peer_percentiles_by_year.establishments_sum_to_screened",
+   "severity": "error",
+   "scope": "structural",
+   "check": "sum_ref",
+   "target": "peer_percentiles_by_year",
+   "rationale": "Peer groups partition the screened-in establishments: n summed over groups equals filings minus flagged.",
+   "column": "n",
+   "ref": {
+    "summary_diff": [
+     "quality.pooled.n_filings",
+     "quality.pooled.n_implausible"
+    ]
+   }
+  },
+  {
+   "id": "peer_percentiles_pooled.columns_present",
+   "severity": "error",
+   "scope": "structural",
+   "check": "columns",
+   "target": "peer_percentiles_pooled",
+   "rationale": "Downstream code and docs read these columns by name.",
+   "columns": [
+    "naics3",
+    "size_band",
+    "n",
+    "n_with_metric",
+    "zero_share",
+    "hours_total",
+    "aggregate_trir",
+    "p10",
+    "p25",
+    "p50",
+    "p75",
+    "p90",
+    "p95",
+    "publishable"
+   ]
+  },
+  {
+   "id": "peer_percentiles_pooled.row_count_min",
+   "severity": "error",
+   "scope": "committed",
+   "check": "rows",
+   "target": "peer_percentiles_pooled",
+   "rationale": "An empty or truncated table means a stage failed silently.",
+   "min": 500
+  },
+  {
+   "id": "peer_percentiles_pooled.key_columns_not_null",
+   "severity": "error",
+   "scope": "structural",
+   "check": "not_null",
+   "target": "peer_percentiles_pooled",
+   "rationale": "Key and count columns identify the row and feed every aggregate; nulls break joins and sums.",
+   "columns": [
+    "naics3",
+    "size_band",
+    "n",
+    "hours_total",
+    "aggregate_trir",
+    "p50",
+    "publishable"
+   ]
+  },
+  {
+   "id": "peer_percentiles_pooled.key_unique",
+   "severity": "error",
+   "scope": "structural",
+   "check": "unique",
+   "target": "peer_percentiles_pooled",
+   "rationale": "Duplicate keys would double count in any aggregate over this table.",
+   "columns": [
+    "naics3",
+    "size_band"
+   ]
+  },
+  {
+   "id": "peer_percentiles_pooled.zero_share_in_unit_interval",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "peer_percentiles_pooled",
+   "rationale": "A share is a part divided by a whole, so it must lie in [0, 1].",
+   "columns": [
+    "zero_share"
+   ],
+   "min": 0,
+   "max": 1
+  },
+  {
+   "id": "peer_percentiles_pooled.counts_non_negative",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "peer_percentiles_pooled",
+   "rationale": "A count of filings, hours or cases cannot be negative.",
+   "columns": [
+    "n",
+    "n_with_metric",
+    "hours_total"
+   ],
+   "min": 0,
+   "max": null
+  },
+  {
+   "id": "peer_percentiles_pooled.groups_non_empty",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "peer_percentiles_pooled",
+   "rationale": "A peer group exists only if it has at least one establishment.",
+   "columns": [
+    "n"
+   ],
+   "min": 1,
+   "max": null
+  },
+  {
+   "id": "peer_percentiles_pooled.rates_physical",
+   "severity": "warn",
+   "scope": "structural",
+   "check": "range",
+   "target": "peer_percentiles_pooled",
+   "rationale": "A rate per 100 full-time workers above 1,000 would mean ten recordable cases per worker-year; it indicates an unscreened denominator or a broken join.",
+   "columns": [
+    "aggregate_trir",
+    "p10",
+    "p25",
+    "p50",
+    "p75",
+    "p90",
+    "p95"
+   ],
+   "min": 0,
+   "max": 1000
+  },
+  {
+   "id": "peer_percentiles_pooled.metric_le_n",
+   "severity": "error",
+   "scope": "structural",
+   "check": "col_le",
+   "target": "peer_percentiles_pooled",
+   "rationale": "Establishments with a metric are a subset of the group.",
+   "left": "n_with_metric",
+   "right": "n"
+  },
+  {
+   "id": "peer_percentiles_pooled.percentiles_ordered",
+   "severity": "error",
+   "scope": "structural",
+   "check": "monotone_row",
+   "target": "peer_percentiles_pooled",
+   "rationale": "Percentiles of one distribution must be non-decreasing from p10 to p95.",
+   "columns": [
+    "p10",
+    "p25",
+    "p50",
+    "p75",
+    "p90",
+    "p95"
+   ]
+  },
+  {
+   "id": "peer_percentiles_pooled.size_band_allowed",
+   "severity": "error",
+   "scope": "structural",
+   "check": "value_in",
+   "target": "peer_percentiles_pooled",
+   "rationale": "Size bands are the seven defined in peers.py.",
+   "column": "size_band",
+   "values": [
+    "001-019",
+    "020-049",
+    "050-099",
+    "100-249",
+    "250-499",
+    "500-999",
+    "1000+"
+   ]
+  },
+  {
+   "id": "peer_percentiles_pooled.establishments_sum_to_screened",
+   "severity": "error",
+   "scope": "structural",
+   "check": "sum_ref",
+   "target": "peer_percentiles_pooled",
+   "rationale": "Peer groups partition the screened-in establishments: n summed over groups equals filings minus flagged.",
+   "column": "n",
+   "ref": {
+    "summary_diff": [
+     "quality.pooled.n_filings",
+     "quality.pooled.n_implausible"
+    ]
+   }
+  },
+  {
+   "id": "peer_percentiles_by_year.years_in_range",
+   "severity": "error",
+   "scope": "structural",
+   "check": "years",
+   "target": "peer_percentiles_by_year",
+   "rationale": "ITA reporting years covered by the pipeline are 2016 to 2024.",
+   "column": "year_filing_for",
+   "min": 2016,
+   "max": 2024
+  },
+  {
+   "id": "size_band_effects.columns_present",
+   "severity": "error",
+   "scope": "structural",
+   "check": "columns",
+   "target": "size_band_effects",
+   "rationale": "Downstream code and docs read these columns by name.",
+   "columns": [
+    "size_band",
+    "n",
+    "zero_share",
+    "mean_recordables",
+    "var_recordables",
+    "variance_to_mean_ratio",
+    "aggregate_trir",
+    "median_establishment_trir"
+   ]
+  },
+  {
+   "id": "size_band_effects.row_count",
+   "severity": "error",
+   "scope": "committed",
+   "check": "rows",
+   "target": "size_band_effects",
+   "rationale": "Row count is fixed by the design of the table (committed outputs).",
+   "equals": 7
+  },
+  {
+   "id": "size_band_effects.key_columns_not_null",
+   "severity": "error",
+   "scope": "structural",
+   "check": "not_null",
+   "target": "size_band_effects",
+   "rationale": "Key and count columns identify the row and feed every aggregate; nulls break joins and sums.",
+   "columns": [
+    "size_band",
+    "n",
+    "zero_share",
+    "mean_recordables",
+    "var_recordables",
+    "aggregate_trir"
+   ]
+  },
+  {
+   "id": "size_band_effects.key_unique",
+   "severity": "error",
+   "scope": "structural",
+   "check": "unique",
+   "target": "size_band_effects",
+   "rationale": "Duplicate keys would double count in any aggregate over this table.",
+   "columns": [
+    "size_band"
+   ]
+  },
+  {
+   "id": "size_band_effects.zero_share_in_unit_interval",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "size_band_effects",
+   "rationale": "A share is a part divided by a whole, so it must lie in [0, 1].",
+   "columns": [
+    "zero_share"
+   ],
+   "min": 0,
+   "max": 1
+  },
+  {
+   "id": "size_band_effects.moments_non_negative",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "size_band_effects",
+   "rationale": "Means and variances of counts cannot be negative.",
+   "columns": [
+    "n",
+    "mean_recordables",
+    "var_recordables",
+    "variance_to_mean_ratio"
+   ],
+   "min": 0,
+   "max": null
+  },
+  {
+   "id": "size_band_effects.rates_physical",
+   "severity": "warn",
+   "scope": "structural",
+   "check": "range",
+   "target": "size_band_effects",
+   "rationale": "A rate per 100 full-time workers above 1,000 would mean ten recordable cases per worker-year; it indicates an unscreened denominator or a broken join.",
+   "columns": [
+    "aggregate_trir",
+    "median_establishment_trir"
+   ],
+   "min": 0,
+   "max": 1000
+  },
+  {
+   "id": "size_band_effects.size_band_allowed",
+   "severity": "error",
+   "scope": "structural",
+   "check": "value_in",
+   "target": "size_band_effects",
+   "rationale": "Size bands are the seven defined in peers.py.",
+   "column": "size_band",
+   "values": [
+    "001-019",
+    "020-049",
+    "050-099",
+    "100-249",
+    "250-499",
+    "500-999",
+    "1000+"
+   ]
+  },
+  {
+   "id": "size_band_effects.establishments_sum_to_screened",
+   "severity": "error",
+   "scope": "structural",
+   "check": "sum_ref",
+   "target": "size_band_effects",
+   "rationale": "Size bands partition the screened-in establishments.",
+   "column": "n",
+   "ref": {
+    "summary_diff": [
+     "quality.pooled.n_filings",
+     "quality.pooled.n_implausible"
+    ]
+   }
+  },
+  {
+   "id": "count_model_comparison.columns_present",
+   "severity": "error",
+   "scope": "structural",
+   "check": "columns",
+   "target": "count_model_comparison",
+   "rationale": "Downstream code and docs read these columns by name.",
+   "columns": [
+    "model",
+    "params",
+    "loglik",
+    "n",
+    "k",
+    "converged",
+    "aic",
+    "bic",
+    "observed_zeros",
+    "expected_zeros",
+    "naics3",
+    "year",
+    "is_best_by_aic"
+   ]
+  },
+  {
+   "id": "count_model_comparison.row_count",
+   "severity": "error",
+   "scope": "committed",
+   "check": "rows",
+   "target": "count_model_comparison",
+   "rationale": "Row count is fixed by the design of the table (committed outputs).",
+   "equals": 120
+  },
+  {
+   "id": "count_model_comparison.key_columns_not_null",
+   "severity": "error",
+   "scope": "structural",
+   "check": "not_null",
+   "target": "count_model_comparison",
+   "rationale": "Key and count columns identify the row and feed every aggregate; nulls break joins and sums.",
+   "columns": [
+    "model",
+    "naics3",
+    "year",
+    "n",
+    "k",
+    "loglik",
+    "aic",
+    "bic",
+    "is_best_by_aic"
+   ]
+  },
+  {
+   "id": "count_model_comparison.key_unique",
+   "severity": "error",
+   "scope": "structural",
+   "check": "unique",
+   "target": "count_model_comparison",
+   "rationale": "Duplicate keys would double count in any aggregate over this table.",
+   "columns": [
+    "naics3",
+    "year",
+    "model"
+   ]
+  },
+  {
+   "id": "count_model_comparison.model_allowed",
+   "severity": "error",
+   "scope": "structural",
+   "check": "value_in",
+   "target": "count_model_comparison",
+   "rationale": "Only the four documented count models are fitted.",
+   "column": "model",
+   "values": [
+    "poisson",
+    "nb2",
+    "zip",
+    "zinb"
+   ]
+  },
+  {
+   "id": "count_model_comparison.years_in_range",
+   "severity": "error",
+   "scope": "structural",
+   "check": "years",
+   "target": "count_model_comparison",
+   "rationale": "ITA reporting years covered by the pipeline are 2016 to 2024.",
+   "column": "year",
+   "min": 2016,
+   "max": 2024
+  },
+  {
+   "id": "count_model_comparison.sizes_positive",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "count_model_comparison",
+   "rationale": "A fit needs at least one observation and one parameter.",
+   "columns": [
+    "n",
+    "k"
+   ],
+   "min": 1,
+   "max": null
+  },
+  {
+   "id": "count_model_comparison.pi_alpha_valid",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "count_model_comparison",
+   "rationale": "A zero-inflation probability lies in [0, 1].",
+   "columns": [
+    "zero_inflation_pi"
+   ],
+   "min": 0,
+   "max": 1
+  },
+  {
+   "id": "count_model_comparison.dispersion_non_negative",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "count_model_comparison",
+   "rationale": "Dispersion and variance cannot be negative.",
+   "columns": [
+    "dispersion_alpha",
+    "observed_variance"
+   ],
+   "min": 0,
+   "max": null
+  },
+  {
+   "id": "count_model_comparison.zeros_le_n",
+   "severity": "error",
+   "scope": "structural",
+   "check": "col_le",
+   "target": "count_model_comparison",
+   "rationale": "Observed zeros are a subset of observations.",
+   "left": "observed_zeros",
+   "right": "n"
+  },
+  {
+   "id": "count_model_comparison.aic_identity",
+   "severity": "error",
+   "scope": "structural",
+   "check": "linear",
+   "target": "count_model_comparison",
+   "rationale": "AIC = 2k - 2 loglik.",
+   "terms": {
+    "k": 2,
+    "loglik": -2
+   },
+   "equals": "aic"
+  },
+  {
+   "id": "count_model_comparison.one_best_model_per_group",
+   "severity": "error",
+   "scope": "structural",
+   "check": "group_sum",
+   "target": "count_model_comparison",
+   "rationale": "Exactly one model is best by AIC in each industry-year.",
+   "group_by": [
+    "naics3",
+    "year"
+   ],
+   "column": "is_best_by_aic",
+   "equals": 1
+  },
+  {
+   "id": "count_model_fit_detail.columns_present",
+   "severity": "error",
+   "scope": "structural",
+   "check": "columns",
+   "target": "count_model_fit_detail",
+   "rationale": "Downstream code and docs read these columns by name.",
+   "columns": [
+    "naics3",
+    "model",
+    "count",
+    "observed",
+    "expected"
+   ]
+  },
+  {
+   "id": "count_model_fit_detail.row_count",
+   "severity": "error",
+   "scope": "committed",
+   "check": "rows",
+   "target": "count_model_fit_detail",
+   "rationale": "Row count is fixed by the design of the table (committed outputs).",
+   "equals": 1320
+  },
+  {
+   "id": "count_model_fit_detail.key_columns_not_null",
+   "severity": "error",
+   "scope": "structural",
+   "check": "not_null",
+   "target": "count_model_fit_detail",
+   "rationale": "Key and count columns identify the row and feed every aggregate; nulls break joins and sums.",
+   "columns": [
+    "naics3",
+    "model",
+    "count",
+    "observed",
+    "expected"
+   ]
+  },
+  {
+   "id": "count_model_fit_detail.counts_non_negative",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "count_model_fit_detail",
+   "rationale": "A count of filings, hours or cases cannot be negative.",
+   "columns": [
+    "observed",
+    "expected"
+   ],
+   "min": 0,
+   "max": null
+  },
+  {
+   "id": "count_model_fit_detail.model_allowed",
+   "severity": "error",
+   "scope": "structural",
+   "check": "value_in",
+   "target": "count_model_fit_detail",
+   "rationale": "Only the four documented count models are fitted.",
+   "column": "model",
+   "values": [
+    "poisson",
+    "nb2",
+    "zip",
+    "zinb"
+   ]
+  },
+  {
+   "id": "count_model_selection_summary.columns_present",
+   "severity": "error",
+   "scope": "structural",
+   "check": "columns",
+   "target": "count_model_selection_summary",
+   "rationale": "Downstream code and docs read these columns by name.",
+   "columns": [
+    "model",
+    "n_industries_best_by_aic",
+    "n_industries_fitted",
+    "share_best_by_aic"
+   ]
+  },
+  {
+   "id": "count_model_selection_summary.row_count",
+   "severity": "error",
+   "scope": "committed",
+   "check": "rows",
+   "target": "count_model_selection_summary",
+   "rationale": "Row count is fixed by the design of the table (committed outputs).",
+   "equals": 4
+  },
+  {
+   "id": "count_model_selection_summary.key_columns_not_null",
+   "severity": "error",
+   "scope": "structural",
+   "check": "not_null",
+   "target": "count_model_selection_summary",
+   "rationale": "Key and count columns identify the row and feed every aggregate; nulls break joins and sums.",
+   "columns": [
+    "model",
+    "n_industries_best_by_aic",
+    "n_industries_fitted",
+    "share_best_by_aic"
+   ]
+  },
+  {
+   "id": "count_model_selection_summary.key_unique",
+   "severity": "error",
+   "scope": "structural",
+   "check": "unique",
+   "target": "count_model_selection_summary",
+   "rationale": "Duplicate keys would double count in any aggregate over this table.",
+   "columns": [
+    "model"
+   ]
+  },
+  {
+   "id": "count_model_selection_summary.share_in_unit_interval",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "count_model_selection_summary",
+   "rationale": "A share is a part divided by a whole, so it must lie in [0, 1].",
+   "columns": [
+    "share_best_by_aic"
+   ],
+   "min": 0,
+   "max": 1
+  },
+  {
+   "id": "count_model_selection_summary.best_counts_sum_to_fitted",
+   "severity": "error",
+   "scope": "structural",
+   "check": "sum_ref",
+   "target": "count_model_selection_summary",
+   "rationale": "Each fitted industry has exactly one best model.",
+   "column": "n_industries_best_by_aic",
+   "ref": {
+    "table": "count_model_selection_summary",
+    "column": "n_industries_fitted"
+   }
+  },
+  {
+   "id": "percentile_band_stability.columns_present",
+   "severity": "error",
+   "scope": "structural",
+   "check": "columns",
+   "target": "percentile_band_stability",
+   "rationale": "Downstream code and docs read these columns by name.",
+   "columns": [
+    "year_from",
+    "year_to",
+    "percentile",
+    "n_matched_groups",
+    "spearman_rho",
+    "median_abs_change",
+    "median_abs_rel_change"
+   ]
+  },
+  {
+   "id": "percentile_band_stability.row_count",
+   "severity": "error",
+   "scope": "committed",
+   "check": "rows",
+   "target": "percentile_band_stability",
+   "rationale": "Row count is fixed by the design of the table (committed outputs).",
+   "equals": 48
+  },
+  {
+   "id": "percentile_band_stability.key_columns_not_null",
+   "severity": "error",
+   "scope": "structural",
+   "check": "not_null",
+   "target": "percentile_band_stability",
+   "rationale": "Key and count columns identify the row and feed every aggregate; nulls break joins and sums.",
+   "columns": [
+    "year_from",
+    "year_to",
+    "percentile",
+    "n_matched_groups"
+   ]
+  },
+  {
+   "id": "percentile_band_stability.key_unique",
+   "severity": "error",
+   "scope": "structural",
+   "check": "unique",
+   "target": "percentile_band_stability",
+   "rationale": "Duplicate keys would double count in any aggregate over this table.",
+   "columns": [
+    "year_from",
+    "year_to",
+    "percentile"
+   ]
+  },
+  {
+   "id": "percentile_band_stability.rho_not_null",
+   "severity": "error",
+   "scope": "committed",
+   "check": "not_null",
+   "target": "percentile_band_stability",
+   "rationale": "Every committed year pair has enough matched groups to define a rank correlation.",
+   "columns": [
+    "spearman_rho"
+   ]
+  },
+  {
+   "id": "percentile_band_stability.years_from_in_range",
+   "severity": "error",
+   "scope": "structural",
+   "check": "years",
+   "target": "percentile_band_stability",
+   "rationale": "ITA reporting years covered by the pipeline are 2016 to 2024.",
+   "column": "year_from",
+   "min": 2016,
+   "max": 2024
+  },
+  {
+   "id": "percentile_band_stability.years_to_in_range",
+   "severity": "error",
+   "scope": "structural",
+   "check": "years",
+   "target": "percentile_band_stability",
+   "rationale": "ITA reporting years covered by the pipeline are 2016 to 2024.",
+   "column": "year_to",
+   "min": 2016,
+   "max": 2024
+  },
+  {
+   "id": "percentile_band_stability.rho_valid",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "percentile_band_stability",
+   "rationale": "A rank correlation lies in [-1, 1].",
+   "columns": [
+    "spearman_rho"
+   ],
+   "min": -1,
+   "max": 1
+  },
+  {
+   "id": "percentile_band_stability.changes_non_negative",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "percentile_band_stability",
+   "rationale": "Absolute changes and group counts cannot be negative.",
+   "columns": [
+    "median_abs_change",
+    "median_abs_rel_change",
+    "n_matched_groups"
+   ],
+   "min": 0,
+   "max": null
+  },
+  {
+   "id": "peer_group_persistence.columns_present",
+   "severity": "error",
+   "scope": "structural",
+   "check": "columns",
+   "target": "peer_group_persistence",
+   "rationale": "Downstream code and docs read these columns by name.",
+   "columns": [
+    "year_from",
+    "year_to",
+    "groups_year_from",
+    "groups_year_to",
+    "groups_matched",
+    "matched_share_of_year_from"
+   ]
+  },
+  {
+   "id": "peer_group_persistence.row_count",
+   "severity": "error",
+   "scope": "committed",
+   "check": "rows",
+   "target": "peer_group_persistence",
+   "rationale": "Row count is fixed by the design of the table (committed outputs).",
+   "equals": 8
+  },
+  {
+   "id": "peer_group_persistence.key_columns_not_null",
+   "severity": "error",
+   "scope": "structural",
+   "check": "not_null",
+   "target": "peer_group_persistence",
+   "rationale": "Key and count columns identify the row and feed every aggregate; nulls break joins and sums.",
+   "columns": [
+    "year_from",
+    "year_to",
+    "groups_year_from",
+    "groups_matched"
+   ]
+  },
+  {
+   "id": "peer_group_persistence.key_unique",
+   "severity": "error",
+   "scope": "structural",
+   "check": "unique",
+   "target": "peer_group_persistence",
+   "rationale": "Duplicate keys would double count in any aggregate over this table.",
+   "columns": [
+    "year_from",
+    "year_to"
+   ]
+  },
+  {
+   "id": "peer_group_persistence.share_in_unit_interval",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "peer_group_persistence",
+   "rationale": "A share is a part divided by a whole, so it must lie in [0, 1].",
+   "columns": [
+    "matched_share_of_year_from"
+   ],
+   "min": 0,
+   "max": 1
+  },
+  {
+   "id": "peer_group_persistence.matched_le_from",
+   "severity": "error",
+   "scope": "structural",
+   "check": "col_le",
+   "target": "peer_group_persistence",
+   "rationale": "Matched groups are a subset of the earlier year's groups.",
+   "left": "groups_matched",
+   "right": "groups_year_from"
+  },
+  {
+   "id": "peer_group_persistence.matched_le_to",
+   "severity": "error",
+   "scope": "structural",
+   "check": "col_le",
+   "target": "peer_group_persistence",
+   "rationale": "Matched groups are a subset of the later year's groups.",
+   "left": "groups_matched",
+   "right": "groups_year_to"
+  },
+  {
+   "id": "peer_group_persistence.share_matches_counts",
+   "severity": "error",
+   "scope": "structural",
+   "check": "ratio",
+   "target": "peer_group_persistence",
+   "rationale": "matched_share_of_year_from must equal groups_matched / groups_year_from.",
+   "num": "groups_matched",
+   "den": "groups_year_from",
+   "equals": "matched_share_of_year_from"
+  },
+  {
+   "id": "metrics_by_year.columns_present",
+   "severity": "error",
+   "scope": "structural",
+   "check": "columns",
+   "target": "metrics_by_year",
+   "rationale": "Downstream code and docs read these columns by name.",
+   "columns": [
+    "label",
+    "n_filings",
+    "n_screened_in",
+    "hours_unscreened",
+    "hours_screened",
+    "trir_numerator_screened",
+    "trir_unscreened",
+    "trir_screened",
+    "dart_screened",
+    "ltir_screened",
+    "severity_screened"
+   ]
+  },
+  {
+   "id": "metrics_by_year.row_count",
+   "severity": "error",
+   "scope": "committed",
+   "check": "rows",
+   "target": "metrics_by_year",
+   "rationale": "Row count is fixed by the design of the table (committed outputs).",
+   "equals": 9
+  },
+  {
+   "id": "metrics_by_year.key_columns_not_null",
+   "severity": "error",
+   "scope": "structural",
+   "check": "not_null",
+   "target": "metrics_by_year",
+   "rationale": "Key and count columns identify the row and feed every aggregate; nulls break joins and sums.",
+   "columns": [
+    "label",
+    "n_filings",
+    "n_screened_in",
+    "hours_unscreened",
+    "hours_screened",
+    "trir_numerator_screened",
+    "trir_unscreened",
+    "trir_screened",
+    "dart_screened",
+    "ltir_screened",
+    "severity_screened"
+   ]
+  },
+  {
+   "id": "metrics_by_year.key_unique",
+   "severity": "error",
+   "scope": "structural",
+   "check": "unique",
+   "target": "metrics_by_year",
+   "rationale": "Duplicate keys would double count in any aggregate over this table.",
+   "columns": [
+    "label"
+   ]
+  },
+  {
+   "id": "metrics_by_year.counts_non_negative",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "metrics_by_year",
+   "rationale": "A count of filings, hours or cases cannot be negative.",
+   "columns": [
+    "n_filings",
+    "n_screened_in",
+    "hours_unscreened",
+    "hours_screened",
+    "trir_numerator_screened"
+   ],
+   "min": 0,
+   "max": null
+  },
+  {
+   "id": "metrics_by_year.rates_physical",
+   "severity": "warn",
+   "scope": "structural",
+   "check": "range",
+   "target": "metrics_by_year",
+   "rationale": "A rate per 100 full-time workers above 1,000 would mean ten recordable cases per worker-year; it indicates an unscreened denominator or a broken join.",
+   "columns": [
+    "trir_unscreened",
+    "trir_screened",
+    "dart_unscreened",
+    "dart_screened",
+    "ltir_unscreened",
+    "ltir_screened"
+   ],
+   "min": 0,
+   "max": 1000
+  },
+  {
+   "id": "metrics_by_year.screened_le_filings",
+   "severity": "error",
+   "scope": "structural",
+   "check": "col_le",
+   "target": "metrics_by_year",
+   "rationale": "Screened-in filings are a subset of all filings.",
+   "left": "n_screened_in",
+   "right": "n_filings"
+  },
+  {
+   "id": "metrics_by_year.screened_hours_le_all_hours",
+   "severity": "error",
+   "scope": "structural",
+   "check": "col_le",
+   "target": "metrics_by_year",
+   "rationale": "Screened hours are a subset of all hours.",
+   "left": "hours_screened",
+   "right": "hours_unscreened"
+  },
+  {
+   "id": "metrics_by_year.trir_screened_formula",
+   "severity": "error",
+   "scope": "structural",
+   "check": "ratio",
+   "target": "metrics_by_year",
+   "rationale": "TRIR is 200,000 x numerator / hours, the OSHA per-100-FTE convention.",
+   "num": "trir_numerator_screened",
+   "den": "hours_screened",
+   "equals": "trir_screened",
+   "scale": 200000
+  },
+  {
+   "id": "metrics_by_year.dart_screened_formula",
+   "severity": "error",
+   "scope": "structural",
+   "check": "ratio",
+   "target": "metrics_by_year",
+   "rationale": "DART is 200,000 x numerator / hours, the OSHA per-100-FTE convention.",
+   "num": "dart_numerator_screened",
+   "den": "hours_screened",
+   "equals": "dart_screened",
+   "scale": 200000
+  },
+  {
+   "id": "metrics_by_year.ltir_screened_formula",
+   "severity": "error",
+   "scope": "structural",
+   "check": "ratio",
+   "target": "metrics_by_year",
+   "rationale": "LTIR is 200,000 x numerator / hours, the OSHA per-100-FTE convention.",
+   "num": "ltir_numerator_screened",
+   "den": "hours_screened",
+   "equals": "ltir_screened",
+   "scale": 200000
+  },
+  {
+   "id": "metrics_by_year.severity_screened_formula",
+   "severity": "error",
+   "scope": "structural",
+   "check": "ratio",
+   "target": "metrics_by_year",
+   "rationale": "SEVERITY is 200,000 x numerator / hours, the OSHA per-100-FTE convention.",
+   "num": "severity_numerator_screened",
+   "den": "hours_screened",
+   "equals": "severity_screened",
+   "scale": 200000
+  },
+  {
+   "id": "metrics_by_year.trir_ratio_formula",
+   "severity": "error",
+   "scope": "structural",
+   "check": "ratio",
+   "target": "metrics_by_year",
+   "rationale": "The correction ratio is screened / unscreened.",
+   "num": "trir_screened",
+   "den": "trir_unscreened",
+   "equals": "trir_ratio_screened_to_unscreened"
+  },
+  {
+   "id": "metrics_by_year.filings_sum_to_pooled",
+   "severity": "error",
+   "scope": "structural",
+   "check": "sum_ref",
+   "target": "metrics_by_year",
+   "rationale": "Filings must reconcile to the pooled count in summary.json.",
+   "column": "n_filings",
+   "ref": {
+    "summary": "quality.pooled.n_filings"
+   }
+  },
+  {
+   "id": "metrics_by_year.screened_in_sum_to_pooled",
+   "severity": "error",
+   "scope": "structural",
+   "check": "sum_ref",
+   "target": "metrics_by_year",
+   "rationale": "Screened-in filings equal filings minus flagged in summary.json.",
+   "column": "n_screened_in",
+   "ref": {
+    "summary_diff": [
+     "quality.pooled.n_filings",
+     "quality.pooled.n_implausible"
+    ]
+   }
+  },
+  {
+   "id": "metrics_pooled.columns_present",
+   "severity": "error",
+   "scope": "structural",
+   "check": "columns",
+   "target": "metrics_pooled",
+   "rationale": "Downstream code and docs read these columns by name.",
+   "columns": [
+    "label",
+    "n_filings",
+    "n_screened_in",
+    "hours_unscreened",
+    "hours_screened",
+    "trir_numerator_screened",
+    "trir_unscreened",
+    "trir_screened",
+    "dart_screened",
+    "ltir_screened",
+    "severity_screened"
+   ]
+  },
+  {
+   "id": "metrics_pooled.row_count",
+   "severity": "error",
+   "scope": "committed",
+   "check": "rows",
+   "target": "metrics_pooled",
+   "rationale": "Row count is fixed by the design of the table (committed outputs).",
+   "equals": 1
+  },
+  {
+   "id": "metrics_pooled.key_columns_not_null",
+   "severity": "error",
+   "scope": "structural",
+   "check": "not_null",
+   "target": "metrics_pooled",
+   "rationale": "Key and count columns identify the row and feed every aggregate; nulls break joins and sums.",
+   "columns": [
+    "n_filings",
+    "n_screened_in",
+    "hours_unscreened",
+    "hours_screened",
+    "trir_numerator_screened",
+    "trir_unscreened",
+    "trir_screened",
+    "dart_screened",
+    "ltir_screened",
+    "severity_screened"
+   ]
+  },
+  {
+   "id": "metrics_pooled.counts_non_negative",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "metrics_pooled",
+   "rationale": "A count of filings, hours or cases cannot be negative.",
+   "columns": [
+    "n_filings",
+    "n_screened_in",
+    "hours_unscreened",
+    "hours_screened",
+    "trir_numerator_screened"
+   ],
+   "min": 0,
+   "max": null
+  },
+  {
+   "id": "metrics_pooled.rates_physical",
+   "severity": "warn",
+   "scope": "structural",
+   "check": "range",
+   "target": "metrics_pooled",
+   "rationale": "A rate per 100 full-time workers above 1,000 would mean ten recordable cases per worker-year; it indicates an unscreened denominator or a broken join.",
+   "columns": [
+    "trir_unscreened",
+    "trir_screened",
+    "dart_unscreened",
+    "dart_screened",
+    "ltir_unscreened",
+    "ltir_screened"
+   ],
+   "min": 0,
+   "max": 1000
+  },
+  {
+   "id": "metrics_pooled.screened_le_filings",
+   "severity": "error",
+   "scope": "structural",
+   "check": "col_le",
+   "target": "metrics_pooled",
+   "rationale": "Screened-in filings are a subset of all filings.",
+   "left": "n_screened_in",
+   "right": "n_filings"
+  },
+  {
+   "id": "metrics_pooled.screened_hours_le_all_hours",
+   "severity": "error",
+   "scope": "structural",
+   "check": "col_le",
+   "target": "metrics_pooled",
+   "rationale": "Screened hours are a subset of all hours.",
+   "left": "hours_screened",
+   "right": "hours_unscreened"
+  },
+  {
+   "id": "metrics_pooled.trir_screened_formula",
+   "severity": "error",
+   "scope": "structural",
+   "check": "ratio",
+   "target": "metrics_pooled",
+   "rationale": "TRIR is 200,000 x numerator / hours, the OSHA per-100-FTE convention.",
+   "num": "trir_numerator_screened",
+   "den": "hours_screened",
+   "equals": "trir_screened",
+   "scale": 200000
+  },
+  {
+   "id": "metrics_pooled.dart_screened_formula",
+   "severity": "error",
+   "scope": "structural",
+   "check": "ratio",
+   "target": "metrics_pooled",
+   "rationale": "DART is 200,000 x numerator / hours, the OSHA per-100-FTE convention.",
+   "num": "dart_numerator_screened",
+   "den": "hours_screened",
+   "equals": "dart_screened",
+   "scale": 200000
+  },
+  {
+   "id": "metrics_pooled.ltir_screened_formula",
+   "severity": "error",
+   "scope": "structural",
+   "check": "ratio",
+   "target": "metrics_pooled",
+   "rationale": "LTIR is 200,000 x numerator / hours, the OSHA per-100-FTE convention.",
+   "num": "ltir_numerator_screened",
+   "den": "hours_screened",
+   "equals": "ltir_screened",
+   "scale": 200000
+  },
+  {
+   "id": "metrics_pooled.severity_screened_formula",
+   "severity": "error",
+   "scope": "structural",
+   "check": "ratio",
+   "target": "metrics_pooled",
+   "rationale": "SEVERITY is 200,000 x numerator / hours, the OSHA per-100-FTE convention.",
+   "num": "severity_numerator_screened",
+   "den": "hours_screened",
+   "equals": "severity_screened",
+   "scale": 200000
+  },
+  {
+   "id": "metrics_pooled.trir_ratio_formula",
+   "severity": "error",
+   "scope": "structural",
+   "check": "ratio",
+   "target": "metrics_pooled",
+   "rationale": "The correction ratio is screened / unscreened.",
+   "num": "trir_screened",
+   "den": "trir_unscreened",
+   "equals": "trir_ratio_screened_to_unscreened"
+  },
+  {
+   "id": "metrics_pooled.filings_sum_to_pooled",
+   "severity": "error",
+   "scope": "structural",
+   "check": "sum_ref",
+   "target": "metrics_pooled",
+   "rationale": "Filings must reconcile to the pooled count in summary.json.",
+   "column": "n_filings",
+   "ref": {
+    "summary": "quality.pooled.n_filings"
+   }
+  },
+  {
+   "id": "metrics_pooled.screened_in_sum_to_pooled",
+   "severity": "error",
+   "scope": "structural",
+   "check": "sum_ref",
+   "target": "metrics_pooled",
+   "rationale": "Screened-in filings equal filings minus flagged in summary.json.",
+   "column": "n_screened_in",
+   "ref": {
+    "summary_diff": [
+     "quality.pooled.n_filings",
+     "quality.pooled.n_implausible"
+    ]
+   }
+  },
+  {
+   "id": "metrics_by_year.years_in_range",
+   "severity": "error",
+   "scope": "structural",
+   "check": "years",
+   "target": "metrics_by_year",
+   "rationale": "ITA reporting years covered by the pipeline are 2016 to 2024.",
+   "column": "label",
+   "min": 2016,
+   "max": 2024
+  },
+  {
+   "id": "metrics_pooled.trir_matches_quality_overall",
+   "severity": "error",
+   "scope": "structural",
+   "check": "lookup",
+   "target": "metrics_pooled",
+   "rationale": "Two stages compute the pooled screened TRIR; they must agree.",
+   "column": "trir_screened",
+   "ref": {
+    "table": "quality_overall",
+    "column": "aggregate_trir_screened"
+   },
+   "rel_tol": 1e-09
+  },
+  {
+   "id": "metrics_pooled.unscreened_trir_matches_quality_overall",
+   "severity": "error",
+   "scope": "structural",
+   "check": "lookup",
+   "target": "metrics_pooled",
+   "rationale": "Two stages compute the pooled unscreened TRIR; they must agree.",
+   "column": "trir_unscreened",
+   "ref": {
+    "table": "quality_overall",
+    "column": "aggregate_trir_unscreened"
+   },
+   "rel_tol": 1e-09
+  },
+  {
+   "id": "count_model_covariates.columns_present",
+   "severity": "error",
+   "scope": "structural",
+   "check": "columns",
+   "target": "count_model_covariates",
+   "rationale": "Downstream code and docs read these columns by name.",
+   "columns": [
+    "naics3",
+    "year",
+    "model",
+    "n",
+    "n_params",
+    "loglik",
+    "aic",
+    "bic",
+    "is_best_by_aic",
+    "converged"
+   ]
+  },
+  {
+   "id": "count_model_covariates.row_count",
+   "severity": "error",
+   "scope": "committed",
+   "check": "rows",
+   "target": "count_model_covariates",
+   "rationale": "Row count is fixed by the design of the table (committed outputs).",
+   "equals": 120
+  },
+  {
+   "id": "count_model_covariates.key_columns_not_null",
+   "severity": "error",
+   "scope": "structural",
+   "check": "not_null",
+   "target": "count_model_covariates",
+   "rationale": "Key and count columns identify the row and feed every aggregate; nulls break joins and sums.",
+   "columns": [
+    "naics3",
+    "year",
+    "model",
+    "n",
+    "n_params",
+    "loglik",
+    "aic"
+   ]
+  },
+  {
+   "id": "count_model_covariates.key_unique",
+   "severity": "error",
+   "scope": "structural",
+   "check": "unique",
+   "target": "count_model_covariates",
+   "rationale": "Duplicate keys would double count in any aggregate over this table.",
+   "columns": [
+    "naics3",
+    "year",
+    "model"
+   ]
+  },
+  {
+   "id": "count_model_covariates.model_allowed",
+   "severity": "error",
+   "scope": "structural",
+   "check": "value_in",
+   "target": "count_model_covariates",
+   "rationale": "Only the four documented count models are fitted.",
+   "column": "model",
+   "values": [
+    "poisson",
+    "nb2",
+    "zip",
+    "zinb"
+   ]
+  },
+  {
+   "id": "count_model_covariates.years_in_range",
+   "severity": "error",
+   "scope": "structural",
+   "check": "years",
+   "target": "count_model_covariates",
+   "rationale": "ITA reporting years covered by the pipeline are 2016 to 2024.",
+   "column": "year",
+   "min": 2016,
+   "max": 2024
+  },
+  {
+   "id": "count_model_covariates.sizes_positive",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "count_model_covariates",
+   "rationale": "A fit needs at least one observation and one parameter.",
+   "columns": [
+    "n",
+    "n_params"
+   ],
+   "min": 1,
+   "max": null
+  },
+  {
+   "id": "count_model_covariates.pi_valid",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "count_model_covariates",
+   "rationale": "A zero-inflation probability lies in [0, 1].",
+   "columns": [
+    "zero_inflation_pi"
+   ],
+   "min": 0,
+   "max": 1
+  },
+  {
+   "id": "count_model_covariates.alpha_non_negative",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "count_model_covariates",
+   "rationale": "A dispersion parameter cannot be negative.",
+   "columns": [
+    "dispersion_alpha"
+   ],
+   "min": 0,
+   "max": null
+  },
+  {
+   "id": "count_model_covariates.p_values_valid",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "count_model_covariates",
+   "rationale": "A p-value lies in [0, 1].",
+   "columns": [
+    "p_boundary_nb2_vs_poisson",
+    "p_boundary_zinb_vs_nb2"
+   ],
+   "min": 0,
+   "max": 1
+  },
+  {
+   "id": "count_model_covariates.aic_identity",
+   "severity": "error",
+   "scope": "structural",
+   "check": "linear",
+   "target": "count_model_covariates",
+   "rationale": "AIC = 2k - 2 loglik.",
+   "terms": {
+    "n_params": 2,
+    "loglik": -2
+   },
+   "equals": "aic"
+  },
+  {
+   "id": "count_model_covariates_fit_detail.columns_present",
+   "severity": "error",
+   "scope": "structural",
+   "check": "columns",
+   "target": "count_model_covariates_fit_detail",
+   "rationale": "Downstream code and docs read these columns by name.",
+   "columns": [
+    "naics3",
+    "model",
+    "count",
+    "observed",
+    "expected"
+   ]
+  },
+  {
+   "id": "count_model_covariates_fit_detail.row_count",
+   "severity": "error",
+   "scope": "committed",
+   "check": "rows",
+   "target": "count_model_covariates_fit_detail",
+   "rationale": "Row count is fixed by the design of the table (committed outputs).",
+   "equals": 1320
+  },
+  {
+   "id": "count_model_covariates_fit_detail.key_columns_not_null",
+   "severity": "error",
+   "scope": "structural",
+   "check": "not_null",
+   "target": "count_model_covariates_fit_detail",
+   "rationale": "Key and count columns identify the row and feed every aggregate; nulls break joins and sums.",
+   "columns": [
+    "naics3",
+    "model",
+    "count",
+    "observed",
+    "expected"
+   ]
+  },
+  {
+   "id": "count_model_covariates_fit_detail.counts_non_negative",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "count_model_covariates_fit_detail",
+   "rationale": "A count of filings, hours or cases cannot be negative.",
+   "columns": [
+    "observed",
+    "expected"
+   ],
+   "min": 0,
+   "max": null
+  },
+  {
+   "id": "count_model_covariates_summary.columns_present",
+   "severity": "error",
+   "scope": "structural",
+   "check": "columns",
+   "target": "count_model_covariates_summary",
+   "rationale": "Downstream code and docs read these columns by name.",
+   "columns": [
+    "statistic",
+    "value"
+   ]
+  },
+  {
+   "id": "count_model_covariates_summary.row_count",
+   "severity": "error",
+   "scope": "committed",
+   "check": "rows",
+   "target": "count_model_covariates_summary",
+   "rationale": "Row count is fixed by the design of the table (committed outputs).",
+   "equals": 17
+  },
+  {
+   "id": "count_model_covariates_summary.key_columns_not_null",
+   "severity": "error",
+   "scope": "structural",
+   "check": "not_null",
+   "target": "count_model_covariates_summary",
+   "rationale": "Key and count columns identify the row and feed every aggregate; nulls break joins and sums.",
+   "columns": [
+    "statistic",
+    "value"
+   ]
+  },
+  {
+   "id": "count_model_covariates_summary.key_unique",
+   "severity": "error",
+   "scope": "structural",
+   "check": "unique",
+   "target": "count_model_covariates_summary",
+   "rationale": "Duplicate keys would double count in any aggregate over this table.",
+   "columns": [
+    "statistic"
+   ]
+  },
+  {
+   "id": "count_model_covariates_coverage.columns_present",
+   "severity": "error",
+   "scope": "structural",
+   "check": "columns",
+   "target": "count_model_covariates_coverage",
+   "rationale": "Downstream code and docs read these columns by name.",
+   "columns": [
+    "statistic",
+    "value"
+   ]
+  },
+  {
+   "id": "count_model_covariates_coverage.row_count",
+   "severity": "error",
+   "scope": "committed",
+   "check": "rows",
+   "target": "count_model_covariates_coverage",
+   "rationale": "Row count is fixed by the design of the table (committed outputs).",
+   "equals": 11
+  },
+  {
+   "id": "count_model_covariates_coverage.key_columns_not_null",
+   "severity": "error",
+   "scope": "structural",
+   "check": "not_null",
+   "target": "count_model_covariates_coverage",
+   "rationale": "Key and count columns identify the row and feed every aggregate; nulls break joins and sums.",
+   "columns": [
+    "statistic",
+    "value"
+   ]
+  },
+  {
+   "id": "count_model_covariates_coverage.key_unique",
+   "severity": "error",
+   "scope": "structural",
+   "check": "unique",
+   "target": "count_model_covariates_coverage",
+   "rationale": "Duplicate keys would double count in any aggregate over this table.",
+   "columns": [
+    "statistic"
+   ]
+  },
+  {
+   "id": "count_model_covariates_coverage.share_establishments_in_fitted_groups",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "count_model_covariates_coverage",
+   "rationale": "A share is a part divided by a whole, so it must lie in [0, 1].",
+   "columns": [
+    "value"
+   ],
+   "min": 0,
+   "max": 1,
+   "where": {
+    "statistic": "share_establishments_in_fitted_groups"
+   }
+  },
+  {
+   "id": "count_model_covariates_coverage.share_hours_in_fitted_groups",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "count_model_covariates_coverage",
+   "rationale": "A share is a part divided by a whole, so it must lie in [0, 1].",
+   "columns": [
+    "value"
+   ],
+   "min": 0,
+   "max": 1,
+   "where": {
+    "statistic": "share_hours_in_fitted_groups"
+   }
+  },
+  {
+   "id": "count_model_covariates_coverage.share_recordable_cases_in_fitted_groups",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "count_model_covariates_coverage",
+   "rationale": "A share is a part divided by a whole, so it must lie in [0, 1].",
+   "columns": [
+    "value"
+   ],
+   "min": 0,
+   "max": 1,
+   "where": {
+    "statistic": "share_recordable_cases_in_fitted_groups"
+   }
+  },
+  {
+   "id": "reconciliation_panels.columns_present",
+   "severity": "error",
+   "scope": "structural",
+   "check": "columns",
+   "target": "reconciliation_panels",
+   "rationale": "Downstream code and docs read these columns by name.",
+   "columns": [
+    "panel",
+    "label",
+    "years",
+    "n_filings",
+    "n_implausible",
+    "implausible_share",
+    "aggregate_trir_unscreened",
+    "aggregate_trir_screened",
+    "ratio_screened_to_unscreened"
+   ]
+  },
+  {
+   "id": "reconciliation_panels.row_count",
+   "severity": "error",
+   "scope": "committed",
+   "check": "rows",
+   "target": "reconciliation_panels",
+   "rationale": "Row count is fixed by the design of the table (committed outputs).",
+   "equals": 6
+  },
+  {
+   "id": "reconciliation_panels.key_columns_not_null",
+   "severity": "error",
+   "scope": "structural",
+   "check": "not_null",
+   "target": "reconciliation_panels",
+   "rationale": "Key and count columns identify the row and feed every aggregate; nulls break joins and sums.",
+   "columns": [
+    "panel",
+    "label",
+    "n_filings",
+    "n_implausible",
+    "implausible_share"
+   ]
+  },
+  {
+   "id": "reconciliation_panels.share_in_unit_interval",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "reconciliation_panels",
+   "rationale": "A share is a part divided by a whole, so it must lie in [0, 1].",
+   "columns": [
+    "implausible_share",
+    "hours_share_implausible",
+    "cases_share_implausible"
+   ],
+   "min": 0,
+   "max": 1
+  },
+  {
+   "id": "reconciliation_panels.counts_non_negative",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "reconciliation_panels",
+   "rationale": "A count of filings, hours or cases cannot be negative.",
+   "columns": [
+    "n_filings",
+    "n_implausible",
+    "hours_total",
+    "cases_total"
+   ],
+   "min": 0,
+   "max": null
+  },
+  {
+   "id": "reconciliation_panels.implausible_le_filings",
+   "severity": "error",
+   "scope": "structural",
+   "check": "col_le",
+   "target": "reconciliation_panels",
+   "rationale": "Flagged filings are a subset of all filings.",
+   "left": "n_implausible",
+   "right": "n_filings"
+  },
+  {
+   "id": "reconciliation_panels.share_matches_counts",
+   "severity": "error",
+   "scope": "structural",
+   "check": "ratio",
+   "target": "reconciliation_panels",
+   "rationale": "implausible_share must equal n_implausible / n_filings.",
+   "num": "n_implausible",
+   "den": "n_filings",
+   "equals": "implausible_share"
+  },
+  {
+   "id": "panel_coverage.columns_present",
+   "severity": "error",
+   "scope": "structural",
+   "check": "columns",
+   "target": "panel_coverage",
+   "rationale": "Downstream code and docs read these columns by name.",
+   "columns": [
+    "metric",
+    "value"
+   ]
+  },
+  {
+   "id": "panel_coverage.row_count",
+   "severity": "error",
+   "scope": "committed",
+   "check": "rows",
+   "target": "panel_coverage",
+   "rationale": "Row count is fixed by the design of the table (committed outputs).",
+   "equals": 18
+  },
+  {
+   "id": "panel_coverage.key_columns_not_null",
+   "severity": "error",
+   "scope": "structural",
+   "check": "not_null",
+   "target": "panel_coverage",
+   "rationale": "Key and count columns identify the row and feed every aggregate; nulls break joins and sums.",
+   "columns": [
+    "metric",
+    "value"
+   ]
+  },
+  {
+   "id": "panel_coverage.key_unique",
+   "severity": "error",
+   "scope": "structural",
+   "check": "unique",
+   "target": "panel_coverage",
+   "rationale": "Duplicate keys would double count in any aggregate over this table.",
+   "columns": [
+    "metric"
+   ]
+  },
+  {
+   "id": "panel_coverage.counts_non_negative",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "panel_coverage",
+   "rationale": "A count of filings, hours or cases cannot be negative.",
+   "columns": [
+    "value"
+   ],
+   "min": 0,
+   "max": null
+  },
+  {
+   "id": "panel_coverage.years_covered",
+   "severity": "error",
+   "scope": "committed",
+   "check": "lookup",
+   "target": "panel_coverage",
+   "rationale": "The panel spans the nine reporting years 2016 to 2024.",
+   "column": "value",
+   "where": {
+    "metric": "years_covered"
+   },
+   "equals": 9
+  },
+  {
+   "id": "panel_coverage.exact_year_counts_partition_establishments",
+   "severity": "error",
+   "scope": "structural",
+   "check": "sum_ref",
+   "target": "panel_coverage",
+   "rationale": "Establishments by number of years present partition all distinct establishments.",
+   "column": "value",
+   "where_prefix": {
+    "metric": "establishments_in_exactly_"
+   },
+   "ref": {
+    "table": "panel_coverage",
+    "column": "value",
+    "where": {
+     "metric": "distinct_establishments"
+    }
+   }
+  },
+  {
+   "id": "panel_coverage.no_missing_establishment_ids",
+   "severity": "error",
+   "scope": "structural",
+   "check": "lookup",
+   "target": "panel_coverage",
+   "rationale": "Panel linkage needs an id on every filing.",
+   "column": "value",
+   "where": {
+    "metric": "filings_with_missing_establishment_id"
+   },
+   "equals": 0
+  },
+  {
+   "id": "panel_transitions.columns_present",
+   "severity": "error",
+   "scope": "structural",
+   "check": "columns",
+   "target": "panel_transitions",
+   "rationale": "Downstream code and docs read these columns by name.",
+   "columns": [
+    "year_prev",
+    "year_curr",
+    "n11_flag_then_flag",
+    "n10_flag_then_noflag",
+    "n01_noflag_then_flag",
+    "n00_noflag_then_noflag",
+    "n_total",
+    "p_flag_given_prev_flag",
+    "p_flag_given_prev_noflag",
+    "odds_ratio",
+    "kappa"
+   ]
+  },
+  {
+   "id": "panel_transitions.row_count_min",
+   "severity": "error",
+   "scope": "committed",
+   "check": "rows",
+   "target": "panel_transitions",
+   "rationale": "An empty or truncated table means a stage failed silently.",
+   "min": 8
+  },
+  {
+   "id": "panel_transitions.key_columns_not_null",
+   "severity": "error",
+   "scope": "structural",
+   "check": "not_null",
+   "target": "panel_transitions",
+   "rationale": "Key and count columns identify the row and feed every aggregate; nulls break joins and sums.",
+   "columns": [
+    "year_prev",
+    "year_curr",
+    "n_total",
+    "n11_flag_then_flag",
+    "n00_noflag_then_noflag"
+   ]
+  },
+  {
+   "id": "panel_transitions.years_prev_in_range",
+   "severity": "error",
+   "scope": "structural",
+   "check": "years",
+   "target": "panel_transitions",
+   "rationale": "ITA reporting years covered by the pipeline are 2016 to 2024.",
+   "column": "year_prev",
+   "min": 2016,
+   "max": 2024
+  },
+  {
+   "id": "panel_transitions.years_curr_in_range",
+   "severity": "error",
+   "scope": "structural",
+   "check": "years",
+   "target": "panel_transitions",
+   "rationale": "ITA reporting years covered by the pipeline are 2016 to 2024.",
+   "column": "year_curr",
+   "min": 2016,
+   "max": 2024
+  },
+  {
+   "id": "panel_transitions.counts_non_negative",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "panel_transitions",
+   "rationale": "A count of filings, hours or cases cannot be negative.",
+   "columns": [
+    "n11_flag_then_flag",
+    "n10_flag_then_noflag",
+    "n01_noflag_then_flag",
+    "n00_noflag_then_noflag",
+    "n_total"
+   ],
+   "min": 0,
+   "max": null
+  },
+  {
+   "id": "panel_transitions.probabilities_valid",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "panel_transitions",
+   "rationale": "Probabilities lie in [0, 1].",
+   "columns": [
+    "p_flag_given_prev_flag",
+    "p_flag_given_prev_noflag"
+   ],
+   "min": 0,
+   "max": 1
+  },
+  {
+   "id": "panel_transitions.kappa_valid",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "panel_transitions",
+   "rationale": "Cohen's kappa lies in [-1, 1].",
+   "columns": [
+    "kappa"
+   ],
+   "min": -1,
+   "max": 1
+  },
+  {
+   "id": "panel_transitions.odds_ratio_non_negative",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "panel_transitions",
+   "rationale": "An odds ratio cannot be negative.",
+   "columns": [
+    "odds_ratio"
+   ],
+   "min": 0,
+   "max": null
+  },
+  {
+   "id": "panel_transitions.cells_sum_to_total",
+   "severity": "error",
+   "scope": "structural",
+   "check": "sum_columns",
+   "target": "panel_transitions",
+   "rationale": "The 2x2 cells must sum to the number of establishments in both years.",
+   "columns": [
+    "n11_flag_then_flag",
+    "n10_flag_then_noflag",
+    "n01_noflag_then_flag",
+    "n00_noflag_then_noflag"
+   ],
+   "equals": "n_total"
+  },
+  {
+   "id": "panel_permutation.columns_present",
+   "severity": "error",
+   "scope": "structural",
+   "check": "columns",
+   "target": "panel_permutation",
+   "rationale": "Downstream code and docs read these columns by name.",
+   "columns": [
+    "observed_odds_ratio",
+    "n_permutations",
+    "seed",
+    "permutation_mean",
+    "permutation_p2_5",
+    "permutation_p97_5",
+    "fraction_permutations_ge_observed"
+   ]
+  },
+  {
+   "id": "panel_permutation.row_count",
+   "severity": "error",
+   "scope": "committed",
+   "check": "rows",
+   "target": "panel_permutation",
+   "rationale": "Row count is fixed by the design of the table (committed outputs).",
+   "equals": 1
+  },
+  {
+   "id": "panel_permutation.key_columns_not_null",
+   "severity": "error",
+   "scope": "structural",
+   "check": "not_null",
+   "target": "panel_permutation",
+   "rationale": "Key and count columns identify the row and feed every aggregate; nulls break joins and sums.",
+   "columns": [
+    "observed_odds_ratio",
+    "n_permutations",
+    "permutation_p2_5",
+    "permutation_p97_5",
+    "fraction_permutations_ge_observed"
+   ]
+  },
+  {
+   "id": "panel_permutation.fraction_in_unit_interval",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "panel_permutation",
+   "rationale": "A share is a part divided by a whole, so it must lie in [0, 1].",
+   "columns": [
+    "fraction_permutations_ge_observed"
+   ],
+   "min": 0,
+   "max": 1
+  },
+  {
+   "id": "panel_permutation.permutations_positive",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "panel_permutation",
+   "rationale": "At least one permutation must have been run.",
+   "columns": [
+    "n_permutations"
+   ],
+   "min": 1,
+   "max": null
+  },
+  {
+   "id": "panel_permutation.interval_ordered",
+   "severity": "error",
+   "scope": "structural",
+   "check": "col_le",
+   "target": "panel_permutation",
+   "rationale": "The 2.5th percentile cannot exceed the 97.5th.",
+   "left": "permutation_p2_5",
+   "right": "permutation_p97_5"
+  },
+  {
+   "id": "panel_2019.columns_present",
+   "severity": "error",
+   "scope": "structural",
+   "check": "columns",
+   "target": "panel_2019",
+   "rationale": "Downstream code and docs read these columns by name.",
+   "columns": [
+    "comparison",
+    "n_filers",
+    "n_flagged",
+    "flagged_share"
+   ]
+  },
+  {
+   "id": "panel_2019.row_count",
+   "severity": "error",
+   "scope": "committed",
+   "check": "rows",
+   "target": "panel_2019",
+   "rationale": "Row count is fixed by the design of the table (committed outputs).",
+   "equals": 3
+  },
+  {
+   "id": "panel_2019.key_columns_not_null",
+   "severity": "error",
+   "scope": "structural",
+   "check": "not_null",
+   "target": "panel_2019",
+   "rationale": "Key and count columns identify the row and feed every aggregate; nulls break joins and sums.",
+   "columns": [
+    "comparison",
+    "n_filers",
+    "n_flagged",
+    "flagged_share"
+   ]
+  },
+  {
+   "id": "panel_2019.key_unique",
+   "severity": "error",
+   "scope": "structural",
+   "check": "unique",
+   "target": "panel_2019",
+   "rationale": "Duplicate keys would double count in any aggregate over this table.",
+   "columns": [
+    "comparison"
+   ]
+  },
+  {
+   "id": "panel_2019.share_in_unit_interval",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "panel_2019",
+   "rationale": "A share is a part divided by a whole, so it must lie in [0, 1].",
+   "columns": [
+    "flagged_share",
+    "baseline_flag_rate"
+   ],
+   "min": 0,
+   "max": 1
+  },
+  {
+   "id": "panel_2019.flagged_le_filers",
+   "severity": "error",
+   "scope": "structural",
+   "check": "col_le",
+   "target": "panel_2019",
+   "rationale": "Flagged filers are a subset of filers.",
+   "left": "n_flagged",
+   "right": "n_filers"
+  },
+  {
+   "id": "panel_2019.filers_match_quality_by_year",
+   "severity": "error",
+   "scope": "committed",
+   "check": "lookup",
+   "target": "panel_2019",
+   "rationale": "The panel's 2019 filer count must equal the 2019 filings in quality_by_year.",
+   "column": "n_filers",
+   "where": {
+    "comparison": "2019_summary"
+   },
+   "ref": {
+    "table": "quality_by_year",
+    "column": "n_filings",
+    "where": {
+     "label": 2019
+    }
+   }
+  },
+  {
+   "id": "panel_2019.flagged_match_quality_by_year",
+   "severity": "error",
+   "scope": "committed",
+   "check": "lookup",
+   "target": "panel_2019",
+   "rationale": "The panel's 2019 flagged count must equal the 2019 flagged count in quality_by_year.",
+   "column": "n_flagged",
+   "where": {
+    "comparison": "2019_summary"
+   },
+   "ref": {
+    "table": "quality_by_year",
+    "column": "n_implausible",
+    "where": {
+     "label": 2019
+    }
+   }
+  },
+  {
+   "id": "summary.years_present",
+   "severity": "error",
+   "scope": "committed",
+   "check": "scalar",
+   "target": "summary",
+   "rationale": "The summary lists the nine reporting years 2016 to 2024.",
+   "path": "years_present",
+   "equals": [
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "id": "summary.dedup_reconciles",
+   "severity": "error",
+   "scope": "structural",
+   "check": "scalar_diff",
+   "target": "summary",
+   "rationale": "Raw rows minus dropped duplicates equals rows after deduplication.",
+   "a": "load_report.rows_raw",
+   "b": "load_report.duplicate_rows_dropped",
+   "equals_ref": {
+    "summary": "load_report.rows_after_dedup"
+   }
+  },
+  {
+   "id": "summary.pooled_filings_match_load",
+   "severity": "error",
+   "scope": "structural",
+   "check": "scalar",
+   "target": "summary",
+   "rationale": "Pooled filings equal rows after deduplication.",
+   "path": "quality.pooled.n_filings",
+   "equals_ref": {
+    "summary": "load_report.rows_after_dedup"
+   }
+  },
+  {
+   "id": "summary.implausible_le_filings",
+   "severity": "error",
+   "scope": "structural",
+   "check": "scalar",
+   "target": "summary",
+   "rationale": "Flagged filings cannot exceed filings.",
+   "path": "quality.pooled.n_implausible",
+   "min": 0,
+   "max_ref": {
+    "summary": "quality.pooled.n_filings"
+   }
+  },
+  {
+   "id": "summary.implausible_share_unit",
+   "severity": "error",
+   "scope": "structural",
+   "check": "scalar",
+   "target": "summary",
+   "rationale": "A share is a part divided by a whole, so it must lie in [0, 1].",
+   "path": "quality.pooled.implausible_share",
+   "min": 0,
+   "max": 1
+  },
+  {
+   "id": "summary.hours_share_unit",
+   "severity": "error",
+   "scope": "structural",
+   "check": "scalar",
+   "target": "summary",
+   "rationale": "A share is a part divided by a whole, so it must lie in [0, 1].",
+   "path": "quality.pooled.hours_share_implausible",
+   "min": 0,
+   "max": 1
+  },
+  {
+   "id": "summary.peers_establishments_match_screened",
+   "severity": "error",
+   "scope": "structural",
+   "check": "scalar_diff",
+   "target": "summary",
+   "rationale": "Establishments in peer groups equal screened-in filings.",
+   "a": "quality.pooled.n_filings",
+   "b": "quality.pooled.n_implausible",
+   "equals_ref": {
+    "summary": "peers.coverage_pooled.establishments_total"
+   }
+  },
+  {
+   "id": "summary.screened_trir_physical",
+   "severity": "warn",
+   "scope": "structural",
+   "check": "scalar",
+   "target": "summary",
+   "rationale": "A rate per 100 full-time workers above 1,000 would mean ten recordable cases per worker-year; it indicates an unscreened denominator or a broken join.",
+   "path": "quality.pooled.aggregate_trir_screened",
+   "min": 0,
+   "max": 1000
+  },
+  {
+   "id": "detectability_by_size_band.columns_present",
+   "severity": "error",
+   "scope": "structural",
+   "check": "columns",
+   "target": "detectability_by_size_band",
+   "rationale": "Downstream code and docs read these columns by name.",
+   "columns": [
+    "size_band",
+    "n_filings",
+    "aggregate_trir",
+    "mean_hours_per_filing",
+    "mean_cases_per_filing",
+    "trir_upper_bound_if_zero_cases",
+    "cases_for_upper_over_lower_le_2",
+    "hours_for_upper_over_lower_le_2",
+    "site_years_for_upper_over_lower_le_2",
+    "power_one_site_year_each_ratio_1_25",
+    "site_years_per_arm_80pct_ratio_1_25",
+    "power_one_site_year_each_ratio_1_5",
+    "site_years_per_arm_80pct_ratio_1_5",
+    "power_one_site_year_each_ratio_2",
+    "site_years_per_arm_80pct_ratio_2"
+   ]
+  },
+  {
+   "id": "detectability_by_size_band.row_count",
+   "severity": "error",
+   "scope": "committed",
+   "check": "rows",
+   "target": "detectability_by_size_band",
+   "rationale": "One row per size band, matching size_band_effects (committed outputs).",
+   "equals": 7
+  },
+  {
+   "id": "detectability_by_size_band.key_columns_not_null",
+   "severity": "error",
+   "scope": "structural",
+   "check": "not_null",
+   "target": "detectability_by_size_band",
+   "rationale": "Key and count columns identify the row and feed every aggregate; nulls break joins and sums.",
+   "columns": [
+    "size_band",
+    "n_filings",
+    "aggregate_trir"
+   ]
+  },
+  {
+   "id": "detectability_by_size_band.key_unique",
+   "severity": "error",
+   "scope": "structural",
+   "check": "unique",
+   "target": "detectability_by_size_band",
+   "rationale": "Duplicate keys would double count in any aggregate over this table.",
+   "columns": [
+    "size_band"
+   ]
+  },
+  {
+   "id": "panel_linkage_audit.columns_present",
+   "severity": "error",
+   "scope": "structural",
+   "check": "columns",
+   "target": "panel_linkage_audit",
+   "rationale": "Downstream code and docs read these columns by name.",
+   "columns": [
+    "section",
+    "metric",
+    "value",
+    "share",
+    "share_basis",
+    "source_tables",
+    "status"
+   ]
+  },
+  {
+   "id": "panel_linkage_audit.key_columns_not_null",
+   "severity": "error",
+   "scope": "structural",
+   "check": "not_null",
+   "target": "panel_linkage_audit",
+   "rationale": "Section, metric and status identify and qualify each audited quantity.",
+   "columns": [
+    "section",
+    "metric",
+    "source_tables",
+    "status"
+   ]
+  },
+  {
+   "id": "panel_linkage_audit.status_values",
+   "severity": "error",
+   "scope": "structural",
+   "check": "value_set",
+   "target": "panel_linkage_audit",
+   "rationale": "Status must say whether the committed tables answer the question, is a bound, or cannot answer it.",
+   "column": "status",
+   "values": [
+    "answered",
+    "partial_bound",
+    "not_answerable_from_committed_tables"
+   ]
+  },
+  {
+   "id": "panel_linkage_audit.share_in_unit_interval",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "panel_linkage_audit",
+   "rationale": "Shares are proportions of a stated basis.",
+   "columns": [
+    "share"
+   ],
+   "min": 0,
+   "max": 1.0000001
+  }
+ ]
+}

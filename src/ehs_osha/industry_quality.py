@@ -426,8 +426,7 @@ def render(a: Dict[str, object]) -> str:
     w("")
     w(
         "OSHA publishes establishment-level Form 300A summaries collected through the "
-        "Injury Tracking Application (ITA) and uses them to choose establishments for "
-        "inspection. The repository's plausibility screen flags "
+        "Injury Tracking Application (ITA). The repository's plausibility screen flags "
         f"{P['k']:,} of {P['n']:,} filings ({_pct(P['share'])}%) for internally "
         "implausible values, and removing them moves the pooled aggregate TRIR from "
         f"{_num(P['trir_unscreened'])} to {_num(P['trir_screened'])} ({_ratio(P['ratio'])}). "
@@ -636,10 +635,10 @@ def render(a: Dict[str, object]) -> str:
         "(https://www.law.cornell.edu/cfr/text/29/1904.41, "
         "https://www.osha.gov/laws-regs/regulations/standardnumber/1904/1904.41) and "
         "publishes the submissions as ITA data "
-        "(https://www.osha.gov/Establishment-Specific-Injury-and-Illness-Data). Its "
-        "Site-Specific Targeting program, directive CPL 02-01-067 "
-        "(https://www.osha.gov/enforcement/directives/cpl-02-01-067), selects "
-        "establishments for inspection using rates computed from these submissions."
+        "(https://www.osha.gov/Establishment-Specific-Injury-and-Illness-Data). Any "
+        "use of these rates to rank or select establishments inherits the filing "
+        "quality described here; this note does not assess which OSHA programs use "
+        "the data."
     )
     w("")
     w(

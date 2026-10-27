@@ -3622,6 +3622,176 @@
     "value",
     "source_tables"
    ]
+  },
+  {
+   "id": "year_stability_loyo.columns_present",
+   "severity": "error",
+   "scope": "structural",
+   "check": "columns",
+   "target": "year_stability_loyo",
+   "rationale": "Downstream code and docs read these columns by name.",
+   "columns": [
+    "left_out_year",
+    "n_filings",
+    "n_implausible",
+    "implausible_share",
+    "implausible_share_minus_pooled",
+    "hours_total",
+    "hours_share_implausible",
+    "aggregate_trir_unscreened",
+    "aggregate_trir_unscreened_pct_from_pooled",
+    "aggregate_trir_screened",
+    "aggregate_trir_screened_pct_from_pooled",
+    "ratio_screened_to_unscreened",
+    "peer_pairs_remaining",
+    "peer_mean_spearman_rho",
+    "peer_min_spearman_rho"
+   ]
+  },
+  {
+   "id": "year_stability_loyo.row_count",
+   "severity": "error",
+   "scope": "committed",
+   "check": "rows",
+   "target": "year_stability_loyo",
+   "rationale": "One row per left-out year plus the full pool.",
+   "equals": 10
+  },
+  {
+   "id": "year_stability_loyo.key_unique",
+   "severity": "error",
+   "scope": "structural",
+   "check": "unique",
+   "target": "year_stability_loyo",
+   "rationale": "Duplicate keys would double count.",
+   "columns": [
+    "left_out_year"
+   ]
+  },
+  {
+   "id": "year_stability_yoy.columns_present",
+   "severity": "error",
+   "scope": "structural",
+   "check": "columns",
+   "target": "year_stability_yoy",
+   "rationale": "Downstream code and docs read these columns by name.",
+   "columns": [
+    "year",
+    "n_filings",
+    "implausible_share",
+    "implausible_share_change",
+    "hours_share_implausible",
+    "aggregate_trir_unscreened",
+    "aggregate_trir_screened",
+    "aggregate_trir_screened_change",
+    "aggregate_trir_screened_pct_change",
+    "ratio_screened_to_unscreened",
+    "peer_groups_matched_share_from_prior",
+    "peer_mean_spearman_rho_from_prior",
+    "peer_min_spearman_rho_from_prior"
+   ]
+  },
+  {
+   "id": "year_stability_yoy.row_count",
+   "severity": "error",
+   "scope": "committed",
+   "check": "rows",
+   "target": "year_stability_yoy",
+   "rationale": "One row per filing year, 2016 to 2024.",
+   "equals": 9
+  },
+  {
+   "id": "year_stability_yoy.key_unique",
+   "severity": "error",
+   "scope": "structural",
+   "check": "unique",
+   "target": "year_stability_yoy",
+   "rationale": "Duplicate keys would double count.",
+   "columns": [
+    "year"
+   ]
+  },
+  {
+   "id": "year_stability_loyo.shares_in_unit_interval",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "year_stability_loyo",
+   "rationale": "Shares are proportions.",
+   "columns": [
+    "implausible_share",
+    "hours_share_implausible"
+   ],
+   "min": 0,
+   "max": 1
+  },
+  {
+   "id": "year_stability_loyo.peer_rho_in_range",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "year_stability_loyo",
+   "rationale": "Spearman correlations lie in [-1, 1].",
+   "columns": [
+    "peer_mean_spearman_rho",
+    "peer_min_spearman_rho"
+   ],
+   "min": -1,
+   "max": 1.0000001
+  },
+  {
+   "id": "year_stability_yoy.shares_in_unit_interval",
+   "severity": "error",
+   "scope": "structural",
+   "check": "range",
+   "target": "year_stability_yoy",
+   "rationale": "Shares are proportions.",
+   "columns": [
+    "implausible_share",
+    "hours_share_implausible"
+   ],
+   "min": 0,
+   "max": 1
+  },
+  {
+   "id": "year_stability_summary.columns_present",
+   "severity": "error",
+   "scope": "structural",
+   "check": "columns",
+   "target": "year_stability_summary",
+   "rationale": "Downstream code and docs read these columns by name.",
+   "columns": [
+    "section",
+    "metric",
+    "value",
+    "unit",
+    "source_tables"
+   ]
+  },
+  {
+   "id": "year_stability_summary.key_unique",
+   "severity": "error",
+   "scope": "structural",
+   "check": "unique",
+   "target": "year_stability_summary",
+   "rationale": "Each derived quantity appears once.",
+   "columns": [
+    "metric"
+   ]
+  },
+  {
+   "id": "year_stability_summary.key_columns_not_null",
+   "severity": "error",
+   "scope": "structural",
+   "check": "not_null",
+   "target": "year_stability_summary",
+   "rationale": "Every derived quantity needs a section, metric, value and source.",
+   "columns": [
+    "section",
+    "metric",
+    "value",
+    "source_tables"
+   ]
   }
  ]
 }

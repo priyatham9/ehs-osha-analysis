@@ -188,6 +188,16 @@
         "outputs/tables/threshold_robustness_summary.csv",
         "docs/THRESHOLD_ROBUSTNESS.md"
       ]
+    },
+    "year_stability_outputs": {
+      "label": "Year stability tables and page",
+      "kind": "file",
+      "paths": [
+        "outputs/tables/year_stability_loyo.csv",
+        "outputs/tables/year_stability_yoy.csv",
+        "outputs/tables/year_stability_summary.csv",
+        "docs/YEAR_STABILITY.md"
+      ]
     }
   },
   "stages": [
@@ -463,6 +473,20 @@
       ],
       "outputs": [
         "threshold_robustness_outputs"
+      ]
+    },
+    {
+      "id": "year_stability",
+      "title": "Leave-one-year-out and year-over-year stability",
+      "script": "scripts/run_year_stability.py",
+      "function": "main",
+      "inputs": [
+        "quality_tables",
+        "metrics_tables",
+        "stability_tables"
+      ],
+      "outputs": [
+        "year_stability_outputs"
       ]
     }
   ]

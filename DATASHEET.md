@@ -7,7 +7,7 @@ Structure follows Gebru et al., "Datasheets for Datasets" (2021). Every statemen
 Two layers, and only the second is committed:
 
 1. **The analytic frame** (not committed): the 2016-2024 OSHA Injury Tracking Application (ITA) Form 300A establishment filings, harmonised across years, deduplicated, with derived fields and plausibility flags. It is rebuilt in memory by `make data && make analysis` and is gitignored with the raw files [`.gitignore`; README.md "Data provenance and licensing"].
-2. **The committed tables** (30 CSV files in `outputs/tables/`, plus `outputs/summary.json`): aggregates computed from the frame. No row of the committed tables is a single filing except `quality_top50_implausible_hours.csv` (50 filings, identified by `establishment_id` only) [docs/LINEAGE.md].
+2. **The committed tables** (33 CSV files in `outputs/tables/`, plus `outputs/summary.json`): aggregates computed from the frame. No row of the committed tables is a single filing except `quality_top50_implausible_hours.csv` (50 filings, identified by `establishment_id` only) [docs/LINEAGE.md].
 
 The data dictionary documents both layers: rows with table `analytic_frame` describe the in-memory frame, all other rows describe a committed CSV.
 

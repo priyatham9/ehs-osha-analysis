@@ -13,6 +13,7 @@ The package is organised so that each stage can be used on its own:
 ``stability``    Year-over-year stability of percentile bands.
 ``svgplot``      Minimal SVG figure writer, since matplotlib is not available.
 ``pipeline``     End-to-end orchestration; writes every table and figure.
+``ontology``     Foundry-style ontology (objects, links, actions, functions).
 """
 
 from __future__ import annotations
@@ -24,6 +25,7 @@ __all__ = [
     "countmodels",
     "download",
     "load",
+    "ontology",
     "optimize",
     "peers",
     "pipeline",

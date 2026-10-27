@@ -1,0 +1,257 @@
+{
+  "ontology": {
+    "api_name": "ehs_osha_ita",
+    "display_name": "OSHA ITA workplace-safety ontology",
+    "version": "1.0.0",
+    "description": "Foundry-style ontology over the public OSHA Injury Tracking Application Form 300A filings. Independent design on public data; not affiliated with Palantir and uses no employer data. Establishment-level objects come from whatever harmonised frame is supplied (the SYNTHETIC fixture by default, the real ITA files when present). Industry, sector, year, flag and peer-group objects come from the committed pipeline outputs."
+  },
+  "object_types": [
+    {
+      "api_name": "Establishment",
+      "display_name": "Establishment",
+      "plural_display_name": "Establishments",
+      "description": "A physical site that files Form 300A. The unit an EHS manager is accountable for and the unit OSHA inspects.",
+      "backing_dataset": "establishment frame (ehs_osha.load.load_ita_300a), latest filing per establishment_id",
+      "primary_key": "establishment_id",
+      "title_property": "establishment_name",
+      "properties": [
+        {"api_name": "establishment_id", "type": "string", "nullable": false, "description": "OSHA establishment identifier; stable key that joins a site's filings across years."},
+        {"api_name": "establishment_name", "type": "string", "nullable": true, "description": "Name as filed; used only as a display title."},
+        {"api_name": "company_name", "type": "string", "nullable": true, "description": "Parent company as filed; lets a corporate EHS team roll sites up."},
+        {"api_name": "state", "type": "string", "nullable": true, "description": "State as filed; needed for state-plan versus federal OSHA jurisdiction."},
+        {"api_name": "naics_code", "type": "string", "nullable": true, "description": "NAICS code on the latest filing."},
+        {"api_name": "source", "type": "string", "nullable": false, "description": "Provenance label of the backing data (synthetic_fixture or osha_ita_raw)."}
+      ]
+    },
+    {
+      "api_name": "Filing",
+      "display_name": "Form 300A filing",
+      "plural_display_name": "Form 300A filings",
+      "description": "One establishment-year Form 300A summary after deduplication (latest amendment kept). Carries the case counts, the exposure denominator, the plausibility verdict and the analyst writeback that together decide whether this filing may enter a rate.",
+      "backing_dataset": "establishment frame after ehs_osha.quality.apply_screen and ehs_osha.peers.add_peer_keys",
+      "primary_key": "filing_id",
+      "title_property": "filing_title",
+      "properties": [
+        {"api_name": "filing_id", "type": "string", "nullable": false, "description": "establishment_id-year; the deduplication key of the pipeline."},
+        {"api_name": "filing_title", "type": "string", "nullable": false, "description": "Display title: establishment name and reporting year."},
+        {"api_name": "establishment_id", "type": "string", "nullable": false, "description": "Foreign key to Establishment."},
+        {"api_name": "year_filing_for", "type": "integer", "nullable": false, "description": "Calendar year the summary covers; foreign key to ReportingYear."},
+        {"api_name": "naics_code", "type": "string", "nullable": true, "description": "NAICS code as filed."},
+        {"api_name": "naics3", "type": "string", "nullable": true, "description": "NAICS 3-digit subsector; foreign key to Industry."},
+        {"api_name": "size_band", "type": "string", "nullable": true, "description": "Employee-count band from annual_average_employees (not OSHA's size code, which changed meaning in 2023)."},
+        {"api_name": "peer_group_key", "type": "string", "nullable": true, "description": "naics3|size_band; foreign key to PeerGroup, the comparison set for benchmarking."},
+        {"api_name": "annual_average_employees", "type": "double", "nullable": true, "description": "Form 300A annual average employees; bounds the plausible hours."},
+        {"api_name": "total_hours_worked", "type": "double", "nullable": true, "description": "Form 300A total hours; the rate denominator and the field the screen exists to police."},
+        {"api_name": "hours_per_employee", "type": "double", "nullable": true, "description": "total_hours_worked / annual_average_employees; the internal-consistency statistic the screen tests."},
+        {"api_name": "total_deaths", "type": "integer", "nullable": true, "description": "Column G."},
+        {"api_name": "total_dafw_cases", "type": "integer", "nullable": true, "description": "Column H, cases with days away from work."},
+        {"api_name": "total_djtr_cases", "type": "integer", "nullable": true, "description": "Column I, job transfer or restriction cases."},
+        {"api_name": "total_other_cases", "type": "integer", "nullable": true, "description": "Column J, other recordable cases."},
+        {"api_name": "total_dafw_days", "type": "integer", "nullable": true, "description": "Column K, days away from work."},
+        {"api_name": "total_djtr_days", "type": "integer", "nullable": true, "description": "Column L, days of transfer or restriction."},
+        {"api_name": "recordable_cases", "type": "integer", "nullable": true, "description": "G+H+I+J, computed by ehs_osha.load.derive_fields."},
+        {"api_name": "dart_cases", "type": "integer", "nullable": true, "description": "H+I, computed by ehs_osha.load.derive_fields."},
+        {"api_name": "trir", "type": "double", "nullable": true, "description": "Establishment TRIR per 200,000 hours, from ehs_osha.load.derive_fields."},
+        {"api_name": "dart_rate", "type": "double", "nullable": true, "description": "Establishment DART rate per 200,000 hours, from ehs_osha.load.derive_fields."},
+        {"api_name": "flag_hours_missing", "type": "boolean", "nullable": false, "description": "Screen flag; also the join key to QualityFlag."},
+        {"api_name": "flag_employees_missing", "type": "boolean", "nullable": false, "description": "Screen flag; also the join key to QualityFlag."},
+        {"api_name": "flag_negative_counts", "type": "boolean", "nullable": false, "description": "Screen flag; also the join key to QualityFlag."},
+        {"api_name": "flag_hours_per_employee_high", "type": "boolean", "nullable": false, "description": "Screen flag; also the join key to QualityFlag."},
+        {"api_name": "flag_hours_per_employee_low", "type": "boolean", "nullable": false, "description": "Screen flag; also the join key to QualityFlag."},
+        {"api_name": "flag_no_injury_contradiction", "type": "boolean", "nullable": false, "description": "Screen flag (reported, not part of the verdict by default)."},
+        {"api_name": "screen_implausible", "type": "boolean", "nullable": false, "description": "Verdict of the plausibility_screen function. Read-only: changing it means changing the screen configuration, not editing a row."},
+        {"api_name": "analyst_flag", "type": "boolean", "nullable": false, "editable": true, "default": false, "description": "Writeback: an analyst judged the form implausible even though the screen passed it."},
+        {"api_name": "analyst_flag_reason", "type": "string", "nullable": true, "editable": true, "description": "Writeback: coded reason for the analyst flag."},
+        {"api_name": "analyst_flag_note", "type": "string", "nullable": true, "editable": true, "description": "Writeback: free-text justification."},
+        {"api_name": "benchmark_excluded", "type": "boolean", "nullable": false, "editable": true, "default": false, "description": "Writeback: the form may be right, but the site is not comparable to its peers and is kept out of aggregates."},
+        {"api_name": "benchmark_exclusion_reason", "type": "string", "nullable": true, "editable": true, "description": "Writeback: coded reason for exclusion."},
+        {"api_name": "benchmark_exclusion_note", "type": "string", "nullable": true, "editable": true, "description": "Writeback: free-text justification for exclusion or restoration."},
+        {"api_name": "source", "type": "string", "nullable": false, "description": "Provenance label of the backing data."}
+      ]
+    },
+    {
+      "api_name": "ReportingYear",
+      "display_name": "Reporting year",
+      "plural_display_name": "Reporting years",
+      "description": "One ITA collection year with its screened and unscreened aggregate rates. Shows how much a year's headline rate depends on its worst filings.",
+      "backing_dataset": "outputs/tables/quality_by_year.csv joined to outputs/tables/metrics_by_year.csv",
+      "primary_key": "year",
+      "title_property": "year_label",
+      "properties": [
+        {"api_name": "year", "type": "integer", "nullable": false, "description": "Calendar year covered."},
+        {"api_name": "year_label", "type": "string", "nullable": false, "description": "Display title."},
+        {"api_name": "n_filings", "type": "integer", "nullable": false, "description": "Filings after deduplication."},
+        {"api_name": "n_implausible", "type": "integer", "nullable": false, "description": "Filings failing the screen."},
+        {"api_name": "implausible_share", "type": "double", "nullable": false, "description": "Share of filings failing the screen."},
+        {"api_name": "hours_share_implausible", "type": "double", "nullable": false, "description": "Share of reported hours held by failing filings."},
+        {"api_name": "aggregate_trir_unscreened", "type": "double", "nullable": false, "description": "Ratio-of-sums TRIR over every filing."},
+        {"api_name": "aggregate_trir_screened", "type": "double", "nullable": false, "description": "Ratio-of-sums TRIR over plausible filings."},
+        {"api_name": "ratio_screened_to_unscreened", "type": "double", "nullable": false, "description": "Size of the correction the screen makes."},
+        {"api_name": "dart_screened", "type": "double", "nullable": false, "description": "Screened DART rate."},
+        {"api_name": "ltir_screened", "type": "double", "nullable": false, "description": "Screened lost-time incident rate."},
+        {"api_name": "severity_screened", "type": "double", "nullable": false, "description": "Screened severity rate (days per 200,000 hours)."},
+        {"api_name": "source", "type": "string", "nullable": false, "description": "Provenance label."}
+      ]
+    },
+    {
+      "api_name": "Sector",
+      "display_name": "NAICS sector",
+      "plural_display_name": "NAICS sectors",
+      "description": "NAICS 2-digit sector with its screened and unscreened aggregates, so an industry view can show how exposed its parent sector is to implausible hours.",
+      "backing_dataset": "outputs/tables/quality_by_naics2.csv",
+      "primary_key": "naics2",
+      "title_property": "naics2",
+      "properties": [
+        {"api_name": "naics2", "type": "string", "nullable": false, "description": "NAICS 2-digit code as it appears in the filings."},
+        {"api_name": "n_filings", "type": "integer", "nullable": false, "description": "Filings in the sector, all years."},
+        {"api_name": "implausible_share", "type": "double", "nullable": false, "description": "Share failing the screen."},
+        {"api_name": "hours_share_implausible", "type": "double", "nullable": true, "description": "Share of hours held by failing filings."},
+        {"api_name": "aggregate_trir_unscreened", "type": "double", "nullable": true, "description": "Ratio-of-sums TRIR, every filing."},
+        {"api_name": "aggregate_trir_screened", "type": "double", "nullable": true, "description": "Ratio-of-sums TRIR, plausible filings."},
+        {"api_name": "source", "type": "string", "nullable": false, "description": "Provenance label."}
+      ]
+    },
+    {
+      "api_name": "Industry",
+      "display_name": "Industry (NAICS subsector)",
+      "plural_display_name": "Industries",
+      "description": "NAICS 3-digit subsector, the industry level used for peer groups. Named only by its official NAICS 2022 title, never by establishment-supplied text.",
+      "backing_dataset": "distinct naics3 in outputs/tables/peer_percentiles_pooled.csv and in the establishment frame; titles from ehs_osha.naics",
+      "primary_key": "naics3",
+      "title_property": "title",
+      "properties": [
+        {"api_name": "naics3", "type": "string", "nullable": false, "description": "NAICS 3-digit code."},
+        {"api_name": "title", "type": "string", "nullable": false, "description": "Official NAICS 2022 subsector title, or the bare code when it is not a 2022 subsector."},
+        {"api_name": "has_official_title", "type": "boolean", "nullable": false, "description": "False when the code is not a NAICS 2022 subsector (legacy or mistyped codes)."},
+        {"api_name": "naics2", "type": "string", "nullable": false, "description": "Parent sector code; foreign key to Sector."},
+        {"api_name": "source", "type": "string", "nullable": false, "description": "Provenance label."}
+      ]
+    },
+    {
+      "api_name": "PeerGroup",
+      "display_name": "Peer group",
+      "plural_display_name": "Peer groups",
+      "description": "NAICS-3 x size-band benchmark cell, pooled across years. The comparison set a site's TRIR is judged against; cells under the minimum size are carried but marked not publishable.",
+      "backing_dataset": "outputs/tables/peer_percentiles_pooled.csv",
+      "primary_key": "peer_group_key",
+      "title_property": "peer_group_key",
+      "properties": [
+        {"api_name": "peer_group_key", "type": "string", "nullable": false, "description": "naics3|size_band."},
+        {"api_name": "naics3", "type": "string", "nullable": false, "description": "Foreign key to Industry."},
+        {"api_name": "size_band", "type": "string", "nullable": false, "description": "Employee-count band."},
+        {"api_name": "n", "type": "integer", "nullable": false, "description": "Plausible filings in the cell."},
+        {"api_name": "n_with_metric", "type": "integer", "nullable": false, "description": "Filings with a computable TRIR; the publishability count."},
+        {"api_name": "zero_share", "type": "double", "nullable": true, "description": "Share reporting zero recordables; context for why small-site medians are zero."},
+        {"api_name": "aggregate_trir", "type": "double", "nullable": true, "description": "Ratio-of-sums TRIR of the cell."},
+        {"api_name": "p10", "type": "double", "nullable": true, "description": "10th percentile of establishment TRIR."},
+        {"api_name": "p25", "type": "double", "nullable": true, "description": "25th percentile."},
+        {"api_name": "p50", "type": "double", "nullable": true, "description": "Median."},
+        {"api_name": "p75", "type": "double", "nullable": true, "description": "75th percentile."},
+        {"api_name": "p90", "type": "double", "nullable": true, "description": "90th percentile."},
+        {"api_name": "p95", "type": "double", "nullable": true, "description": "95th percentile."},
+        {"api_name": "publishable", "type": "boolean", "nullable": false, "description": "Cell meets the minimum-size rule; peer_position refuses to place a site in a cell that does not."},
+        {"api_name": "source", "type": "string", "nullable": false, "description": "Provenance label."}
+      ]
+    },
+    {
+      "api_name": "QualityFlag",
+      "display_name": "Quality flag",
+      "plural_display_name": "Quality flags",
+      "description": "One rule of the plausibility screen, with its pooled prevalence. Lets a reviewer see which rule fired on a filing and how much of the national denominator that rule controls.",
+      "backing_dataset": "ehs_osha.quality.FLAG_COLUMNS joined to outputs/tables/quality_flag_prevalence.csv",
+      "primary_key": "flag",
+      "title_property": "display_name",
+      "properties": [
+        {"api_name": "flag", "type": "string", "nullable": false, "description": "Flag column name."},
+        {"api_name": "display_name", "type": "string", "nullable": false, "description": "Plain-language rule."},
+        {"api_name": "counts_in_verdict", "type": "boolean", "nullable": false, "description": "Whether the flag contributes to screen_implausible under the default configuration."},
+        {"api_name": "pooled_n", "type": "integer", "nullable": false, "description": "Filings carrying the flag, 2016-2024 pooled."},
+        {"api_name": "pooled_share", "type": "double", "nullable": false, "description": "Share of filings carrying the flag."},
+        {"api_name": "pooled_hours_share", "type": "double", "nullable": false, "description": "Share of all reported hours on flagged filings."},
+        {"api_name": "source", "type": "string", "nullable": false, "description": "Provenance label."}
+      ]
+    }
+  ],
+  "link_types": [
+    {"api_name": "establishment_filings", "source": "Filing", "target": "Establishment", "cardinality": "many_to_one", "foreign_key": "establishment_id", "source_link_name": "establishment", "target_link_name": "filings", "description": "A site's filings across years."},
+    {"api_name": "filing_reporting_year", "source": "Filing", "target": "ReportingYear", "cardinality": "many_to_one", "foreign_key": "year_filing_for", "source_link_name": "reporting_year", "target_link_name": "filings", "description": "Puts a filing beside its year's aggregate."},
+    {"api_name": "filing_industry", "source": "Filing", "target": "Industry", "cardinality": "many_to_one", "foreign_key": "naics3", "source_link_name": "industry", "target_link_name": "filings", "description": "Industry of the filing."},
+    {"api_name": "filing_peer_group", "source": "Filing", "target": "PeerGroup", "cardinality": "many_to_one", "foreign_key": "peer_group_key", "source_link_name": "peer_group", "target_link_name": "filings", "description": "The benchmark cell the filing is compared against."},
+    {"api_name": "industry_peer_groups", "source": "PeerGroup", "target": "Industry", "cardinality": "many_to_one", "foreign_key": "naics3", "source_link_name": "industry", "target_link_name": "peer_groups", "description": "Size-band cells of an industry."},
+    {"api_name": "industry_sector", "source": "Industry", "target": "Sector", "cardinality": "many_to_one", "foreign_key": "naics2", "source_link_name": "sector", "target_link_name": "industries", "description": "Parent NAICS sector."},
+    {"api_name": "filing_quality_flags", "source": "Filing", "target": "QualityFlag", "cardinality": "many_to_many", "join_rule": "source_boolean_property_named_by_target_key", "source_link_name": "quality_flags", "target_link_name": "filings", "description": "Which screen rules fired on a filing. Backed by the boolean flag columns rather than a separate join table."}
+  ],
+  "action_types": [
+    {
+      "api_name": "flag_filing_implausible",
+      "display_name": "Flag filing as implausible",
+      "description": "Record an analyst judgement that a form cannot be right although the automatic screen passed it. The filing then leaves every screened aggregate.",
+      "parameters": [
+        {"api_name": "filing", "type": "object_reference", "object_type": "Filing", "required": true},
+        {"api_name": "reason", "type": "string", "required": true, "allowed_values": ["hours_inconsistent_with_operations", "company_wide_hours_reported", "employee_count_mistyped", "case_counts_inconsistent", "other"]},
+        {"api_name": "note", "type": "string", "required": false, "max_length": 500, "required_when": {"parameter": "reason", "equals": "other"}}
+      ],
+      "submission_criteria": [
+        {"parameter": "filing", "property": "screen_implausible", "operator": "equals", "value": false, "failure_message": "The plausibility screen already excludes this filing."},
+        {"parameter": "filing", "property": "analyst_flag", "operator": "equals", "value": false, "failure_message": "Filing is already flagged; clear the existing flag first."}
+      ],
+      "edits": [
+        {"object_parameter": "filing", "set": {"analyst_flag": true, "analyst_flag_reason": "$reason", "analyst_flag_note": "$note"}}
+      ]
+    },
+    {
+      "api_name": "clear_analyst_flag",
+      "display_name": "Clear analyst flag",
+      "description": "Withdraw an analyst flag, for example after the establishment confirms its hours. A justification is mandatory.",
+      "parameters": [
+        {"api_name": "filing", "type": "object_reference", "object_type": "Filing", "required": true},
+        {"api_name": "note", "type": "string", "required": true, "min_length": 10, "max_length": 500}
+      ],
+      "submission_criteria": [
+        {"parameter": "filing", "property": "analyst_flag", "operator": "equals", "value": true, "failure_message": "Filing carries no analyst flag."}
+      ],
+      "edits": [
+        {"object_parameter": "filing", "set": {"analyst_flag": false, "analyst_flag_reason": null, "analyst_flag_note": "$note"}}
+      ]
+    },
+    {
+      "api_name": "exclude_from_benchmark",
+      "display_name": "Exclude filing from benchmark",
+      "description": "Keep a plausible filing out of aggregates and peer benchmarks because the site is not comparable to its peers.",
+      "parameters": [
+        {"api_name": "filing", "type": "object_reference", "object_type": "Filing", "required": true},
+        {"api_name": "reason", "type": "string", "required": true, "allowed_values": ["not_comparable_to_peers", "company_wide_hours_reported", "under_review", "other"]},
+        {"api_name": "note", "type": "string", "required": false, "max_length": 500, "required_when": {"parameter": "reason", "equals": "other"}}
+      ],
+      "submission_criteria": [
+        {"parameter": "filing", "property": "screen_implausible", "operator": "equals", "value": false, "failure_message": "The plausibility screen already excludes this filing."},
+        {"parameter": "filing", "property": "benchmark_excluded", "operator": "equals", "value": false, "failure_message": "Filing is already excluded from the benchmark."}
+      ],
+      "edits": [
+        {"object_parameter": "filing", "set": {"benchmark_excluded": true, "benchmark_exclusion_reason": "$reason", "benchmark_exclusion_note": "$note"}}
+      ]
+    },
+    {
+      "api_name": "restore_to_benchmark",
+      "display_name": "Restore filing to benchmark",
+      "description": "Return an excluded filing to aggregates and peer benchmarks. A justification is mandatory.",
+      "parameters": [
+        {"api_name": "filing", "type": "object_reference", "object_type": "Filing", "required": true},
+        {"api_name": "note", "type": "string", "required": true, "min_length": 10, "max_length": 500}
+      ],
+      "submission_criteria": [
+        {"parameter": "filing", "property": "benchmark_excluded", "operator": "equals", "value": true, "failure_message": "Filing is not excluded from the benchmark."}
+      ],
+      "edits": [
+        {"object_parameter": "filing", "set": {"benchmark_excluded": false, "benchmark_exclusion_reason": null, "benchmark_exclusion_note": "$note"}}
+      ]
+    }
+  ],
+  "functions": [
+    {"api_name": "plausibility_screen", "input": "ObjectSet<Filing>", "output": "map<filing_id, boolean>", "reuses": "ehs_osha.quality.apply_screen", "description": "Re-run the screen on a set of filings under any bounds (what-if), without editing objects."},
+    {"api_name": "filing_rates", "input": "Filing", "output": "struct<trir: double, dart_rate: double>", "reuses": "ehs_osha.load.derive_fields", "description": "Establishment TRIR and DART rate re-derived from the stored case counts and hours."},
+    {"api_name": "aggregate_trir", "input": "ObjectSet<Filing>", "output": "double", "reuses": "ehs_osha.quality.aggregate_trir", "description": "Ratio-of-sums TRIR over the filings that are included (screen and writeback respected)."},
+    {"api_name": "aggregate_rates", "input": "ObjectSet<Filing>", "output": "struct<trir, dart, ltir, severity: screened and unscreened>", "reuses": "ehs_osha.metrics.compute_rates", "description": "Ratio-of-sums TRIR, DART, LTIR and severity, screened against unscreened."},
+    {"api_name": "peer_position", "input": "Filing", "output": "struct<status, band, peer_group_key>", "reuses": "ehs_osha.peers.DEFAULT_PERCENTILES", "description": "Place a filing's TRIR between the percentiles of its peer group; refuses non-publishable cells and excluded filings."}
+  ]
+}

@@ -3,7 +3,7 @@
 
 PYTHON ?= python3
 
-.PHONY: help data fixture analysis test clean-outputs list-sources
+.PHONY: help data fixture analysis test clean-outputs list-sources ontology
 
 help:
 	@echo "make data      - download the public OSHA ITA files into data/raw"
@@ -11,6 +11,7 @@ help:
 	@echo "make analysis  - run the full pipeline on the real data"
 	@echo "make test      - run the test suite (real-data tests skip if absent)"
 	@echo "make list-sources - print the dataset catalog with URLs"
+	@echo "make ontology  - build the ontology on the fixture, export to build/ontology"
 
 data:
 	$(PYTHON) scripts/download_data.py
@@ -23,6 +24,9 @@ fixture:
 
 analysis:
 	$(PYTHON) scripts/run_analysis.py
+
+ontology:
+	PYTHONPATH=src $(PYTHON) -m ehs_osha.ontology --out build/ontology
 
 test:
 	cd tests && $(PYTHON) -m unittest discover -s . -p "test_*.py"

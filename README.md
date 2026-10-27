@@ -591,7 +591,9 @@ computed a second time. A small runtime loads the spec and checks it, builds
 the objects, follows links, applies actions with an audit log, and exports to
 SQLite and JSON. By default the Establishment and Filing objects come from the
 synthetic fixture, so numbers computed from them are not findings. Design,
-concept mapping and usage are in [docs/ontology.md](docs/ontology.md). A typed client
+concept mapping and usage are in [docs/ontology.md](docs/ontology.md). A static browser
+for the spec and the committed aggregate tables is `docs/ontology_explorer.html`
+(built by `scripts/build_ontology_explorer.py`). A typed client
 (`ontology/client.py`: dataclasses, typed links and actions) is generated from the spec by
 `scripts/generate_ontology_client.py`, with a drift check in CI:
 

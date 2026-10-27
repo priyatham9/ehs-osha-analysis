@@ -27,13 +27,15 @@ runner beyond stdlib `unittest`.
 
 [docs/INDUSTRY_QUALITY.md](docs/INDUSTRY_QUALITY.md) ranks NAICS sectors and years by filing-quality problem rate and screening effect, generated from the committed tables.
 
+[docs/DATA_HEALTH.md](docs/DATA_HEALTH.md) and [docs/LINEAGE.md](docs/LINEAGE.md) are the portable analogue of Foundry data health checks and lineage: 252 data expectations over the committed outputs plus a validated pipeline graph, run with `make health`.
+
 **At a glance**
 
 | Field | Value |
 |---|---|
 | Status | tests passing (see badge above) |
 | Data | real (public OSHA ITA filings, 2016-2024); synthetic fixture available for offline test runs only, never used for headline numbers |
-| Tests | 224 tests, stdlib `unittest` |
+| Tests | 248 tests, stdlib `unittest` |
 | Quickstart | `make data && make analysis && make test` |
 | Licence | MIT |
 
@@ -517,12 +519,13 @@ src/ehs_osha/
   pipeline.py      orchestration; writes every table and figure
   industry_quality.py  sector / size / year quality view (docs/INDUSTRY_QUALITY.md)
   ontology/        Foundry-style ontology over the outputs (docs/ontology.md)
+  health/          lineage spec and data expectations (docs/LINEAGE.md, docs/DATA_HEALTH.md)
 scripts/
   download_data.py
   run_analysis.py
 synthetic/
   generate_fixture.py   SYNTHETIC data generator, for tests only
-tests/                  224 tests, stdlib unittest
+tests/                  248 tests, stdlib unittest
 outputs/
   tables/               15 CSVs, all script-generated
   figures/              6 SVGs, all script-generated

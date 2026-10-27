@@ -25,13 +25,15 @@ runner beyond stdlib `unittest`.
 
 **Documentation:** [REPRODUCIBILITY.md](REPRODUCIBILITY.md) records the source data, exact commands, measured runtimes, and verifiable outputs. [DATASHEET.md](DATASHEET.md) documents the dataset following Gebru et al.
 
+[docs/INDUSTRY_QUALITY.md](docs/INDUSTRY_QUALITY.md) ranks NAICS sectors and years by filing-quality problem rate and screening effect, generated from the committed tables.
+
 **At a glance**
 
 | Field | Value |
 |---|---|
 | Status | tests passing (see badge above) |
 | Data | real (public OSHA ITA filings, 2016-2024); synthetic fixture available for offline test runs only, never used for headline numbers |
-| Tests | 213 tests, stdlib `unittest` |
+| Tests | 224 tests, stdlib `unittest` |
 | Quickstart | `make data && make analysis && make test` |
 | Licence | MIT |
 
@@ -513,13 +515,14 @@ src/ehs_osha/
   stability.py     Spearman rho, year-pair band stability, cell persistence
   svgplot.py       minimal SVG figure writer (no matplotlib)
   pipeline.py      orchestration; writes every table and figure
+  industry_quality.py  sector / size / year quality view (docs/INDUSTRY_QUALITY.md)
   ontology/        Foundry-style ontology over the outputs (docs/ontology.md)
 scripts/
   download_data.py
   run_analysis.py
 synthetic/
   generate_fixture.py   SYNTHETIC data generator, for tests only
-tests/                  213 tests, stdlib unittest
+tests/                  224 tests, stdlib unittest
 outputs/
   tables/               15 CSVs, all script-generated
   figures/              6 SVGs, all script-generated

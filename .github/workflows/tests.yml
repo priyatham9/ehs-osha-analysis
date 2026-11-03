@@ -8,7 +8,7 @@ permissions:
   contents: read
 jobs:
   lint:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -19,7 +19,7 @@ jobs:
       - name: Run ruff
         run: ruff check .
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
@@ -36,7 +36,7 @@ jobs:
       - name: Run tests
         run: PYTHONPATH=src python -m unittest discover -s tests -v
   fixture-pipeline:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -51,7 +51,7 @@ jobs:
           [ -f outputs/summary.json ] || exit 1
           python3 -c "import json; json.load(open('outputs/summary.json'))" || exit 1
   coverage:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

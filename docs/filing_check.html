@@ -6,6 +6,64 @@
 <title>Form 300A filing checker</title>
 <meta name="description" content="Check one OSHA Form 300A filing against the plausibility screen used in the ehs-osha-analysis pipeline. Runs entirely in your browser.">
 <style>
+/*TOKENS_CSS_START*/
+/* tokens.css: the one design-token layer (canonical source; inlined by inline_story.py).
+   Scale values adapted from Open Props 1.7.23, MIT licence, (c) Adam Argyle and contributors,
+   https://open-props.style . Only the values used here are copied.
+   Type scale follows USWDS 3.14 proportions; accessibility rules follow WCAG 2.2 AA. */
+:root{
+ --size-1:.25rem;--size-2:.5rem;--size-3:1rem;--size-4:1.25rem;--size-5:1.5rem;--size-6:1.75rem;--size-7:2rem;--size-8:3rem;--size-9:4rem;--size-10:5rem;
+ --font-size-0:.75rem;--font-size-1:1rem;--font-size-2:1.1rem;--font-size-3:1.25rem;
+ --font-size-4:1.5rem;--font-size-5:2rem;--font-size-6:2.5rem;--font-size-7:3rem;--font-size-8:3.5rem;
+ --font-size-fluid-0:clamp(.75rem,2vw,1rem);--font-size-fluid-1:clamp(1rem,4vw,1.5rem);
+ --font-size-fluid-2:clamp(1.5rem,6vw,2.5rem);--font-size-fluid-3:clamp(2rem,9vw,3.5rem);
+ /* USWDS 3.14-style type scale (rem at 16px root) */
+ --type-3xs:.8125rem;--type-2xs:.875rem;--type-xs:.9375rem;--type-sm:1rem;--type-md:1.0625rem;
+ --type-lg:1.375rem;--type-xl:1.8125rem;--type-2xl:2.25rem;--type-3xl:3rem;
+ --leading-body:1.5;--leading-heading:1.15;--measure:66ch;
+ --radius-1:2px;--radius-2:5px;--radius-3:1rem;--radius-round:1e5px;
+ --ease-1:cubic-bezier(.25,0,.5,1);--ease-2:cubic-bezier(.25,0,.4,1);--ease-3:cubic-bezier(.25,0,.3,1);
+ --ease-out-3:cubic-bezier(.215,.61,.355,1);--ease-in-out-3:cubic-bezier(.45,0,.55,1);
+ --focus-ring:2px;--focus-offset:3px;--target-min:44px;
+
+ /* brand palette (light) */
+ color-scheme:light;
+ --paper:#F7F7F3;--surface:#FFFFFF;--surface-2:#EFEFE9;
+ --ink:#101311;--ink-2:#3A403C;--muted:#666D68;
+ --rule:#101311;--rule-soft:#D6D7CE;
+ --accent:#1E40AF;--accent-2:#17307F;--accent-ink:#FFFFFF;--accent-wash:#E2E8FB;
+ --warn:#8A5A00;--warn-wash:#FBF0DC;
+}
+@media (prefers-color-scheme: dark){
+ :root:not([data-theme="light"]){
+  color-scheme:dark;
+  --paper:#0A0C10;--surface:#12151C;--surface-2:#171B24;
+  --ink:#EAECF2;--ink-2:#BFC4CF;--muted:#838A99;
+  --rule:#EAECF2;--rule-soft:#262B36;
+  --accent:#7C9EFF;--accent-2:#5B7FE8;--accent-ink:#06101F;--accent-wash:#151C33;
+  --warn:#E3B25F;--warn-wash:#241C0C;
+ }
+}
+:root[data-theme="dark"]{
+ color-scheme:dark;
+ --paper:#0A0C10;--surface:#12151C;--surface-2:#171B24;
+ --ink:#EAECF2;--ink-2:#BFC4CF;--muted:#838A99;
+ --rule:#EAECF2;--rule-soft:#262B36;
+ --accent:#7C9EFF;--accent-2:#5B7FE8;--accent-ink:#06101F;--accent-wash:#151C33;
+ --warn:#E3B25F;--warn-wash:#241C0C;
+}
+/* accessibility: body line height, measure, focus ring (>= 3:1 via --accent), target size */
+body{line-height:var(--leading-body)}
+.measure{max-width:var(--measure)}
+:focus-visible{outline:var(--focus-ring) solid var(--accent);outline-offset:var(--focus-offset)}
+.target-44,.btn-44{min-height:var(--target-min);min-width:var(--target-min);display:inline-flex;align-items:center;justify-content:center}
+input.target-44,select.target-44,textarea.target-44{display:block}
+@media (prefers-reduced-motion: reduce){
+ *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+ html{scroll-behavior:auto}
+}
+/*TOKENS_CSS_END*/
+
 :root{--bg:#fff;--fg:#1a1a1a;--mut:#555;--line:#ccd;--bad:#b00020;--ok:#1b6e3c;--acc:#0b57d0}
 @media (prefers-color-scheme:dark){:root{--bg:#14161a;--fg:#eceff4;--mut:#a9b0bb;--line:#363b45;--bad:#ff6b81;--ok:#5fd18a;--acc:#8ab4ff}}
 body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 system-ui,sans-serif}

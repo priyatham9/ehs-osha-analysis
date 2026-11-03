@@ -23,6 +23,64 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" />
 <style>
+/*TOKENS_CSS_START*/
+/* tokens.css: the one design-token layer (canonical source; inlined by inline_story.py).
+   Scale values adapted from Open Props 1.7.23, MIT licence, (c) Adam Argyle and contributors,
+   https://open-props.style . Only the values used here are copied.
+   Type scale follows USWDS 3.14 proportions; accessibility rules follow WCAG 2.2 AA. */
+:root{
+ --size-1:.25rem;--size-2:.5rem;--size-3:1rem;--size-4:1.25rem;--size-5:1.5rem;--size-6:1.75rem;--size-7:2rem;--size-8:3rem;--size-9:4rem;--size-10:5rem;
+ --font-size-0:.75rem;--font-size-1:1rem;--font-size-2:1.1rem;--font-size-3:1.25rem;
+ --font-size-4:1.5rem;--font-size-5:2rem;--font-size-6:2.5rem;--font-size-7:3rem;--font-size-8:3.5rem;
+ --font-size-fluid-0:clamp(.75rem,2vw,1rem);--font-size-fluid-1:clamp(1rem,4vw,1.5rem);
+ --font-size-fluid-2:clamp(1.5rem,6vw,2.5rem);--font-size-fluid-3:clamp(2rem,9vw,3.5rem);
+ /* USWDS 3.14-style type scale (rem at 16px root) */
+ --type-3xs:.8125rem;--type-2xs:.875rem;--type-xs:.9375rem;--type-sm:1rem;--type-md:1.0625rem;
+ --type-lg:1.375rem;--type-xl:1.8125rem;--type-2xl:2.25rem;--type-3xl:3rem;
+ --leading-body:1.5;--leading-heading:1.15;--measure:66ch;
+ --radius-1:2px;--radius-2:5px;--radius-3:1rem;--radius-round:1e5px;
+ --ease-1:cubic-bezier(.25,0,.5,1);--ease-2:cubic-bezier(.25,0,.4,1);--ease-3:cubic-bezier(.25,0,.3,1);
+ --ease-out-3:cubic-bezier(.215,.61,.355,1);--ease-in-out-3:cubic-bezier(.45,0,.55,1);
+ --focus-ring:2px;--focus-offset:3px;--target-min:44px;
+
+ /* brand palette (light) */
+ color-scheme:light;
+ --paper:#F7F7F3;--surface:#FFFFFF;--surface-2:#EFEFE9;
+ --ink:#101311;--ink-2:#3A403C;--muted:#666D68;
+ --rule:#101311;--rule-soft:#D6D7CE;
+ --accent:#1E40AF;--accent-2:#17307F;--accent-ink:#FFFFFF;--accent-wash:#E2E8FB;
+ --warn:#8A5A00;--warn-wash:#FBF0DC;
+}
+@media (prefers-color-scheme: dark){
+ :root:not([data-theme="light"]){
+  color-scheme:dark;
+  --paper:#0A0C10;--surface:#12151C;--surface-2:#171B24;
+  --ink:#EAECF2;--ink-2:#BFC4CF;--muted:#838A99;
+  --rule:#EAECF2;--rule-soft:#262B36;
+  --accent:#7C9EFF;--accent-2:#5B7FE8;--accent-ink:#06101F;--accent-wash:#151C33;
+  --warn:#E3B25F;--warn-wash:#241C0C;
+ }
+}
+:root[data-theme="dark"]{
+ color-scheme:dark;
+ --paper:#0A0C10;--surface:#12151C;--surface-2:#171B24;
+ --ink:#EAECF2;--ink-2:#BFC4CF;--muted:#838A99;
+ --rule:#EAECF2;--rule-soft:#262B36;
+ --accent:#7C9EFF;--accent-2:#5B7FE8;--accent-ink:#06101F;--accent-wash:#151C33;
+ --warn:#E3B25F;--warn-wash:#241C0C;
+}
+/* accessibility: body line height, measure, focus ring (>= 3:1 via --accent), target size */
+body{line-height:var(--leading-body)}
+.measure{max-width:var(--measure)}
+:focus-visible{outline:var(--focus-ring) solid var(--accent);outline-offset:var(--focus-offset)}
+.target-44,.btn-44{min-height:var(--target-min);min-width:var(--target-min);display:inline-flex;align-items:center;justify-content:center}
+input.target-44,select.target-44,textarea.target-44{display:block}
+@media (prefers-reduced-motion: reduce){
+ *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+ html{scroll-behavior:auto}
+}
+/*TOKENS_CSS_END*/
+
 :root {
  color-scheme:light;
  --paper:#F7F7F3; --surface:#FFFFFF; --surface-2:#EFEFE9;
@@ -1762,8 +1820,9 @@ html body{overflow-x:clip}
    data-m-hero                 section: cinematic entrance timeline for its
      data-m-hero-part="text|visual|rule"  parts, in DOM order
      data-m-hero-copy          block that rises and fades as the hero leaves
-   data-m-split="chars|words|lines"  SplitText masked reveal on enter
-                               (chars fall back to words on phones);
+   data-m-split="chars|words|lines"  calm whole-line reveal on enter. Text is never
+                               split into characters or words: "chars" and "words"
+                               are kept for compatibility and behave as "lines";
                                data-m-delay="0.3" offsets it
    data-m-pin="220%"           section pins at the top for that much scroll
                                and scrubs its [data-m-step] children
@@ -1775,14 +1834,15 @@ html body{overflow-x:clip}
    data-m-draw[="selector"]    stroke draw of paths/lines, scrubbed to scroll
    data-m-bars="y|x"           bars grow from their baseline, scrubbed
      data-m-bar="selector"     which children are bars (default rect / > *)
-   data-m-count[="12,345.6%"]  counter from 0 to the element's own text
+   data-m-count[="12,345.6%"]  kept for compatibility: no count-up, the element
+                               shows its own final value as written
    data-m-reveal [data-m-stagger="0.08"]  one-shot fade-up (of children)
    data-m-start="top 70%"      custom ScrollTrigger start for draw/reveal
    data-m-parallax="-12"       yPercent drift across the viewport (desktop)
    data-m-spring[="1.5"]       spring hover lift + press squash (elastic)
    data-m-flip[="selector"]    Flip layout transition when a button inside
                                filters or re-orders the children
-   Aliases: data-st-kinetic -> data-m-split="words" when GSAP is present.
+   Aliases: data-st-kinetic -> data-m-split="words" (a whole-line reveal) when GSAP is present.
    JS: Story.motion.scan(root) re-applies after DOM changes; Story.motion.kill().
 
    Rules the engine enforces (v2.1):
@@ -2119,21 +2179,10 @@ html body{overflow-x:clip}
       var pre = raw.slice(0, m.index), post = raw.slice(m.index + m[0].length);
       var dec = opts.decimals != null ? opts.decimals : (m[0].split(".")[1] || "").length;
       var grp = m[0].indexOf(",") >= 0;
-      function paint(v) {
-        var s = Math.abs(target) >= 1000 && dec === 0 ? Math.round(v).toString() : v.toFixed(dec);
-        if (grp) s = s.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        n.textContent = pre + s + post;
-      }
-      // data-st-ticker: digits roll into place instead of counting by value
-      var isTick = opts.ticker || (n.hasAttribute && n.hasAttribute("data-st-ticker"));
-      var run = isTick
-        ? function () {
-          var s = Math.abs(target) >= 1000 && dec === 0 ? Math.round(target).toString() : target.toFixed(dec);
-          if (grp) s = s.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-          tickerPaint(n, pre + s + post, !reduced());
-        }
-        : function () { tween(opts.from == null ? 0 : opts.from, target, function (v) { paint(v); }, { duration: opts.duration || 1400, ease: "expo" }); };
-      if (opts.now) run(); else inView(n, run, { once: true });
+      // final value, painted at once: no tween, no ticker roll (data-st-ticker shows static text)
+      var s = Math.abs(target) >= 1000 && dec === 0 ? Math.round(target).toString() : target.toFixed(dec);
+      if (grp) s = s.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      n.textContent = pre + s + post;
     });
   }
   // reveal: staggered entrance for [data-st-reveal] or opts.selector children
@@ -5326,7 +5375,7 @@ html body{overflow-x:clip}
        * words rise in line by line (a stagger per rendered line, not per word)
        * the key word (an <em>, <mark> or [data-st-key] inside) gets an accent
          underline that draws after the line lands
-       * any [data-st-count] inside counts up to the number already written in it
+       * any [data-st-count] inside keeps the number already written in it (no count-up)
      The text is fully present in the HTML; without JS, or with reduced motion,
      it simply shows. Auto-applied to [data-st-kinetic]. */
   function kinetic(node, kopts) {
@@ -5494,25 +5543,23 @@ html body{overflow-x:clip}
         scrollTrigger: n.closest("[data-m-hero]") ? null : { trigger: n, start: "top 88%", once: true } });
       return;
     }
-    var type = n.getAttribute("data-m-split") || "words";
-    if (!/^(chars|words|lines)$/.test(type)) type = "words";
-    if (phone && type === "chars") type = "words";
+    // never split into characters or words: every value reveals whole lines
+    var type = "lines";
     var st = global.SplitText.create(n, {
-      type: type === "lines" ? "lines" : type === "chars" ? "words,chars" : "words",
-      mask: type === "chars" ? "words" : type,
+      type: "lines",
+      mask: "lines",
       aria: "auto",
-      // chars stay inside a no-wrap word, so a line never breaks mid-word
-      wordsClass: "m-word", charsClass: "m-char", linesClass: "m-line",
-      autoSplit: type === "lines",
+      linesClass: "m-line",
+      autoSplit: true,
       onSplit: function (self) {
-        var parts = self[type];
+        var parts = self.lines;
         n.setAttribute("data-m-split-done", "");
         var hero = n.closest("[data-m-hero]");
         var t = global.gsap.from(parts, {
-          yPercent: 110, autoAlpha: type === "chars" ? 1 : 0, rotate: type === "chars" && !phone ? 6 : 0,
-          // v2.2: the whole line is in within ~0.9s however long the headline is
-          duration: type === "chars" ? 0.6 : 0.55, ease: M_EASE.out,
-          stagger: { amount: Math.min(0.35, parts.length * (type === "chars" ? 0.022 : type === "words" ? 0.045 : 0.1)) },
+          yPercent: 60, autoAlpha: 0,
+          // short and calm: the whole headline is in within ~0.6s
+          duration: 0.5, ease: M_EASE.out,
+          stagger: { amount: Math.min(0.2, parts.length * 0.08) },
           delay: Math.min(0.3, mNum(n.getAttribute("data-m-delay"), hero ? 0.05 : 0)),
           scrollTrigger: hero ? null : { trigger: n, start: "top 88%", once: true }
         });
@@ -5675,28 +5722,8 @@ html body{overflow-x:clip}
   // --- counters: the element's own text is the final value ---
   function mCount(n, tl, at) {
     if (n.__mCount) return; n.__mCount = 1;
-    var p = mParseNum(n.getAttribute("data-m-count") || n.textContent);
-    if (!p) return;
-    var final = n.textContent;
-    var o = { v: 0 };
-    n.setAttribute("aria-label", final.trim());
-    // land on the page's own text exactly (formatting, spaces, units), never a rounded neighbour
-    var step = Math.pow(10, -p.dec) / 2;
-    function upd() { n.textContent = Math.abs(p.value - o.v) < step ? final : mFmtNum(p, o.v); }
-    var vars = { v: p.value, duration: 1.6, ease: M_EASE.soft, onUpdate: upd, onComplete: function () { n.textContent = final; } };
-    upd();
-    if (tl) {
-      // inside a pin the count plays in time once its moment is reached, then holds the
-      // exact figure: a scrubbed counter at rest mid-pin would show a number the data never said
-      var played = false;
-      tl.call(function () {
-        if (played) return; played = true;
-        global.gsap.to(o, { v: p.value, duration: 1.2, ease: M_EASE.soft, onUpdate: upd, onComplete: function () { n.textContent = final; } });
-      }, null, at || 0);
-      return;
-    }
-    vars.scrollTrigger = { trigger: n, start: "top 88%", once: true };
-    global.gsap.to(o, vars);
+    // no count from 0: the element's own text stays in place as the final value
+    n.setAttribute("aria-label", n.textContent.trim());
   }
   // --- one-shot reveal of an element or of its children ---
   function mReveal(n) {
@@ -5747,7 +5774,7 @@ html body{overflow-x:clip}
       });
     }, true);
   }
-  // --- cinematic hero: headline chars, then lede, actions and visual ---
+  // --- cinematic hero: headline lines, then lede, actions and visual ---
   function mHero(h, phone) {
     var g = global.gsap, tl = g.timeline({ defaults: { ease: M_EASE.out } });
     var parts = mTameAll(mClaim(els("[data-m-hero-part]", h)));
@@ -5904,7 +5931,7 @@ html body{overflow-x:clip}
     if (global.SplitText) plugins.push(global.SplitText);
     if (global.Flip) plugins.push(global.Flip);
     global.gsap.registerPlugin.apply(global.gsap, plugins);
-    // legacy aliases: one API. v1.4 kinetic headlines become SplitText word reveals.
+    // legacy aliases: one API. v1.4 kinetic headlines become SplitText line reveals.
     els("[data-st-kinetic]").forEach(function (n) { if (!n.hasAttribute("data-m-split")) n.setAttribute("data-m-split", "words"); });
     motionSetup(document);
     M.ready = true;

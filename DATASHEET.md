@@ -49,7 +49,7 @@ The data dictionary documents both layers: rows with table `analytic_frame` desc
 
 **Are there errors, noise or redundancies?** Yes, documented and measured:
 
-- Hours are free text. One 2019 filing reports about 1.68e13 hours for 7 employees, and the single largest filing holds 88.8% of all reported hours; flagged filings hold 96.7% of hours but 1.4% of cases [outputs/tables/quality_top50_implausible_hours.csv; quality_hours_concentration.csv; quality_overall.csv].
+- Hours are free text. One 2019 filing reports about 1.68e13 hours for 7 employees, and the single largest filing holds 88.8% of all reported hours; flagged filings hold 96.7% of hours but 1.4% of cases; without that one filing they hold 70.3% of hours and the pooled correction is 3.32x rather than 29.7x [outputs/tables/quality_top50_implausible_hours.csv; quality_hours_concentration.csv; quality_overall.csv; outputs/headline.json].
 - `establishment_id` is not a stable entity key: 313,527 ids (25.3%) carry more than one EIN across years, 108,855 (8.8%) more than one company name, 4,010 more than one state [outputs/tables/panel_coverage.csv; docs/PANEL_AUDIT.md].
 - The OSHA `size` code is not comparable across years (code 2 was split into 21 and 22 with the 2023 collection), so size bands are built from `annual_average_employees` [src/ehs_osha/schema.py].
 - 301 filings have a `no_injuries_illnesses` checkbox that contradicts their case counts [outputs/tables/quality_flag_prevalence.csv].

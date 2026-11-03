@@ -108,7 +108,7 @@ Across the 25 bound pairs the screened aggregate TRIR runs from 3.963 to 3.993, 
 
 The reason is that the filings that move between cells carry almost no hours. Raising the lower bound from 120 to 400 hours reclassifies 55,448 filings with a band TRIR of 9.663, yet the largest reclassified band (the 12,436 filings that enter the flagged set when the upper bound falls from 4,500 to 3,500 hours) holds only 0.018% of pooled hours. The aggregate is set by the few filings with enormous hours, which every cell flags.
 
-As a check with no hours-per-employee bound at all, dropping only the single filing with the most hours lifts the aggregate TRIR from 0.134 to 1.198, and dropping the 10,000 filings with the most hours (0.357% of filings) gives 4.137, the same order as the screened 3.983. The trim is cruder than the screen and does not converge to it, but it points the same way.
+As a check with no hours-per-employee bound at all, dropping only the single filing with the most hours lifts the aggregate TRIR from 0.134 to 1.198; the remaining flagged filings then hold 70.32% of all hours, and the screened rate is 3.32 times the unscreened one. Dropping the 10,000 filings with the most hours (0.357% of filings) gives 4.137, the same order as the screened 3.983. The trim is cruder than the screen and does not converge to it, but it points the same way.
 
 ### 5.2 Year stability
 
@@ -285,6 +285,8 @@ Each row gives a number exactly as written in the text above, the committed file
 | 12,436 | outputs/tables/threshold_robustness_summary.csv | col=value; where metric=upper_bound_3500_to_4500_filings | filings entering flagged set, upper bound 4,500 to 3,500 |
 | 0.018 | docs/THRESHOLD_ROBUSTNESS.md | grep=The largest band holds 0.018% | hours share of largest reclassified band, percent |
 | 1.198 | outputs/tables/threshold_robustness_summary.csv | col=value; where metric=drop_top_1_by_hours_trir | TRIR after dropping the largest filing |
+| 70.32 | outputs/headline.json | path=excluding_largest_filing.hours_share_flagged_pct | share of hours in flagged filings once the largest filing is dropped, percent |
+| 3.32 | outputs/headline.json | path=excluding_largest_filing.ratio | screened over unscreened TRIR once the largest filing is dropped |
 | 4.137 | outputs/tables/threshold_robustness_summary.csv | col=value; where metric=drop_top_10000_by_hours_trir | TRIR after dropping the 10,000 largest filings |
 | 0.357 | outputs/tables/threshold_robustness_summary.csv | col=value; where metric=drop_top_10000_by_hours_share_of_filings; x100 | share of filings dropped, percent |
 | 10,000 | outputs/tables/quality_hours_concentration.csv | col=top_n_filings_by_hours; agg=max | largest trim size |

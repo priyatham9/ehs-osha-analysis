@@ -34,7 +34,7 @@ RELATIONS = {
 LICENSES = {
     "MIT License": ("MIT", "mit", "https://spdx.org/licenses/MIT"),
 }
-PROGRAMME = "https://priyatham9.github.io/grounded"
+PROGRAMME = "https://grounded-chi-five.vercel.app"
 
 
 def _scalar(text):

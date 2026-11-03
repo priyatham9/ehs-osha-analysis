@@ -7,7 +7,7 @@ authors:
     given-names: Priyatham
     email: priyatham9@gmail.com
 repository-code: "https://github.com/priyatham9/ehs-osha-analysis"
-url: "https://priyatham9.github.io/ehs-osha-analysis/"
+url: "https://ehs-osha-analysis.vercel.app/"
 license: MIT
 date-released: "2026-09-07"
 version: 0.1.0

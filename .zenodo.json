@@ -19,7 +19,7 @@
   ],
   "related_identifiers": [
     {
-      "identifier": "https://priyatham9.github.io/grounded/",
+      "identifier": "https://grounded-chi-five.vercel.app/",
       "relation": "isPartOf",
       "scheme": "url",
       "resource_type": "other"
@@ -31,7 +31,7 @@
       "resource_type": "software"
     },
     {
-      "identifier": "https://priyatham9.github.io/ehs-osha-analysis/",
+      "identifier": "https://ehs-osha-analysis.vercel.app/",
       "relation": "isDocumentedBy",
       "scheme": "url",
       "resource_type": "other"

@@ -1,9 +1,9 @@
 # ehs-osha-analysis
 
 [![tests](https://github.com/priyatham9/ehs-osha-analysis/actions/workflows/tests.yml/badge.svg)](https://github.com/priyatham9/ehs-osha-analysis/actions/workflows/tests.yml)
-[![site](https://img.shields.io/badge/site-github%20pages-blue)](https://priyatham9.github.io/ehs-osha-analysis/)
+[![site](https://img.shields.io/badge/site-github%20pages-blue)](https://ehs-osha-analysis.vercel.app/)
 
-Part of the Grounded research programme: https://priyatham9.github.io/grounded/
+Part of the Grounded research programme: https://grounded-chi-five.vercel.app/
 
 A reproducible pipeline over the public OSHA Injury Tracking Application Form 300A establishment filings, 2016-2024. It screens filings for internal plausibility and quantifies the bias they introduce to aggregate injury rates; screening raises the aggregate TRIR from 0.134 to 3.983, a 29.7x correction.
 

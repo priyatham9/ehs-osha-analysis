@@ -74,15 +74,26 @@ employee, against a physical ceiling of 8,760.
 Pooled across all nine reporting years, under the default screen
 (120-4,500 hours per average employee per year):
 
-| | |
-|---|---|
-| Filings after deduplication | 2,801,064 |
-| Flagged implausible | 57,857 (2.07%) |
-| Share of all reported hours they hold | 96.68% |
-| Share of all reported cases they hold | 1.37% |
-| Aggregate TRIR, unscreened | **0.134** |
-| Aggregate TRIR, screened | **3.983** |
-| Ratio | **29.7x** |
+| | All filings | Without the single largest filing |
+|---|---|---|
+| Filings after deduplication | 2,801,064 | 2,801,063 |
+| Flagged implausible | 57,857 (2.07%) | 57,856 (2.07%) |
+| Share of all reported hours they hold | 96.68% | 70.32% |
+| Share of all reported cases they hold | 1.37% | 1.37% |
+| Aggregate TRIR, unscreened | **0.134** | **1.198** |
+| Aggregate TRIR, screened | **3.983** | **3.983** |
+| Ratio | **29.7x** | **3.32x** |
+
+These are the canonical headline numbers. They are written, with their exact
+definitions, to [`outputs/headline.json`](outputs/headline.json) by
+`scripts/build_headline.py` from the committed outputs, and
+`tests/test_headline.py` fails if that file, or this table, drifts. Quote them
+from there. The right-hand column exists because one filing (establishment
+90427, CY2019, 7 employees, 16.8 trillion hours, zero cases) holds 88.81% of all
+reported hours on its own: 96.68% is true, but on its own it overstates how
+widespread the problem is. Without that filing the flagged 2.07% still hold
+70.32% of reported hours and the pooled correction is 3.32x, which is the more
+conservative figure to lead with.
 
 Per year (`outputs/tables/quality_by_year.csv`):
 

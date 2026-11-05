@@ -104,7 +104,7 @@ def load_sectors() -> pd.DataFrame:
     df = pd.read_csv(TABLES / "quality_by_naics2.csv", dtype={"label": str})
     df = df[(df["n_filings"] >= MIN_SECTOR_FILINGS) & df["label"].isin(SECTOR_TITLES) & (df["label"] != "99")]
     df = df.sort_values("label").reset_index(drop=True)
-    df["flagged_hours"] = df["hours_total"] * df["hours_share_implausible"]
+    df["flagged_hours"] = (df["hours_total"] * df["hours_share_implausible"]).round(0)
     return df
 
 

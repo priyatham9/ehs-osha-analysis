@@ -1,0 +1,21 @@
+metric,value,note
+n_sectors,24.0,"NAICS sector rows used (>=1,000 filings, code 99 excluded)"
+n_filings_in_sectors,2798839.0,filings in those rows
+n_flagged_in_sectors,57490.0,flagged filings in those rows
+pooled_flag_rate_all_rows,0.020655365,"quality_overall.csv, all rows"
+gini_flagged_filings,0.319967555,"concentration Gini of flagged filings vs filings, sectors ordered by flag rate"
+gini_flagged_filings_boot_lo,0.315937691,"2.5th percentile, 2000 binomial bootstrap draws, seed 20261105"
+gini_flagged_filings_boot_hi,0.324439758,97.5th percentile
+gini_flagged_hours,0.029111398,concentration Gini of flagged hours vs hours (near 0 because flagged filings carry most hours)
+top5_rate_sectors_share_of_filings,0.135747715,share of filings in the five highest-rate sectors
+top5_rate_sectors_share_of_flagged,0.29598191,share of flagged filings in those sectors
+top5_rate_sectors_share_of_flagged_cp_lo,0.292252146,Clopper-Pearson 95% lower
+top5_rate_sectors_share_of_flagged_cp_hi,0.299732279,Clopper-Pearson 95% upper
+top3_count_sectors_share_of_flagged,0.396712472,three sectors with most flagged filings
+top3_count_sectors_share_of_filings,0.215120984,their share of filings
+top3_flagged_hours_sectors_share_of_flagged_hours,0.981497244,three sectors holding most flagged hours
+top3_flagged_hours_sectors_share_of_hours,0.962615088,their share of all hours
+top1_flagged_hours_sector_share,0.919931829,share of flagged hours in the single largest sector (see sectors CSV)
+flagged_hours_share_of_all_hours,0.966812363,flagged hours / all hours in the sector rows
+hhi_flagged_filings,0.083015171,Herfindahl index of share_of_flagged (1/24 = 0.0417 if even)
+hhi_flagged_hours,0.848980668,Herfindahl index of share_of_flagged_hours

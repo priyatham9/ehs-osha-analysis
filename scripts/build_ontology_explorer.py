@@ -157,17 +157,17 @@ PAGE = r"""<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ontology Explorer</title>
 <style>
-:root{--bg:#f6f7f9;--panel:#fff;--ink:#1c2430;--mut:#5b6675;--line:#d9dee5;--acc:#1f5fbf;--accbg:#e8f0fc;--warn:#8a5a00;--warnbg:#fff4d6}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12161c;--panel:#1a2029;--ink:#e6eaf0;--mut:#9aa6b6;--line:#2c3542;--acc:#7fb0ff;--accbg:#1d2a40;--warn:#f0c46a;--warnbg:#3a2f12}}
-body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,sans-serif}
-header{padding:14px 16px;border-bottom:1px solid var(--line);background:var(--panel)}
-h1{font-size:18px;margin:0 0 4px}h2{font-size:16px;margin:0 0 8px}h3{font-size:14px;margin:12px 0 6px}
+:root{--bg:#f7f7f2;--panel:#fff;--ink:#172824;--mut:#5d6e65;--line:#dce3d9;--acc:#136c50;--accbg:#e6f0e7;--warn:#8a5a00;--warnbg:#fff4d6}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12201c;--panel:#192a23;--ink:#e6eaf0;--mut:#9aa6b6;--line:#2c3542;--acc:#8cd6ad;--accbg:#1d2a40;--warn:#f0c46a;--warnbg:#3a2f12}}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 system-ui,sans-serif}
+header{padding:32px max(20px,calc((100vw - 1168px)/2));border-bottom:1px solid var(--line);background:var(--panel)}
+h1{font:400 clamp(26px,4vw,40px)/1.15 Georgia,serif;margin:0 0 12px}h2{font-size:16px;margin:0 0 8px}h3{font-size:14px;margin:12px 0 6px}
 .sub{color:var(--mut);font-size:13px}
 nav{display:flex;gap:4px;flex-wrap:wrap;padding:8px 16px;background:var(--panel);border-bottom:1px solid var(--line)}
-nav button{border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:6px 12px;border-radius:6px;cursor:pointer;font:inherit}
+nav button{border:1px solid var(--line);background:var(--bg);color:var(--ink);min-height:44px;padding:8px 16px;border-radius:6px;cursor:pointer;font:inherit}
 nav button[aria-selected="true"]{background:var(--accbg);border-color:var(--acc);color:var(--acc)}
-main{padding:16px;max-width:1200px;margin:0 auto}
-.panel{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin-bottom:14px}
+main{padding:28px 20px;max-width:1200px;margin:0 auto}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:22px 24px;margin-bottom:20px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
 .card{border:1px solid var(--line);border-radius:8px;padding:10px;background:var(--panel);cursor:pointer;text-align:left;font:inherit;color:inherit}
 .card:hover{border-color:var(--acc)}

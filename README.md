@@ -5,6 +5,12 @@
 
 Part of the Grounded research programme: https://grounded-chi-five.vercel.app/
 
+[Open the interactive project](https://ehs-osha-analysis.vercel.app/explore.html) · [Data and methods](https://ehs-osha-analysis.vercel.app/)
+
+**Research question:** How much does the hours denominator change an injury-rate benchmark?
+
+**Evidence and limits:** Reproducible analysis of public OSHA establishment filings. Plausibility screening cannot identify which fields are wrong or establish injury causes.
+
 A reproducible pipeline over the public OSHA Injury Tracking Application Form 300A establishment filings, 2016-2024. It screens filings for internal plausibility and quantifies the bias they introduce to aggregate injury rates; screening raises the aggregate TRIR from 0.134 to 3.983, a 29.7x correction.
 
 It does not identify which specific numbers on forms are wrong, nor does it address causes of injury, nor does it represent the broader US workforce.

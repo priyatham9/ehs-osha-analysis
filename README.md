@@ -1,13 +1,13 @@
 # ehs-osha-analysis
 
 [![tests](https://github.com/priyatham9/ehs-osha-analysis/actions/workflows/tests.yml/badge.svg)](https://github.com/priyatham9/ehs-osha-analysis/actions/workflows/tests.yml)
-[![site](https://img.shields.io/badge/site-github%20pages-blue)](https://ehs-osha-analysis.vercel.app/)
+[![site](https://img.shields.io/badge/site-live%20audit-blue)](https://ehs-osha-analysis.vercel.app/)
 
 Part of the Grounded research programme: https://grounded-chi-five.vercel.app/
 
 [![Empirical influence audit showing reported and exclusion-sensitive injury-rate trends](docs/audit-preview.jpg)](https://ehs-osha-analysis.vercel.app/decision-audit.html)
 
-[Open the interactive project](https://ehs-osha-analysis.vercel.app/explore.html) · [Data and methods](https://ehs-osha-analysis.vercel.app/)
+[Open the denominator audit](https://ehs-osha-analysis.vercel.app/decision-audit.html) · [Original data explorer](https://ehs-osha-analysis.vercel.app/explore.html) · [Data and methods](https://ehs-osha-analysis.vercel.app/)
 
 ## New investigation: a plausible ratio can conceal an influential denominator
 

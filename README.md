@@ -20,7 +20,19 @@ The investigation exposes exact records, denominator concentration, symmetric ex
 - Reproduce the empirical audit: `make decision-audit` (all nine pinned raw snapshots required).
 - Inspect [analytical outputs and provenance](outputs/research/benchmark_fragility/findings.json).
 - Verify browser calculation models: `node --test tests/browser/*.test.mjs`.
-- Run browser integration checks against a local static server: `python scripts/check_decision_audit.py` (Playwright required).
+- Browser regressions start an isolated static server; no raw data or analysis dependencies are needed:
+
+  ```bash
+  python -m pip install playwright==1.62.0
+  python -m playwright install --with-deps chromium
+  python scripts/check_decision_audit.py
+  python scripts/check_denominator_audit.py
+  ```
+
+  Optional: `--base-url https://ehs-osha-analysis.vercel.app` checks a deployed docs root;
+  `--artifacts PATH` retains screenshots and exports in a chosen directory (otherwise a
+  fresh temporary directory). The browser CI job runs both checks, including CSV review
+  restoration, source-hash rejection, export scope and mobile layout.
 
 The original analysis below remains available; its plausibility screen is the starting point for this additional audit.
 

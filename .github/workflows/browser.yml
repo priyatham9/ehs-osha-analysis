@@ -1,0 +1,33 @@
+name: browser regressions
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  chromium:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install browser test dependency
+        run: python -m pip install playwright==1.62.0
+      - name: Install Chromium
+        run: python -m playwright install --with-deps chromium
+      - name: Check browser interactions and exported evidence
+        run: |
+          python scripts/check_decision_audit.py --artifacts browser-artifacts/decision
+          python scripts/check_denominator_audit.py --artifacts browser-artifacts/denominator
+      - name: Retain screenshots and downloaded reviews
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-regression-artifacts
+          path: browser-artifacts/
+          retention-days: 7
+          if-no-files-found: warn

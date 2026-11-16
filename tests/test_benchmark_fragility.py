@@ -1,5 +1,15 @@
-"""Accounting identities, influence diagnostics and reproducibility of the audit."""
+"""Accounting identities, influence diagnostics and reproducibility of the audit.
+
+Floating reductions can differ by a few ULPs across NumPy/pandas versions, and
+CSV artifacts round to 15 significant digits. Reproduction therefore permits
+1e-12 relative/absolute error for floating results only, far below reported
+precision. Source hashes, structure, row order and discrete values stay exact.
+The public JSON must still be byte-identical to its research artifact.
+"""
+import csv
+import io
 import json
+import math
 import tempfile
 import unittest
 from pathlib import Path
@@ -11,6 +21,106 @@ import pandas as pd
 from ehs_osha import benchmark_fragility as audit
 from ehs_osha.catalog import all_files
 from ehs_osha.quality import apply_screen, PlausibilityConfig
+
+
+FLOAT_RTOL = 1e-12
+FLOAT_ATOL = 1e-12
+
+
+def assert_reproduces(test, expected, actual, path="result"):
+    """Compare JSON-shaped data without relaxing keys, types or list order."""
+    if isinstance(expected, dict):
+        test.assertIsInstance(actual, dict, path)
+        test.assertEqual(set(expected), set(actual), f"{path}: keys")
+        for key in expected:
+            assert_reproduces(test, expected[key], actual[key], f"{path}.{key}")
+    elif isinstance(expected, list):
+        test.assertIsInstance(actual, list, path)
+        test.assertEqual(len(expected), len(actual), f"{path}: length")
+        for index, (left, right) in enumerate(zip(expected, actual)):
+            assert_reproduces(test, left, right, f"{path}[{index}]")
+    elif isinstance(expected, float):
+        test.assertIsInstance(actual, float, path)
+        test.assertTrue(math.isfinite(expected) and math.isfinite(actual), path)
+        test.assertTrue(
+            math.isclose(expected, actual, rel_tol=FLOAT_RTOL, abs_tol=FLOAT_ATOL),
+            f"{path}: {actual!r} != {expected!r} within floating tolerance",
+        )
+    else:
+        # In particular, bool/int and int/float substitutions must not pass
+        # merely because Python's ordinary equality treats them as equal.
+        test.assertIs(type(actual), type(expected), f"{path}: type")
+        test.assertEqual(expected, actual, path)
+
+
+def assert_csv_reproduces(test, saved_text, frame, path="table"):
+    """Parse CSV while preserving exact identifiers, booleans and counts."""
+    expected = list(csv.reader(io.StringIO(saved_text)))
+    actual = list(csv.reader(io.StringIO(frame.to_csv(index=False, float_format="%.15g"))))
+    test.assertEqual(expected[0], actual[0], f"{path}: columns")
+    test.assertEqual(len(expected), len(actual), f"{path}: row count")
+    test.assertEqual(len(actual[0]), len(set(actual[0])), f"{path}: duplicate columns")
+    # Outer joins can store integral case counts as float64. They remain
+    # discrete quantities; do not grant them a floating tolerance.
+    floating = {column for column in frame.columns
+                if pd.api.types.is_float_dtype(frame[column].dtype)
+                and not column.startswith("cases_reconstructed")}
+    for index, (left_row, right_row) in enumerate(zip(expected[1:], actual[1:])):
+        test.assertEqual(len(left_row), len(actual[0]), f"{path}[{index}]: saved width")
+        test.assertEqual(len(right_row), len(actual[0]), f"{path}[{index}]: generated width")
+        for column, left, right in zip(actual[0], left_row, right_row):
+            location = f"{path}[{index}].{column}"
+            if column not in floating or left == "" or right == "":
+                test.assertEqual(left, right, location)
+            else:
+                assert_reproduces(test, float(left), float(right), location)
+
+
+class TestReproductionTolerance(unittest.TestCase):
+    def test_ulp_noise_is_allowed_but_material_float_changes_are_not(self):
+        saved = {"sha256": "source-digest", "rows": [{"year": 2023, "rate": 3.1466293096590285}]}
+        noisy = {"sha256": "source-digest", "rows": [{"year": 2023, "rate": float(np.nextafter(saved["rows"][0]["rate"], np.inf))}]}
+        assert_reproduces(self, saved, noisy)
+        assert_reproduces(self, 0.0, 5e-16)
+        noisy["rows"][0]["rate"] += 1e-8
+        with self.assertRaises(AssertionError):
+            assert_reproduces(self, saved, noisy)
+        for changed in (1e-8, float("nan"), float("inf")):
+            with self.subTest(changed=changed), self.assertRaises(AssertionError):
+                assert_reproduces(self, 0.0, changed)
+
+    def test_structure_fingerprints_order_and_discrete_values_are_exact(self):
+        saved = {"sha256": "original", "rows": [{"id": "001", "n": 1000000, "ok": True},
+                                                  {"id": "002", "n": 2, "ok": False}]}
+        variants = []
+        for key, value in (("id", "1"), ("n", 1000001), ("n", 1000000.0), ("ok", 1)):
+            changed = json.loads(json.dumps(saved))
+            changed["rows"][0][key] = value
+            variants.append(changed)
+        variants.extend([{**saved, "sha256": "changed"},
+                         {**saved, "rows": list(reversed(saved["rows"]))},
+                         {**saved, "unexpected": 1}])
+        for changed in variants:
+            with self.subTest(changed=changed), self.assertRaises(AssertionError):
+                assert_reproduces(self, saved, changed)
+
+    def test_csv_accepts_ulp_noise_but_rejects_drift_and_schema_changes(self):
+        saved = "naics3,n,cases_reconstructed_before,rate,valid\n001,100,5000,3.14662930965903,True\n002,200,6000,4.5,False\n"
+        frame = pd.DataFrame({"naics3": ["001", "002"], "n": [100, 200],
+                              "cases_reconstructed_before": [5000.0, 6000.0],
+                              "rate": [3.1466293096590285, 4.5], "valid": [True, False]})
+        noisy = frame.copy()
+        noisy.loc[0, "rate"] += 1e-15
+        assert_csv_reproduces(self, saved, noisy)
+        variants = [frame.iloc[::-1], frame.iloc[:1], frame.rename(columns={"rate": "different"})]
+        for column, value in (("rate", 3.14663), ("naics3", "1"), ("n", 101),
+                              ("cases_reconstructed_before", 5000.000000001), ("valid", False)):
+            changed = frame.copy()
+            changed.loc[0, column] = value
+            variants.append(changed)
+        for changed in variants:
+            with self.subTest(columns=list(changed.columns)), self.assertRaises(AssertionError):
+                assert_csv_reproduces(self, saved, changed)
 
 
 def frame(year, hours, cases, names=("111", "222")):
@@ -100,7 +210,7 @@ class TestCommittedAudit(unittest.TestCase):
 
     def test_source_table_fingerprints_and_results_are_reproducible(self):
         for key in ("annual_rates", "decomposition", "provenance", "definitions", "limitations"):
-            self.assertEqual(self.saved[key], self.rebuilt[key], key)
+            assert_reproduces(self, self.saved[key], self.rebuilt[key], key)
 
     def test_all_decompositions_reconcile(self):
         for r in self.saved["decomposition"]:
@@ -154,7 +264,7 @@ class TestCommittedAudit(unittest.TestCase):
 
     def test_generated_csvs_match_saved_artifacts(self):
         for name, df in self.tables.items():
-            self.assertEqual(df.to_csv(index=False, float_format="%.15g"), (self.path/f"{name}.csv").read_text())
+            assert_csv_reproduces(self, (self.path/f"{name}.csv").read_text(), df, name)
 
 
 class TestPinnedRawAudit(unittest.TestCase):
@@ -166,7 +276,7 @@ class TestPinnedRawAudit(unittest.TestCase):
         saved = json.loads((audit.ROOT/"outputs"/"research"/"benchmark_fragility"/"findings.json").read_text())
         rebuilt, _ = audit.raw_analysis(data, saved["annual_rates"])
         for key, value in rebuilt.items():
-            self.assertEqual(saved[key], value, key)
+            assert_reproduces(self, saved[key], value, key)
 
     def test_mismatched_source_fails_before_loading(self):
         spec = next(f for f in all_files() if f.calendar_year == 2022)

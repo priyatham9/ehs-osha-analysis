@@ -1,0 +1,4 @@
+
+# Reproducible analytical outputs; review their generators and source hashes.
+outputs/research/** linguist-generated=true
+docs/decision-audit-data.json linguist-generated=true

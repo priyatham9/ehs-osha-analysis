@@ -5,13 +5,30 @@
 
 Part of the Grounded research programme: https://grounded-chi-five.vercel.app/
 
+[![Empirical influence audit showing reported and exclusion-sensitive injury-rate trends](docs/audit-preview.jpg)](https://ehs-osha-analysis.vercel.app/decision-audit.html)
+
 [Open the interactive project](https://ehs-osha-analysis.vercel.app/explore.html) · [Data and methods](https://ehs-osha-analysis.vercel.app/)
+
+## New investigation: a plausible ratio can conceal an influential denominator
+
+[Explore the empirical audit](https://ehs-osha-analysis.vercel.app/decision-audit.html) · [Audit your own CSV locally](https://ehs-osha-analysis.vercel.app/denominator-audit.html)
+
+The screened 2023→2024 rate increases **15.73%**. Excluding two 2023 filings changes that comparison to **−3.81%**. Both filings pass all 25 tested hours-per-employee screens; the sign reversal persists when each specification is applied to the complete yearly populations. This is exclusion sensitivity, **not a corrected injury estimate** or proof that the filings are wrong.
+
+The investigation exposes exact records, denominator concentration, symmetric exclusions, threshold sensitivity, and composition effects. The applied tool accepts a local CSV, computes individual-record influence, and exports a documented review scenario without uploading the file.
+
+- Reproduce the empirical audit: `make decision-audit` (all nine pinned raw snapshots required).
+- Inspect [analytical outputs and provenance](outputs/research/benchmark_fragility/findings.json).
+- Verify browser calculation models: `node --test tests/browser/*.test.mjs`.
+- Run browser integration checks against a local static server: `python scripts/check_decision_audit.py` (Playwright required).
+
+The original analysis below remains available; its plausibility screen is the starting point for this additional audit.
 
 **Research question:** How much does the hours denominator change an injury-rate benchmark?
 
 **Evidence and limits:** Reproducible analysis of public OSHA establishment filings. Plausibility screening cannot identify which fields are wrong or establish injury causes.
 
-A reproducible pipeline over the public OSHA Injury Tracking Application Form 300A establishment filings, 2016-2024. It screens filings for internal plausibility and quantifies the bias they introduce to aggregate injury rates; screening raises the aggregate TRIR from 0.134 to 3.983, a 29.7x correction.
+A reproducible pipeline over the public OSHA Injury Tracking Application Form 300A establishment filings, 2016-2024. It screens filings for internal plausibility and quantifies their influence on aggregate injury rates; screening raises the aggregate TRIR from 0.134 to 3.983, a 29.7x screening effect.
 
 It does not identify which specific numbers on forms are wrong, nor does it address causes of injury, nor does it represent the broader US workforce.
 
@@ -33,7 +50,7 @@ runner beyond stdlib `unittest`.
 
 [docs/INDUSTRY_QUALITY.md](docs/INDUSTRY_QUALITY.md) ranks NAICS sectors and years by filing-quality problem rate and screening effect, generated from the committed tables.
 
-[docs/PANEL_AUDIT.md](docs/PANEL_AUDIT.md) audits establishment linkage from the committed tables: how many years each `establishment_id` appears, attribute drift under a fixed id, and what can and cannot be said about where the 29.7x correction sits (`outputs/tables/panel_linkage_audit.csv`).
+[docs/PANEL_AUDIT.md](docs/PANEL_AUDIT.md) audits establishment linkage from the committed tables: how many years each `establishment_id` appears, attribute drift under a fixed id, and what can and cannot be said about where the 29.7x screening effect sits (`outputs/tables/panel_linkage_audit.csv`).
 [docs/THRESHOLD_ROBUSTNESS.md](docs/THRESHOLD_ROBUSTNESS.md) is a specification-curve view of the screen: across all 25 pairs of bounds in the committed sensitivity grid the screened aggregate TRIR stays within 3.963-3.993 while the flagged share runs from 1.79% to 4.49%, with the filings that move between cells priced by their own hours and cases, a threshold-free top-N-by-hours cross-check, and the limits (`outputs/tables/threshold_robustness_cells.csv`, `outputs/tables/threshold_robustness_summary.csv`).
 [docs/YEAR_STABILITY.md](docs/YEAR_STABILITY.md) leaves each of the nine years out in turn and tracks year-over-year change: the screened aggregate TRIR stays within 3.901-4.137 and the flagged share within 2.00%-2.12% across the leave-one-out pools, the unscreened TRIR does not (one year, 2019, drives it), and peer-group rank correlation stays between 0.840 and 0.946 (`outputs/tables/year_stability_loyo.csv`, `year_stability_yoy.csv`, `year_stability_summary.csv`).
 [docs/flag_concentration.md](docs/flag_concentration.md) measures how unevenly flagged filings and flagged hours sit across 24 NAICS sectors: concentration Gini 0.320 (bootstrap 95% 0.316-0.324) for filings, the five highest-rate sectors hold 13.57% of filings but 29.60% of flagged filings (exact 95% 29.23%-29.97%), and construction alone holds 92.0% of flagged hours (`outputs/flag_concentration_*.csv`, `make flag-concentration`).
@@ -49,7 +66,7 @@ runner beyond stdlib `unittest`.
 |---|---|
 | Status | tests passing (see badge above) |
 | Data | real (public OSHA ITA filings, 2016-2024); synthetic fixture available for offline test runs only, never used for headline numbers |
-| Tests | 323 tests, stdlib `unittest` (18 skip without `data/raw/`) |
+| Tests | Python `unittest` and Node calculation tests; raw-data checks require `data/raw/` |
 | Quickstart | `make data && make analysis && make test` |
 | Licence | MIT |
 

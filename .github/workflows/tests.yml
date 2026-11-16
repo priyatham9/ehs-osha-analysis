@@ -65,3 +65,13 @@ jobs:
         run: |
           coverage report -m
           coverage report -m | grep TOTAL | awk '{print "Coverage: " $NF}' >> $GITHUB_STEP_SUMMARY
+
+  browser-models:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify interactive audit calculations
+        run: node --test tests/browser/*.test.mjs

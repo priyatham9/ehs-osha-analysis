@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; connect-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'self'; form-action 'none'"
+    />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="Audit denominator concentration and trend sensitivity in your own two-period filing data. Local browser calculations; files are not uploaded."
+    />
+    <title>Denominator review · Grounded</title>
+    <link rel="stylesheet" href="denominator-audit.css" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to audit</a>
+    <header>
+      <a class="brand" href="decision-audit.html"
+        >g.<span>Grounded / Applied measurement</span></a
+      >
+      <nav aria-label="Main">
+        <a href="decision-audit.html">The research ↗</a
+        ><a href="#method">Method</a>
+      </nav>
+    </header>
+    <main id="main">
+      <div class="heading">
+        <div>
+          <p class="eyebrow">A decision audit, before the dashboard</p>
+          <h1>What holds your trend together?</h1>
+          <p>
+            Inspect the records behind a pooled rate. Test their influence
+            before treating a change as a signal.
+          </p>
+        </div>
+        <div class="privacy">
+          <span class="privacy-dot"></span
+          ><strong>Local to this browser</strong>
+          <p>
+            Your file is processed on this device. The app does not upload or
+            persist it. Reloading clears loaded data.
+          </p>
+        </div>
+      </div>
+      <div class="workspace">
+        <aside class="setup">
+          <h2><span class="step">01</span> Define the comparison</h2>
+          <label class="file-label" for="csv-file"
+            >Open a CSV file<span>Up to 10 MB · 50,000 records</span></label
+          ><input id="csv-file" type="file" accept=".csv,text/csv" />
+          <p class="hint">
+            Required columns: <code>year, employees, hours, cases</code>.
+            Optional: <code>filing_id</code>. Use reported hours, not FTEs.
+          </p>
+          <div class="small-actions">
+            <button id="template" type="button">Download template</button
+            ><button id="example" type="button">Try a constructed case</button>
+          </div>
+          <div class="restore-control">
+            <button id="restore-review" type="button" disabled>
+              Restore a saved review</button
+            ><input
+              id="review-file"
+              type="file"
+              accept=".json,application/json"
+              hidden
+            />
+            <p class="hint">
+              Load the original CSV first. Restoration verifies its fingerprint
+              and recomputes every result.
+            </p>
+          </div>
+          <p id="file-status" role="status">No file loaded.</p>
+          <div id="error" role="alert" hidden></div>
+          <form id="settings">
+            <fieldset disabled id="settings-fields">
+              <legend>Period &amp; ratio screen</legend>
+              <div class="pair">
+                <label>Earlier year<select id="before"></select></label
+                ><label>Later year<select id="after"></select></label>
+              </div>
+              <div class="pair">
+                <label
+                  >Minimum hours / employee<input
+                    id="low"
+                    type="number"
+                    value="120"
+                    min="0"
+                    step="any"
+                    required /></label
+                ><label
+                  >Maximum hours / employee<input
+                    id="high"
+                    type="number"
+                    value="4500"
+                    min="0"
+                    step="any"
+                    required
+                /></label>
+              </div>
+              <button class="primary" type="submit">
+                Run influence audit →
+              </button>
+            </fieldset>
+          </form>
+          <p class="hint">
+            The default ratio bounds reproduce the research screen. They are not
+            validated cleaning rules for your data.
+          </p>
+          <button id="clear" type="button" disabled>
+            Clear file &amp; review
+          </button>
+        </aside>
+        <section class="analysis" aria-label="Audit results">
+          <div id="empty">
+            <span class="outline-number">Σ</span>
+            <h2>A plausible ratio is only one check.</h2>
+            <p>
+              When hours and employee count grow together, their ratio can stay
+              unchanged—even while one filing dominates a pooled rate.
+            </p>
+            <ol>
+              <li>Load at least two years of records.</li>
+              <li>Inspect what passes the ratio screen.</li>
+              <li>Review which individual records can change the trend.</li>
+            </ol>
+            <a href="decision-audit.html"
+              >See the finding in nine years of public OSHA data →</a
+            >
+          </div>
+          <div id="results" hidden>
+            <div class="result-heading">
+              <div>
+                <p class="eyebrow">02 / Inspect the measurement</p>
+                <h2 id="period-title"></h2>
+              </div>
+              <span id="data-kind" class="badge"></span>
+            </div>
+            <div class="metrics">
+              <div>
+                <span>Screened trend</span><strong id="base-change"></strong
+                ><small id="base-rates"></small>
+              </div>
+              <div>
+                <span>Review scenario</span><strong id="review-change"></strong
+                ><small id="review-rates"></small>
+              </div>
+              <div>
+                <span>Single-record reversals</span
+                ><strong id="reversal-count"></strong
+                ><small>Among screen-passing records</small>
+              </div>
+            </div>
+            <p class="finding" id="finding" aria-live="polite"></p>
+            <div
+              class="rate-chart"
+              id="rate-chart"
+              role="img"
+              aria-label="Screened and review-scenario rates"
+            ></div>
+            <details class="ledger">
+              <summary>
+                Inspect exact numerator, denominator &amp; screening counts
+              </summary>
+              <div
+                class="table-scroll"
+                tabindex="0"
+                role="region"
+                aria-label="Annual calculation ledger"
+              >
+                <table>
+                  <caption>
+                    Rates = cases × 200,000 ÷ reported hours. Values rounded for
+                    display; JSON retains numeric precision.
+                  </caption>
+                  <thead>
+                    <tr>
+                      <th>Year</th>
+                      <th>Input rows</th>
+                      <th>Pass</th>
+                      <th>Outside bounds</th>
+                      <th>Reviewed out</th>
+                      <th>Remaining cases</th>
+                      <th>Remaining hours</th>
+                      <th>Rate</th>
+                    </tr>
+                  </thead>
+                  <tbody id="ledger"></tbody>
+                </table>
+              </div>
+            </details>
+            <div class="result-heading record-heading">
+              <div>
+                <p class="eyebrow">03 / Review influential records</p>
+                <h2>Which records deserve a closer look?</h2>
+                <p>
+                  Ranked by absolute change in the pooled rate after removing
+                  one record from its year. A flag requests investigation; it
+                  does not establish an error.
+                </p>
+              </div>
+            </div>
+            <div class="review-controls">
+              <div class="scenario-strip" aria-live="polite">
+                <span id="scenario-count"></span
+                ><strong id="scenario-consequence"></strong
+                ><button id="review-selected" type="button">
+                  Review selected
+                </button>
+              </div>
+              <div class="toolbar">
+                <label
+                  >Show<select id="record-filter">
+                    <option value="all">All screen-passing records</option>
+                    <option value="reversals">
+                      Only single-record reversals
+                    </option>
+                    <option value="selected">Selected for review</option>
+                  </select></label
+                ><button id="reset-review" type="button">
+                  Reset exclusions</button
+                ><span id="record-count" role="status"></span>
+              </div>
+            </div>
+            <div
+              class="table-scroll"
+              tabindex="0"
+              role="region"
+              aria-label="Influential record review"
+            >
+              <table class="records">
+                <thead>
+                  <tr>
+                    <th>Exclude in scenario</th>
+                    <th>Record / year</th>
+                    <th>Employees</th>
+                    <th>Hours</th>
+                    <th>Cases</th>
+                    <th>Hours / employee</th>
+                    <th>Year's hours</th>
+                    <th>Rate influence</th>
+                    <th>Trend if removed alone</th>
+                  </tr>
+                </thead>
+                <tbody id="records"></tbody>
+              </table>
+            </div>
+            <div class="pagination">
+              <button id="previous" type="button">← Previous</button
+              ><span id="page-label"></span
+              ><button id="next" type="button">Next →</button>
+            </div>
+            <div class="review">
+              <div>
+                <p class="eyebrow">04 / Record the judgment</p>
+                <h2>Keep the evidence and decision separate.</h2>
+                <p>
+                  Record what you would verify with the data owner. Export this
+                  scenario for review; the source file remains unchanged.
+                </p>
+              </div>
+              <div>
+                <label for="review-note">Reviewer note</label
+                ><textarea
+                  id="review-note"
+                  rows="4"
+                  maxlength="4000"
+                  placeholder="For example: verify the units and the reporting scope for the most influential filing."
+                ></textarea>
+                <div class="small-actions">
+                  <button id="export-json" class="primary" type="button">
+                    Export review JSON</button
+                  ><button id="export-csv" type="button">
+                    Export influence CSV
+                  </button>
+                </div>
+                <p class="hint">
+                  Exports contain the loaded record identifiers and values.
+                  Choose where to share them. CSV exports all records in the two
+                  selected years, regardless of the viewing filter. Formula-like
+                  identifiers are prefixed for spreadsheet safety; JSON retains
+                  original selected identifiers.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <section id="method" class="method">
+        <div>
+          <p class="eyebrow">Method / bounded conclusions</p>
+          <h2>Influence is not invalidity.</h2>
+        </div>
+        <div>
+          <p>
+            The pooled rate weights each filing by reported hours. This tool
+            applies the same inclusive hours-per-employee screen in both
+            selected years, then directly recomputes leave-one-out changes for
+            every included record. Single-record reversals compare the signs of
+            the original and leave-one-out differences; a zero difference is not
+            a reversal.
+          </p>
+          <p>
+            Exclusion scenarios recompute the pooled rate after all selected
+            records are removed. Their effects need not add. This is a
+            sensitivity analysis, not a corrected estimate, probability sample,
+            causal analysis, or judgment about data quality. Rates can also
+            change because the reporting population changes.
+          </p>
+          <p>
+            Calculations use standard floating-point arithmetic; differences
+            smaller than numerical precision may not be resolved. Missing or
+            invalid required values stop the audit instead of silently dropping
+            rows. A year with zero remaining hours has no defined rate. A zero
+            baseline rate has no defined percentage change; the absolute rate
+            difference remains available.
+          </p>
+          <a href="decision-audit.html#method"
+            >Research sources &amp; limitations →</a
+          >
+        </div>
+      </section>
+    </main>
+    <footer>
+      Grounded · Denominator review · Independent analytical tool, not an OSHA
+      product.
+    </footer>
+    <script type="module" src="denominator-audit.js"></script>
+  </body>
+</html>

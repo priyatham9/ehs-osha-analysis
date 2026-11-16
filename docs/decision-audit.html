@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="A reproducible influence audit of screened OSHA reporting rates: test how two influential filings change the apparent 2024 trend."
+    />
+    <title>When a passing check hides a fragile trend · Grounded</title>
+    <link rel="stylesheet" href="decision-audit.css" />
+    <script type="module" src="decision-audit.js"></script>
+  <link rel="canonical" href="https://ehs-osha-analysis.vercel.app/decision-audit.html"><meta property="og:type" content="website"><meta property="og:title" content="A screening rule passed. The trend was still fragile."><meta property="og:description" content="Inspect real public filings, threshold sensitivity and the records that can reverse an annual injury-rate comparison."><meta property="og:url" content="https://ehs-osha-analysis.vercel.app/decision-audit.html"><meta property="og:image" content="https://ehs-osha-analysis.vercel.app/audit-preview.jpg"><meta name="twitter:card" content="summary_large_image">
+</head>
+  <body>
+    <a class="skip" href="#investigation">Skip to investigation</a>
+    <header>
+      <a class="brand" href="https://grounded-chi-five.vercel.app/"
+        >g.<span>Grounded / Measurement audits</span></a
+      >
+      <nav aria-label="Research navigation">
+        <a href="explore.html">Data explorer</a
+        ><a href="#method">Method & sources</a
+        ><a href="https://priyatham9.github.io/labs/">All projects ↗︎</a>
+      </nav>
+    </header>
+    <main>
+      <section class="opening">
+        <p class="eyebrow">OSHA ITA / EMPIRICAL SENSITIVITY STUDY</p>
+        <h1>A screening rule passed.<br />The trend was still fragile.</h1>
+        <div class="opening-grid">
+          <p class="lead">
+            The screened rate rises in 2024. Excluding just two influential 2023
+            filings changes the direction. Their hours per employee look
+            plausible even though both reported inputs are enormous.
+          </p>
+          <p class="claim-bound">
+            This is an influence audit,
+            <strong>not a corrected safety estimate</strong>. The records are
+            real public filings. Their true values—and the reason for the
+            unusual scale—are unknown.
+          </p>
+        </div>
+        <p class="apply-link">
+          <a href="denominator-audit.html"
+            >Apply the influence audit to your own CSV →</a
+          ><span>Local browser calculations · no file upload</span>
+        </p>
+      </section>
+      <div id="load-status" role="status">
+        Loading the reproducible findings…
+      </div>
+      <noscript
+        ><p>
+          This investigation requires JavaScript.
+          <a href="decision-audit-data.json"
+            >Download the findings and provenance</a
+          >.
+        </p></noscript
+      >
+      <div id="loaded" hidden>
+        <section class="thesis-strip" aria-label="Headline evidence">
+          <div>
+            <span>Apparent 2024 change</span><strong id="headline-base"></strong
+            ><small>Under the existing hours screen</small>
+          </div>
+          <div>
+            <span>After excluding two 2023 filings</span
+            ><strong id="headline-sensitive"></strong
+            ><small>Sensitivity calculation, not a correction</small>
+          </div>
+          <div>
+            <span>Share of 2023 screened hours</span
+            ><strong id="headline-hours"></strong
+            ><small>Two filings · ten reported cases</small>
+          </div>
+        </section>
+        <section id="investigation" class="chapter">
+          <div class="chapter-title">
+            <p class="eyebrow">01 / CHALLENGE THE HEADLINE</p>
+            <h2>Does the direction survive?</h2>
+            <p>
+              Keep the reported cases and hours visible. Change the inclusion
+              rule; inspect the consequence.
+            </p>
+          </div>
+          <div class="workbench">
+            <div class="canvas">
+              <div class="figure-header">
+                <h3>Screened aggregate TRIR</h3>
+                <span>Cases per 200,000 reported hours</span>
+              </div>
+              <div class="legend">
+                <span><i class="ink"></i>Existing screen</span
+                ><span><i class="blue"></i>Selected sensitivity</span>
+              </div>
+              <div id="trend-chart" class="chart"></div>
+              <p class="chart-note">
+                Fixed vertical scale from zero. The comparison changes included
+                filings; it does not estimate a causal change in workplace
+                safety.
+              </p>
+              <p id="numerator-context" class="numerator-context"></p>
+              <div
+                id="delta-readout"
+                class="delta-readout"
+                aria-live="polite"
+              ></div>
+            </div>
+            <aside class="controls" aria-label="Sensitivity controls">
+              <h3>Choose the inclusion rule</h3>
+              <fieldset>
+                <legend class="sr-only">Sensitivity scenario</legend>
+                <label class="scenario"
+                  ><input
+                    type="radio"
+                    name="scenario"
+                    value="baseline"
+                    checked
+                  /><span
+                    ><strong>Existing screen</strong
+                    ><small
+                      >Retain all filings passing the original rule.</small
+                    ></span
+                  ></label
+                ><label class="scenario"
+                  ><input type="radio" name="scenario" value="selected" /><span
+                    ><strong>Inspect two influential filings</strong
+                    ><small
+                      >Exclude either or both selected 2023 records.</small
+                    ></span
+                  ></label
+                ><label class="scenario"
+                  ><input type="radio" name="scenario" value="symmetric" /><span
+                    ><strong>Use the same rule in each year</strong
+                    ><small
+                      >Exclude the largest-hour filings in each plotted
+                      year.</small
+                    ></span
+                  ></label
+                >
+              </fieldset>
+              <div id="record-controls" hidden>
+                <p class="control-label">EXCLUDE FROM 2023</p>
+                <div id="exclude-list"></div>
+              </div>
+              <div id="top-controls" hidden>
+                <label for="top-k">Largest-hour filings removed per year</label
+                ><select id="top-k"></select>
+                <p>
+                  Ranks are calculated separately in each year. Cases and hours
+                  are both removed.
+                </p>
+              </div>
+              <div class="audit-note">
+                <strong>The adversarial check</strong>
+                <p>
+                  Does the reversal require choosing a convenient year? The
+                  symmetric rule tests that objection directly.
+                </p>
+              </div>
+              <button id="reset" class="quiet">Reset investigation</button>
+            </aside>
+          </div>
+          <div class="ledger-header">
+            <h3>The denominator behind the chart</h3>
+            <button id="export-csv">Export selected calculation ↓</button>
+          </div>
+          <div
+            class="table-wrap"
+            tabindex="0"
+            role="region"
+            aria-label="Selected calculation table"
+          >
+            <table id="calculation-table">
+              <caption>
+                Exact counts; rates displayed to six decimals. Scroll
+                horizontally on small screens.
+              </caption>
+              <thead>
+                <tr>
+                  <th>Year</th>
+                  <th>Included filings</th>
+                  <th>Included cases</th>
+                  <th>Included hours</th>
+                  <th>TRIR</th>
+                  <th>Removed hours</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+        <section class="chapter" id="records">
+          <div class="chapter-title">
+            <p class="eyebrow">02 / INSPECT THE RECORDS</p>
+            <h2>The ratio looks ordinary.<br />The scale does not.</h2>
+            <p>
+              These are reported values from pinned agency CSV files, checked
+              against their original strings. No institution names are needed to
+              inspect the measurement problem.
+            </p>
+          </div>
+          <div
+            class="table-wrap"
+            tabindex="0"
+            role="region"
+            aria-label="Influential public filing records"
+          >
+            <table id="records-table">
+              <caption>
+                2023 records · both pass the default 120–4,500
+                hours-per-employee screen
+              </caption>
+              <thead>
+                <tr>
+                  <th>Filing ID</th>
+                  <th>Reported employees</th>
+                  <th>Reported hours</th>
+                  <th>Cases</th>
+                  <th>Hours / employee</th>
+                  <th>Screen</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div class="concentration-context">
+            <div>
+              <h3>Is 2023 unusual among the nine years?</h3>
+              <p id="concentration-summary"></p>
+              <p class="chart-note">
+                Share of each year's default-screened hours held by its two
+                largest filings. Every bar uses the same 0–20% scale.
+              </p>
+              <div
+                id="concentration-bars"
+                role="img"
+                aria-label="Annual top-two reported-hours concentration"
+              ></div>
+            </div>
+            <div class="single-review">
+              <p class="eyebrow">FROM FINDING TO REVIEW RULE</p>
+              <h3>One record is enough to reverse this comparison.</h3>
+              <p id="single-review-summary"></p>
+              <p>
+                Apply the same single-deletion check to every included record in
+                both years. Route a sign-changing record for review; retain it
+                until its units and reporting scope can be verified.
+              </p>
+              <p class="chart-note">
+                The operational rule is defined here and applied
+                retrospectively. It was not historically preregistered. No
+                single-record reversal does not establish robustness to combined
+                deletions.
+              </p>
+              <a href="denominator-audit.html"
+                >Run this check on your own CSV →</a
+              >
+            </div>
+          </div>
+          <div class="mechanism">
+            <div>
+              <h3>A ratio cannot identify joint scale</h3>
+              <p>
+                Multiply both hours and headcount by the same positive factor.
+                Their ratio stays unchanged. The incident rate changes if cases
+                do not scale with them.
+              </p>
+              <p class="equation">
+                (k × hours) / (k × people) = hours / people
+              </p>
+              <p class="muted">
+                This is a mathematical stress test using a reported row. It does
+                not assert which fields are wrong or propose corrected values.
+              </p>
+            </div>
+            <div class="stress">
+              <label for="scale-row">Reported row to stress-test</label
+              ><select id="scale-row"></select
+              ><label for="scale-factor"
+                >Hypothetical multiplier on hours and headcount</label
+              ><select id="scale-factor">
+                <option value="0.01">× 0.01</option>
+                <option value="0.1">× 0.1</option>
+                <option value="1" selected>× 1 — original report</option>
+                <option value="10">× 10</option>
+                <option value="100">× 100</option>
+              </select>
+              <dl id="scale-result" aria-live="polite"></dl>
+            </div>
+          </div>
+          <details class="disclosure">
+            <summary>
+              Do adjacent-year records change the interpretation?
+            </summary>
+            <p>
+              The same reported establishment IDs also occur in adjacent files.
+              Their scale differs substantially. ID reuse is a linkage hint, not
+              independently verified physical identity; these rows provide an
+              audit lead, not replacement values.
+            </p>
+            <div
+              class="table-wrap"
+              tabindex="0"
+              role="region"
+              aria-label="Same-ID adjacent-year evidence"
+            >
+              <table id="linked-table">
+                <thead>
+                  <tr>
+                    <th>Year</th>
+                    <th>Establishment ID</th>
+                    <th>Filing ID</th>
+                    <th>Employees</th>
+                    <th>Hours</th>
+                    <th>Hours / employee</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </details>
+        </section>
+        <section class="chapter" id="robustness">
+          <div class="chapter-title">
+            <p class="eyebrow">03 / TRY TO BREAK THE FINDING</p>
+            <h2>A threshold sweep is not enough.</h2>
+            <p>
+              Changing the cutoffs tests the same ratio repeatedly. An influence
+              audit asks a different question: which records can change the
+              conclusion?
+            </p>
+          </div>
+          <div class="robust-grid">
+            <div>
+              <h3>Does the trend survive all 25 screens?</h3>
+              <p id="threshold-description"></p>
+              <div
+                id="threshold-grid"
+                class="threshold-grid"
+                aria-label="Tested ratio screen grid"
+              ></div>
+              <p
+                id="threshold-detail"
+                class="threshold-detail"
+                aria-live="polite"
+              ></p>
+              <p class="chart-note">
+                Each cell recomputes both full-year populations under its
+                bounds. Upper value: reported trend. Lower value: excluding the
+                two filings. All 25 specifications reverse direction. Select a
+                cell to inspect its rates.
+              </p>
+            </div>
+            <div>
+              <h3>Does symmetric deletion preserve the sign?</h3>
+              <div
+                class="table-wrap"
+                tabindex="0"
+                role="region"
+                aria-label="Symmetric top-k sensitivity"
+              >
+                <table id="robust-table">
+                  <caption>
+                    2023 → 2024; remove top k by hours separately in each year
+                  </caption>
+                  <thead>
+                    <tr>
+                      <th>k per year</th>
+                      <th>2023 rate</th>
+                      <th>2024 rate</th>
+                      <th>Change</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <details class="disclosure">
+            <summary>
+              Separate within-group change from changing composition
+            </summary>
+            <p>
+              Peer groups are industry × establishment-size cells, not a
+              longitudinal panel of the same establishments. This decomposition
+              is descriptive. The residual accounts for changes in cell support
+              and renormalization.
+            </p>
+            <label for="pair-year">Adjacent years</label
+            ><select id="pair-year"></select>
+            <div id="decomposition"></div>
+            <p class="chart-note">
+              Symmetric decomposition: within = Σ mean(weight) × Δrate;
+              composition = Σ mean(rate) × Δweight. Full change = within +
+              composition + support residual. These are algebraic contributions,
+              not causal effects.
+            </p>
+          </details>
+        </section>
+        <section class="chapter review" id="review">
+          <div>
+            <p class="eyebrow">04 / TAKE A DEFENSIBLE STATEMENT</p>
+            <h2>Export the finding,<br />including its limits.</h2>
+            <p>
+              The evidence supports a fragility claim. It does not tell us the
+              true injury trend, the correct values, or anyone’s intent.
+            </p>
+          </div>
+          <div>
+            <label for="review-note"
+              >Your interpretation or follow-up question</label
+            ><textarea
+              id="review-note"
+              rows="4"
+              maxlength="3000"
+              placeholder="What would you ask the data owner to verify?"
+            ></textarea
+            ><button id="export-review" class="primary">
+              Export research brief ↓</button
+            ><button id="copy-link">Copy this investigation</button>
+            <p id="action-status" role="status"></p>
+          </div>
+        </section>
+        <section class="chapter methods" id="method">
+          <p class="eyebrow">REPRODUCIBLE / OPEN FOR SCRUTINY</p>
+          <h2>What this result rests on</h2>
+          <div class="method-grid">
+            <div>
+              <h3>Evidence boundaries</h3>
+              <ul id="limits"></ul>
+              <p>
+                All calculations are descriptive. A deletion sensitivity is not
+                an endorsed cleaning policy. No statistical inference about all
+                workplaces follows from these administrative records.
+              </p>
+            </div>
+            <div>
+              <h3>Sources and exact artifacts</h3>
+              <p>
+                The public JSON records source hashes, filing IDs, definitions
+                and the complete analytical output.
+              </p>
+              <a class="download" href="decision-audit-data.json" download
+                >Download findings JSON ↓</a
+              ><a
+                class="download"
+                href="https://github.com/priyatham9/ehs-osha-analysis/blob/main/src/ehs_osha/benchmark_fragility.py"
+                >Read the reproducible analysis ↗︎</a
+              >
+              <div id="source-list"></div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <footer>
+        <span>Priyatham Chimmani / Grounded</span
+        ><a href="explore.html">Continue exploring the public data →</a>
+      </footer>
+    </main>
+  </body>
+</html>

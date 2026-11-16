@@ -3,7 +3,7 @@
 
 PYTHON ?= python3
 
-.PHONY: help data fixture analysis test clean-outputs list-sources ontology health flag-concentration
+.PHONY: help data fixture analysis test clean-outputs list-sources ontology health flag-concentration decision-audit
 
 help:
 	@echo "make data      - download the public OSHA ITA files into data/raw"
@@ -14,6 +14,7 @@ help:
 	@echo "make ontology  - build the ontology on the fixture, export to build/ontology"
 	@echo "make flag-concentration - rebuild outputs/flag_concentration*.csv, docs/flag_concentration.md and its SVG"
 	@echo "make health    - validate lineage, run data expectations, regenerate docs/LINEAGE.md and docs/DATA_HEALTH.md"
+	@echo "make decision-audit - reproduce benchmark fragility audit from tables and pinned 2016-2024 raw snapshots"
 
 data:
 	$(PYTHON) scripts/download_data.py
@@ -35,6 +36,9 @@ health:
 
 flag-concentration:
 	$(PYTHON) scripts/build_flag_concentration.py
+
+decision-audit:
+	PYTHONPATH=src $(PYTHON) -m ehs_osha.benchmark_fragility --raw data/raw --public-json docs/decision-audit-data.json
 
 test:
 	cd tests && $(PYTHON) -m unittest discover -s . -p "test_*.py"

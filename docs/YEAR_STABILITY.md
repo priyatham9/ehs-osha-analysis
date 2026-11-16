@@ -31,7 +31,7 @@ Three views, all arithmetic on committed per-year tables (nothing is re-screened
 
 - **Screened aggregate TRIR is stable.** Across the nine leave-one-out pools it runs from 3.901 to 4.137; the largest departure from the pooled 3.983 is 3.86% (leaving out 2023).
 - **Flagged share is stable.** It runs from 2.00% to 2.12%; the largest shift from the pooled value is 0.07 percentage points (leaving out 2021).
-- **The unscreened TRIR is not stable, and one year explains why.** It runs from 0.117 to 1.186. Leaving out 2019 changes it by 785%: that year holds 99.6% of its reported hours in flagged filings, and the pooled denominator is dominated by it. The conclusion "screening raises the aggregate rate by an order of magnitude or more" nonetheless holds in all nine pools (ratio 3.4x to 34.8x).
+- **The unscreened TRIR is not stable, and one year explains why.** It runs from 0.117 to 1.186. Leaving out 2019 changes it by 785%: that year holds 99.6% of its reported hours in flagged filings, and the pooled denominator is dominated by it. Screening raises the aggregate rate in all nine pools, but an order-of-magnitude increase does not survive every omission: the ratio ranges from 3.4x to 34.8x.
 
 ## Result 2: year over year
 

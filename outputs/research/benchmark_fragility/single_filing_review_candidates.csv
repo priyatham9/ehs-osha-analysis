@@ -1,0 +1,2 @@
+year_before,year_after,removal_year,filing_id,establishment_id,original_rate_before,original_rate_after,review_rate_before,review_rate_after,original_change_pct,review_change_pct,hours,cases
+2023,2024,2023,2156121,1083230,3.14662930965903,3.64152111771572,3.68941660725701,3.64152111771572,15.7276806180362,-1.29818599089853,14366733149,7

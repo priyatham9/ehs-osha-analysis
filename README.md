@@ -618,6 +618,13 @@ screen in the browser; nothing is uploaded. The rules are a shared JSON spec
 installed) and the vectorised `quality.apply_screen` return the same flags on the
 same filings, including edge cases at each bound.
 
+Load either invented sample to learn the workflow, or enter your own figures.
+Malformed numbers and fractional case counts receive field-level feedback;
+blank values still reach the screen as missing. Editing a checked filing clears
+the previous result. Download a local text report containing the entered values,
+rule flags, bounds and limitations. A passing screen is not an audit or a
+compliance determination.
+
 ## Data provenance and licensing
 
 Source: US Department of Labor, Occupational Safety and Health Administration,

@@ -19,6 +19,11 @@ button{margin-top:1rem;font:inherit;padding:.5rem 1.2rem;border:0;border-radius:
 #result{margin-top:1.5rem;border-top:1px solid var(--line);padding-top:1rem}
 .bad{color:var(--bad)}.ok{color:var(--ok)}.note{color:var(--mut);font-size:.9rem}
 a{color:var(--acc)}
+main{max-width:52rem}h1{font:400 clamp(2rem,5vw,3rem)/1.1 Georgia,serif}h2{font-size:1.2rem}
+.examples{margin:24px 0;padding:22px;border:1px solid var(--rule-soft);border-radius:12px;background:var(--surface)}
+button{background:var(--accent);color:var(--accent-ink);min-height:44px;margin-right:8px}button:disabled{opacity:.6;cursor:wait}.secondary{background:var(--surface-2);color:var(--ink);border:1px solid var(--rule-soft)}
+input,select{min-height:44px;background:var(--surface);color:var(--ink)}input[aria-invalid="true"]{border:2px solid var(--bad)}
+[hidden]{display:none!important}.note{color:var(--muted)}
 </style>
 <link rel="stylesheet" href="portfolio.css" />
 </head>
@@ -27,6 +32,12 @@ a{color:var(--acc)}
 <h1>Form 300A filing checker</h1>
 <p>Enter the figures from one OSHA Form 300A. The check runs in your browser; nothing is sent anywhere. It applies the same rules as the plausibility screen in
 <a href="https://github.com/priyatham9/ehs-osha-analysis">ehs-osha-analysis</a>, read from the shared file <a href="plausibility_rules.json">plausibility_rules.json</a>.</p>
+<nav aria-label="Project"><a href="index.html">← Data and methods</a></nav>
+<section class="examples" aria-labelledby="examples-title"><h2 id="examples-title">Start with a sample</h2>
+<p>These invented examples explain the screen. Replace every field to check your own filing. Blank fields remain missing; enter 0 for a known zero.</p>
+<button type="button" id="sample-typical">Load typical-hours sample</button>
+<button type="button" id="sample-hours">Load excessive-hours sample</button>
+<p id="sample-note" class="note" role="status"></p></section>
 <form id="f" autocomplete="off">
 <div class="row">
 <div><label for="total_hours_worked">Total hours worked (box K)</label><input id="total_hours_worked" inputmode="decimal"></div>
@@ -38,39 +49,15 @@ a{color:var(--acc)}
 </div>
 <label for="no_injuries_illnesses">No-injuries checkbox (ITA coding)</label>
 <select id="no_injuries_illnesses"><option value="">Not provided</option><option value="1">1 - cases occurred</option><option value="2">2 - no cases occurred</option></select>
-<button type="submit">Check filing</button>
+<p id="input-help" class="note">Use plain numbers or comma-separated thousands. Case counts must be whole numbers. Negative values are accepted so the screen can flag them.</p>
+<button type="submit" id="check" disabled>Loading screening rules…</button>
+<button type="reset" class="secondary">Clear all fields</button>
 </form>
-<div id="result" aria-live="polite"></div>
+<div id="result" aria-live="polite" aria-atomic="true"></div>
+<button type="button" id="export" hidden>Download screening report (.txt)</button>
 <p class="note">This is a screen, not an audit. It flags filings whose numerator and denominator cannot both be right; it does not say which field is wrong. Bounds and their rationale are in the repository README and <code>src/ehs_osha/quality.py</code>. Column letters follow the ITA field names in the repository; confirm against your form.</p>
 </main>
 <script src="filing_check.js"></script>
-<script>
-(function(){
-  var rules=null, out=document.getElementById("result");
-  fetch("plausibility_rules.json").then(function(r){return r.json();}).then(function(j){rules=j;})
-    .catch(function(){out.textContent="Could not load plausibility_rules.json. Serve this folder over HTTP.";});
-  document.getElementById("f").addEventListener("submit",function(e){
-    e.preventDefault();
-    if(!rules){return;}
-    var rec={};
-    ["total_hours_worked","annual_average_employees","total_deaths","total_dafw_cases","total_djtr_cases","total_other_cases","no_injuries_illnesses"].forEach(function(id){
-      var v=document.getElementById(id).value.replace(/,/g,"").trim();
-      rec[id]=v===""?null:Number(v);
-    });
-    var r=FilingCheck.checkFiling(rec,rules);
-    out.textContent="";
-    var h=document.createElement("h2");
-    h.textContent=r.implausible?"Implausible":"No plausibility flag raised";
-    h.className=r.implausible?"bad":"ok";
-    out.appendChild(h);
-    var ul=document.createElement("ul");
-    (r.messages.length?r.messages:["No rule fired."]).forEach(function(m){var li=document.createElement("li");li.textContent=m;ul.appendChild(li);});
-    out.appendChild(ul);
-    var p=document.createElement("p");p.className="note";
-    p.textContent="Rules fired: "+(Object.keys(r.flags).filter(function(k){return r.flags[k];}).join(", ")||"none")+". Bounds: "+rules.params.min_hours_per_employee+" to "+rules.params.max_hours_per_employee+" hours per average employee.";
-    out.appendChild(p);
-  });
-})();
-</script>
+<script src="filing_check_ui.js"></script>
 </body>
 </html>
